@@ -9,10 +9,10 @@
 		<div class="row">
 			<div class="col-md-7">
 				<h4>Amout of Dirt (in cubic yards):</h4>
-				<input class="form-control" type="number" step="0.01" ng-model="new_job.amount" required><br>
+				<input class="form-control" type="number" step="0.01" min="0.01" ng-model="new_job.amount" required><br>
 				<button class="btn btn-info" type="button" ng-click="step=5">Fill Calculator</button>
 				<h4>Desired Completion Date:</h4>
-				<input class="form-control" type="date" ng-model="new_job.completion_date" min="{{today | date: 'yyyy-MM-dd'}}" required><br>
+				<input class="form-control" type="date" ng-model="new_job.completion_date" min="{{today|date:'yyyy-MM-dd'}}" required><br>
 			</div>
 			<div class="col-md-3 col-md-offset-1">
 				<img class="img-responsive center-block" src="../static/images/shovel.PNG" alt="OOPS!">
@@ -34,26 +34,19 @@
 				<textarea class="form-control" ng-model="new_job.description" placeholder="Grainy, ashy, big chunkys, etc."></textarea>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" ng-model="new_job.pickup_only" ng-true-value="true" ng-false-value="false">
+						<input type="checkbox" ng-model="new_job.pickup_only">
 						Pickup Only
 					</label>
 					<label>
-						<input type="checkbox" ng-model="new_job.loader_onsite" ng-true-value="true" ng-false-value="false">
+						<input type="checkbox" ng-model="new_job.loader_onsite">
 						Loader On-Site
 					</label>
 				</div>
 				<div ng-if="!new_job.pickup_only">
 					<h4>Drop-Off Location</h4>
-					<input class="form-conrol" type="text" placeholder="Address" ng-model="new_job.address" required><br>
-					<div class="form-group">
-						<div class="col-md-5">
-							<input class="form-conrol" type="text" placeholder="City" ng-model="new_job.city" required><br>
-						</div>
-						<div class="col-md-5 col-md-offset-1">
-							<input class="form-conrol" type="number" placeholder="Zip Code" ng-model="new_job.zip" required>
-						</div>
-					</div>
-					<br>
+					<input class="form-conrol" type="text" placeholder="Address" ng-model="new_job.address" required><br><br>
+					<input class="form-conrol" type="text" placeholder="City" ng-model="new_job.city" required><br><br>
+					<input class="form-conrol" type="number" placeholder="Zip Code" ng-model="new_job.zip" required><br><br>
 				</div>
 			</div>
 			<div class="col-md-3 col-md-offset-1">
@@ -78,7 +71,7 @@
 		<table>
 			<tr>
 				<th>Completion Date:</th>
-				<td>{{new_job.completion_date | date: 'fullDate'}}</td>
+				<td>{{new_job.completion_date|date:'fullDate'}}</td>
 			</tr>
 			<tr>
 				<th>Amount of Dirt:</th>
@@ -115,18 +108,16 @@
 			<button class="btn btn-primary" ng-click="create()">Place Job</button>
 		</div>
 	</div>
-	<p class="error" ng-bind="job_error"></p>
+	<p class="error" ng-bind="error"></p>
 </div>
 
 <!-- STEP 4: SUCCESS -->
 <div class="row center-content" ng-show="step==4">
 	<h1>Success!</h1>
-	<p>Your jobs is now live.</p>
-	<p>Truckers in the area will be notified and will reach out to assist you.</p>
-	<p>Let's check out your inbox to see who has reached out.</p>
-	<button class="btn btn-primary" ng-click="$location.url('/')">View Inbox</button>
+	<p>Your job is now live.</p>
+	<p>You can now view the new job to make edits and upload pictures.</p>
+	<a href="#/jobs/{{id}}"><button class="btn btn-primary">View Job</button></a>
 </div>
-
 
 <!-- STEP 5/FILL CALCULATOR -->
 <div class="row" ng-show="step==5">
@@ -164,7 +155,7 @@
 		<label>Height (yards)</label><br>
 		<input type="number" step="0.01" ng-model="height" required><br>
 		<label>Looks like you'll need:</label><br>
-		<b>{{(length * depth * height) | number: 2}} cubic yards</b>
+		<b>{{(length*depth*height)|number:2}} cubic yards</b>
 		<hr>
 		<button type="button" ng-click="step=1">Return to Form</button><input type="submit" value="Use This Amount">
 	</form>

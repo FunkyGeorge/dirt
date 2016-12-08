@@ -21,6 +21,10 @@ app.config(function ($routeProvider) {
 		templateUrl: 'partials/jobs.html',
 		controller: 'jobsController'
 	})
+	.when('/jobs/:id',{
+		templateUrl: 'partials/jobs_show.html',
+		controller: 'jobsShowController'
+	})
 	.otherwise({
 		redirectTo: '/welcome'
 	});

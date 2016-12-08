@@ -13,39 +13,49 @@ module.exports = {
 		});
 	},
 	show: function(req, callback) {
-		var query = "SELECT *, HEX(id) AS id, HEX(contractor_id) AS contractor_id FROM jobs WHERE HEX(id) = ? LIMI 1";
+		var query = "SELECT *, HEX(id) AS id, HEX(contractor_id) AS contractor_id FROM jobs WHERE HEX(id) = ? LIMIT 1";
 		connection.query(query, req.params.id, function(err, data) {
 			if (err)
 				callback({errors: {database: {message: `Database error: ${err.code}.`}}});
 			else
-				callback(false, data);
+				callback(false, data[0]);
 		});
 	},	
 	create: function(req, callback) {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-			else if (!req.body.amount | !req.body.completion_date)
+			else if (!req.body.amount | req.body.amount <= 0 | !req.body.completion_date)
 				callback({errors: {form: {message: "Invalid details."}}});
-			else {
-				var _data = {
-					amount: req.body.amount,
-					completion_date: req.body.completion_date,
-					description: req.body.description,
-					pickup_only: req.body.pickup_only,
-					loader_onsite: req.body.loader_onsite,
-					address: req.body.address,
-					city: req.body.city,
-					zip: req.body.zip
-				};
-				connection.query("INSERT INTO jobs SET ?, id = UNHEX(REPLACE(UUID(), '-', '')), \
-				contractor_id = UNHEX(?), created_at = NOW(), updated_at = NOW()", [_data, data.id], function(err) {
+			else
+				connection.query("SET @temp = UNHEX(REPLACE(UUID(), '-', ''))", function(err) {
 					if (err)
 						callback({errors: {database: {message: `Database error: ${err.code}.`}}});
-					else 
-						callback(false);				
+					else {
+						var _data = {
+							amount: req.body.amount,
+							completion_date: req.body.completion_date,
+							description: req.body.description,
+							pickup_only: req.body.pickup_only,
+							loader_onsite: req.body.loader_onsite,
+							address: req.body.address,
+							city: req.body.city,
+							zip: req.body.zip
+						};
+						connection.query("INSERT INTO jobs SET ?, id = @temp, contractor_id = UNHEX(?), \
+						created_at = NOW(), updated_at = NOW()", [_data, data.id], function(err) {
+							if (err)
+								callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+							else
+								connection.query("SELECT HEX(@temp) AS id", function(err, data) {
+									if (err)
+										callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+									else
+										callback(false, data[0]);
+								});
+						});
+					}				
 				});
-			}
 		});
 	},
 	update: function(req, callback) {

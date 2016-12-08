@@ -15,7 +15,10 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 	else
 		$location.url('/welcome');
 
-	$scope.new_job = {};
+	$scope.new_job = {
+		pickup_only: false,
+		loader_onsite: false
+	};
 	$scope.today = new Date();
 	$scope.step = 1;
 	$scope.progress = {'width': '30%'};
@@ -26,7 +29,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 	}
 
 	$scope.create = function() {
-		console.log($scope.new_job);
+		console.log($scope.new_job)
 		$scope.error = null;
 		jobsFactory.create($scope.new_job, function(data) {
 			if (data.errors) {
@@ -36,8 +39,11 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 				}
 				$scope.error += ' Please edit the details before re-submitting.'
 			}
-			else
+			else {
+				console.log("id", data.id)
+				$scope.id = data.id;
 				$scope.step = 4;
+			}
 		});
 	}
 });

@@ -1,0 +1,143 @@
+<!-- NAVIGATION -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand">Got Dirt, Need Dirt</a>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav navbar-right">
+				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li><a href="#/jobs" ng-show="user_type=='contractor'">Post New Job</a></li>
+				<li><a href="#/" ng-click="logout()">Logout</a></li>
+			</ul>
+		</div>
+	</div><!--/.nav-collapse -->
+</nav>
+
+<!-- MAIN -->
+<div class="row error" ng-bind="error"></div>
+
+<div class="row" ng-show="!error">
+	
+	<div class="row">
+		<h1 class="col-md-8">{{job.amount}} Cubic Yards<span ng-show="id==job.contractor_id"> (posted by you)</span></h1>
+		<a class="col-md-4" href="#/"><button>Back to Browse</button></a><br>
+	</div>
+
+	<!-- SHOW MODE -->
+	<div class="row" ng-show="mode=='show'">
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-6">
+					<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt=""><br>
+					<div class="row">
+						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
+						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
+						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<b>Description:</b><br>
+					<p ng-bind="job.description"></p><br>
+					<b>Distance:</b><br>
+					<p>5 miles (estimated) (hard coded)</p><br>
+					<b>Completed By:</b><br>
+					<p ng-bind="job.completion_date|date:'fullDate'"></p><br>
+					<input type="checkbox" ng-checked="job.pickup_only" disabled>Pickup Only
+					<input type="checkbox" ng-checked="job.loader_onsite" disabled>Loader On-Site
+					<div ng-show="id==job.contractor_id && !job.pickup_only">
+						<b>Drop-Off Location:</b>
+						<p ng-bind="job.address"></p>
+						<p ng-show="job.city && job.zip">{{job.city}}, {{job.zip}}</p>						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<b>Job Size:</b>
+			<hr>
+			<table>
+				<tr>
+					<th>Load:</th>
+					<td ng-bind="job.amount"></td>
+				</tr>
+				<tr>
+					<th>Distance:</th>
+					<td>5 miles (hardcoded)</td>
+				</tr>
+				<tr style="border-bottom: 1px solid black">
+					<th>Lead Fee:</th>
+					<td>$25 (hard coded)</td>
+				</tr>
+				<tr>
+					<th>Your payout:</th>
+					<td>$200 (hard coded)</td>
+				</tr>
+			</table>
+			<a href="" ng-show="user_type=='trucker'"><button>Accept Job</button></a><br><br>
+			<button ng-show="id==job.contractor_id" ng-click="mode='edit'">Edit Job</button>
+		</div>
+	</div>
+
+	<!-- EDIT MODE -->
+	<div class="row" ng-show="mode=='edit' && id==job.contractor_id">
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-6">
+					<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt=""><br>
+					<div class="row">
+						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
+						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
+						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<b>Description:</b><br>
+					<textarea ng-model="job.description"></textarea><br>
+					<b>Distance:</b><br>
+					<p>5 miles (estimated) (hard coded)</p><br>
+					<b>Completed By:</b><br>
+					<input  type="date" ng-model="job.completion_date" min="{{today|date:'yyyy-MM-dd'}}"><br><br>
+					<input type="checkbox" ng-model="job.pickup_only">Pickup Only
+					<input type="checkbox" ng-model="job.loader_onsite">Loader On-Site
+					<div ng-if="!job.pickup_only">
+						<b>Drop-Off Location:</b><br>
+						<input type="text" placeholder="Address" ng-model="job.address"><br>
+						<input type="text" placeholder="City" ng-model="job.city"><br>
+						<input type="number" placeholder="Zip" ng-model="job.zip">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<b>Job Size:</b>
+			<hr>
+			<table>
+				<tr>
+					<th>Load:</th>
+					<td ng-bind="job.amount"></td>
+				</tr>
+				<tr>
+					<th>Distance:</th>
+					<td>5 miles (hardcoded)</td>
+				</tr>
+				<tr style="border-bottom: 1px solid black">
+					<th>Lead Fee:</th>
+					<td>$25 (hard coded)</td>
+				</tr>
+				<tr>
+					<th>Your payout:</th>
+					<td>$200 (hard coded)</td>
+				</tr>
+			</table>
+			<a href="" ng-show="user_type=='trucker'"><button>Accept Job</button></a><br><br>
+			<button ng-click="update()">Save Details</button>
+		</div>
+	</div>	
+</div>
