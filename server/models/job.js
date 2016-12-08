@@ -5,7 +5,10 @@ var jwt_key = fs.readFileSync('keys/jwt', 'utf8');
 
 module.exports = {
 	index: function(callback) {
-		connection.query("SELECT *, HEX(id) AS id, HEX(contractor_id) AS contractor_id FROM jobs", function(err, data) {
+		var query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at as created_at, HEX(contractor_id) \
+		AS contractor_id FROM jobs LEFT JOIN images ON jobs.id = job_id ORDER BY jobs.created_at DESC";
+		connection.query(query, function(err, data) {
+			console.log(data)
 			if (err)
 				callback({errors: {database: {message: `Database error: ${err.code}.`}}});
 			else
@@ -13,7 +16,8 @@ module.exports = {
 		});
 	},
 	show: function(req, callback) {
-		var query = "SELECT *, HEX(id) AS id, HEX(contractor_id) AS contractor_id FROM jobs WHERE HEX(id) = ? LIMIT 1";
+		var query = "SELECT *, HEX(jobs.id) AS id, HEX(contractor_id) AS contractor_id FROM jobs \
+		LEFT JOIN images ON jobs.id = job_id WHERE HEX(jobs.id) = ? LIMIT 1";
 		connection.query(query, req.params.id, function(err, data) {
 			if (err)
 				callback({errors: {database: {message: `Database error: ${err.code}.`}}});
@@ -68,6 +72,7 @@ module.exports = {
 					completion_date: req.body.completion_date,
 					description: req.body.description,
 					pickup_only: req.body.pickup_only,
+					loader_onsite: req.body.loader_onsite,
 					address: req.body.address,
 					city: req.body.city,
 					zip: req.body.zip
@@ -76,8 +81,10 @@ module.exports = {
 				connection.query(query, [_data, req.params.id, data.id], function(err, data) {
 					if (err)
 						callback({errors: {database: {message: `Database error: ${err.code}.`}}});
-					else
+					else {
+						console.log(this.sql)
 						callback(false);
+					}
 				});
 			}
 		});

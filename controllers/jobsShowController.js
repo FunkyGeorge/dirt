@@ -22,8 +22,8 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 				$scope.mode = 'show';
 				$scope.job = data;
 				$scope.job.completion_date = new Date(data.completion_date);
-				$scope.job.pickup_only = Boolean(data.pickup_only);
-				$scope.job.loader_onsite = Boolean(data.loader_onsite);
+				$scope.job.pickup_only = $scope.job.pickup_only ? true: false;
+				$scope.job.loader_onsite = $scope.job.loader_onsite ? true: false;
 			}
 		});
 	}
@@ -31,13 +31,7 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 		$location.url('/welcome');
 
 	$scope.update = function() {
-		$scope.error = null;
-		jobsFactory.update($scope.job, function(data) {
-			if (data.errors)
-				$scope.error = "Something went wrong. Changes not saved.";
-			else
-				$scope.mode = 'show';
-		});
+		$scope.mode = 'show';
 	}
 
 	$scope.logout = function() {

@@ -26,7 +26,7 @@
 <div class="row" ng-show="!error">
 	
 	<div class="row">
-		<h1 class="col-md-8">{{job.amount}} Cubic Yards<span ng-show="id==job.contractor_id"> (posted by you)</span></h1>
+		<h1 class="col-md-8">{{job.amount}} cubic yards</h1>
 		<a class="col-md-4" href="#/"><button>Back to Browse</button></a><br>
 	</div>
 
@@ -43,14 +43,17 @@
 					</div>
 				</div>
 				<div class="col-md-6">
+					<b ng-show="id==job.contractor_id">Posted by you!</b><br><br>
 					<b>Description:</b><br>
 					<p ng-bind="job.description"></p><br>
-					<b>Distance:</b><br>
-					<p>5 miles (estimated) (hard coded)</p><br>
+					<div ng-show="id!=job.contractor_id">
+						<b>Distance:</b><br>
+						<p>5 miles (estimated) (hard coded)</p><br>
+					</div>
 					<b>Completed By:</b><br>
 					<p ng-bind="job.completion_date|date:'fullDate'"></p><br>
 					<input type="checkbox" ng-checked="job.pickup_only" disabled>Pickup Only
-					<input type="checkbox" ng-checked="job.loader_onsite" disabled>Loader On-Site
+					<input type="checkbox" ng-checked="job.loader_onsite" disabled>Loader On-Site<br><br>
 					<div ng-show="id==job.contractor_id && !job.pickup_only">
 						<b>Drop-Off Location:</b>
 						<p ng-bind="job.address"></p>
@@ -76,7 +79,7 @@
 					<td>$25 (hard coded)</td>
 				</tr>
 				<tr>
-					<th>Your payout:</th>
+					<th>Trucker's payout:</th>
 					<td>$200 (hard coded)</td>
 				</tr>
 			</table>
@@ -98,20 +101,22 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<b>Description:</b><br>
-					<textarea ng-model="job.description"></textarea><br>
-					<b>Distance:</b><br>
-					<p>5 miles (estimated) (hard coded)</p><br>
-					<b>Completed By:</b><br>
-					<input  type="date" ng-model="job.completion_date" min="{{today|date:'yyyy-MM-dd'}}"><br><br>
-					<input type="checkbox" ng-model="job.pickup_only">Pickup Only
-					<input type="checkbox" ng-model="job.loader_onsite">Loader On-Site
-					<div ng-if="!job.pickup_only">
-						<b>Drop-Off Location:</b><br>
-						<input type="text" placeholder="Address" ng-model="job.address"><br>
-						<input type="text" placeholder="City" ng-model="job.city"><br>
-						<input type="number" placeholder="Zip" ng-model="job.zip">
-					</div>
+					<form ng-submit="update()">
+						<label>Description:</label><br>
+						<textarea ng-model="job.description"></textarea><br>
+						<label>Completed By:</label><br>
+						<input  type="date" ng-model="job.completion_date" min="{{today|date:'yyyy-MM-dd'}}" required><br><br>
+						<input type="checkbox" ng-model="job.pickup_only">Pickup Only
+						<input type="checkbox" ng-model="job.loader_onsite">Loader On-Site<br><br>
+						<div ng-if="!job.pickup_only">
+							<b>Drop-Off Location:</b><br>
+							<input type="text" placeholder="Address" ng-model="job.address" required><br>
+							<input type="text" placeholder="City" ng-model="job.city" required><br>
+							<input type="number" placeholder="Zip" ng-model="job.zip" required><br><br>
+						</div>
+						<input type="submit" value="Save Details">
+						<p class="error" ng-bind="errors"></p>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -137,7 +142,6 @@
 				</tr>
 			</table>
 			<a href="" ng-show="user_type=='trucker'"><button>Accept Job</button></a><br><br>
-			<button ng-click="update()">Save Details</button>
 		</div>
 	</div>	
 </div>

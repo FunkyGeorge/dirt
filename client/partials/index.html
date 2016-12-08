@@ -21,9 +21,11 @@
 </nav>
 
 <!-- MAIN -->
-<div class="row">
-	<div class="col-lg-3">
-		<h1>We Got Dirt</h1>
+<div class="row error" ng-bind="error"></div>
+
+<div class="row" ng-show="!error">
+	<h1>We Got Dirt</h1>
+	<div class="col-lg-2">
 		<h2>Sort By:</h2>
 		<form>
 	    <div class="radio">
@@ -34,37 +36,20 @@
 	    </div>
 	  </form>
 	</div>
-	<div class="col-lg-9">
-		<div class="row">
+	<div class="col-lg-10">
+		<div class="row" ng-repeat="job in jobs" style="margin-bottom: 10px;">
 			<div class="col-lg-3">
 				<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt="">
 			</div>
 			<div class="col-lg-9">
-				<h2>Distance ( __ miles away)</h2>
-				<p>Description: <br> Enter Descripion here</p>
-				<p>Posted: mm/dd/yyy  <input name="loader-onsite" type="checkbox" disabled="disabled" checked="checked"/> <label for="">Loader On-Site</label> <button class="btn btn-default pull-right"type="button" name="button">View Job</button></p>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-lg-3">
-				<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt="">
-			</div>
-			<div class="col-lg-9">
-				<h2>Distance ( __ miles away)</h2>
-				<p>Description: <br> Enter Descripion here</p>
-				<p>Posted: mm/dd/yyy  <input name="loader-onsite" type="checkbox" disabled="disabled" checked="checked"/> <label for="">Loader On-Site</label> <button class="btn btn-default pull-right"type="button" name="button">View Job</button></p>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-lg-3">
-				<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt="">
-			</div>
-			<div class="col-lg-9">
-				<h2>Distance ( __ miles away)</h2>
-				<p>Description: <br> Enter Descripion here</p>
-				<p>Posted: mm/dd/yyy  <input name="loader-onsite" type="checkbox" disabled="disabled" checked="checked"/> <label for="">Loader On-Site</label> <button class="btn btn-default pull-right"type="button" name="button">View Job</button></p>
+				<h2>{{job.amount}} cubic yards {{id==job.contractor_id ? '(Posted by you)' : '(est __ miles away)'}}</h2>
+				<b>Description:</b><br>
+				<p ng-bind="job.description"></p>
+				<b>Posted:</b><br>
+				<p>{{job.created_at | date:'fullDate'}} at {{job.created_at | date:'shortTime'}}</p>
+				<input type="checkbox" ng-checked="job.pickup_only" disabled/>Pickup Only
+				<input type="checkbox" ng-checked="job.loader_onsite" disabled/>Loader On-Site
+				<a href="#/jobs/{{job.id}}"><button class="btn btn-default pull-right">View Job</button></a>
 			</div>
 		</div>
 	</div>

@@ -29,6 +29,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 	}
 
 	$scope.create = function() {
+		console.log($scope.new_job)
 		$scope.error = null;
 		jobsFactory.create($scope.new_job, function(data) {
 			if (data.errors) {
@@ -39,6 +40,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 				$scope.error += ' Please edit the details before re-submitting.'
 			}
 			else {
+				console.log("id", data.id)
 				$scope.id = data.id;
 				$scope.step = 4;
 			}

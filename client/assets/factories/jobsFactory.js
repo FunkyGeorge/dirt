@@ -22,7 +22,7 @@ app.factory('jobsFactory', function($http, $cookies) {
 			});
 		},
 		update: function(data, callback) {
-			$http.put(`/api/jobs/${data._id}`, data, {
+			$http.put(`/api/jobs/${data.id}`, data, {
 				headers: {'authorization': `Bearer ${$cookies.get('token')}`}
 			}).then(function(res) {
 				callback(res.data);
