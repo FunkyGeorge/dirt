@@ -1,17 +1,17 @@
 var message = require('../models/message');
 
 module.exports = {
-	index: function(req, res) {
-		message.index(req, function(err, data) {
-			if (err)
-				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
-				else
-					res.json(err);
-			else
-				res.json(data);
-		});
-	},
+	// index: function(req, res) {
+	// 	message.index(req, function(err, data) {
+	// 		if (err)
+	// 			if (err.errors.jwt)
+	// 				res.clearCookie('token').json(err);
+	// 			else
+	// 				res.json(err);
+	// 		else
+	// 			res.json(data);
+	// 	});
+	// },
 	show: function(req, res) {
 		message.show(req, function(err, data) {
 			if (err)

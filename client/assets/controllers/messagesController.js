@@ -12,8 +12,13 @@ app.controller('messagesController', function ($scope, $location, $cookies, $rou
 		$scope.new_message = {sender: 'truck_type' in payload ? 1 : 0};
 		$scope.error = null;
 		pendingsFactory.index(function(data) {
-			if (data.errors)
-				$scope.error = "Something went wrong, please wait a while and try reloading.";
+			if (data.errors) {
+				$scope.error = "Could not load conversation. "
+				for (key in data.errors) {
+					$scope.error += data.errors[key].message;
+					break;
+				}
+			}
 			else
 				$scope.pendings = data;
 		});
@@ -36,15 +41,16 @@ app.controller('messagesController', function ($scope, $location, $cookies, $rou
 				for (key in data.errors) {
 					$scope.error += data.errors[key].message;
 					break;
-				}							
+				}
 			}
-			else
+			else {
+				$scope.new_message.pending_id = pending_id;
 				$scope.messages = data;
+			}
 		});
 	}
 
-	$scope.createMessage = function(pending_id) {
-		$scope.new_message.pending_id = pending_id;
+	$scope.createMessage = function() {
 		messagesFactory.create($scope.new_message, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not send message. "
@@ -53,8 +59,10 @@ app.controller('messagesController', function ($scope, $location, $cookies, $rou
 					break;
 				}							
 			}
-			else
+			else {
 				$scope.messages = data;
+				$scope.new_message.message = "";				
+			}
 		});
 	}	
 });

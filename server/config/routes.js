@@ -41,7 +41,7 @@ module.exports = function(app) {
 	app.delete('/api/pendings/:id', pendings.delete);
 
 	// MESSAGES
-	app.get('/api/messages', messages.index);
+	// app.get('/api/messages', messages.index);
 	app.get('/api/messages/:id', messages.show);
 	app.post('/api/messages', messages.create);
 	app.put('/api/messages/:id', messages.update);

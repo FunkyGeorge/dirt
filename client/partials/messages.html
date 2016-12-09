@@ -25,8 +25,8 @@
 
 <div class="row" ng-show="!error">
 	<h1>Messages</h1>
-	<div class="col-sm-2 scroll">
-		<div ng-repeat="pending in pendings">
+	<div class="col-sm-2 div_chat">
+		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id)">
 			<b>{{pending.first_name}} {{pending.last_name}}</b>
 			<p>
 				Complete by: {{pending.completion_date | date:"shortDate"}}<br>
@@ -34,7 +34,18 @@
 			</p>
 		</div>
 	</div>
-	<div class="col-sm-10 scroll">
-
+	<div class="col-sm-10">
+		<div class="div_chat">
+			<b ng-show="!messages">You can view your conversations here. Click on a conversation on the left to view the conversation.</b>
+			<div ng-repeat="message in messages">
+			<p class="pull-right">&nbsp;{{message.created_at | date:'shortTime'}}</p>
+				<p ng-class="{'pull-right': user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender}">{{message.message}}</p>
+				<span ng-if="user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender"><br><br></span>
+			</div>
+		</div>
+		<form ng-submit="createMessage(); ">
+			<input type="text" placeholder="Type a message here..." ng-model="new_message.message">
+			<input type="submit" value="Send">
+		</form>
 	</div>
 </div>

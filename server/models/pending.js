@@ -16,9 +16,10 @@ module.exports = {
 					contractor_id = contractors.id WHERE HEX(pendings.trucker_id) = ? ORDER BY pendings.created_at DESC";
 				else
 					query = "SELECT HEX(pendings.id) AS id, pendings.created_at AS created_at, first_name, last_name, \
-					completion_date FROM pendings LEFT JOIN contractors ON contractor_id = contractors.id WHERE \
-					HEX(contractors.id) = ? ORDER BY pendings.created_at DESC";
+					completion_date FROM pendings LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN truckers ON \
+					pendings.trucker_id = truckers.id WHERE HEX(contractor_id) = ? ORDER BY pendings.created_at DESC";
 				connection.query(query, data.id, function(err, data) {
+			console.log(err, data)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else

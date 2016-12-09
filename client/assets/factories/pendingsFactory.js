@@ -1,6 +1,7 @@
 app.factory('pendingsFactory', function($http, $cookies) {
 	return {
 		index: function(callback) {
+			console.log($cookies.get('token'))
 			$http.get('/api/pendings', {
 				headers: {'authorization': `Bearer ${$cookies.get('token')}`}
 			}).then(function(res) {

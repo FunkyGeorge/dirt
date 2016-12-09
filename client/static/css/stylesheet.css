@@ -20,6 +20,10 @@ body{
 	margin-top: 4em;
 }
 
-.scroll {
+.div_chat {
+	height: 600px;
+	border: solid 1px black;
+	padding: 10px;
 	overflow-y: auto;
+	border-radius: 5px;
 }
