@@ -25,6 +25,10 @@ app.config(function ($routeProvider) {
 		templateUrl: 'partials/jobs_show.html',
 		controller: 'jobsShowController'
 	})
+	.when('/messages',{
+		templateUrl: 'partials/messages.html',
+		controller: 'messagesController'
+	})
 	.otherwise({
 		redirectTo: '/welcome'
 	});

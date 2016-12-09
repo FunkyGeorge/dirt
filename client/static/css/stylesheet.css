@@ -19,3 +19,7 @@ body{
 .footer{
 	margin-top: 4em;
 }
+
+.scroll {
+	overflow-y: auto;
+}

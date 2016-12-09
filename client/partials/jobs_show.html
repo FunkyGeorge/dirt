@@ -83,13 +83,16 @@
 					<td>$200 (hard coded)</td>
 				</tr>
 			</table>
-			<a href="" ng-show="user_type=='trucker'"><button>Accept Job</button></a><br><br>
+			<br>
+			<button ng-show="user_type=='trucker' && !job.accepted" ng-click="createPending()">Accept Job</button>
+			<b ng-show="user_type=='trucker' && job.accepted">You've accepted this job!</b>
+			<br><br>
 			<button ng-show="id==job.contractor_id" ng-click="mode='edit'">Edit Job</button>
 		</div>
 	</div>
 
 	<!-- EDIT MODE -->
-	<div class="row" ng-show="mode=='edit' && id==job.contractor_id">
+	<div class="row" ng-show="mode=='edit'">
 		<div class="col-md-8">
 			<div class="row">
 				<div class="col-md-6">
@@ -101,7 +104,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<form ng-submit="update()">
+					<form ng-submit="updateJob()">
 						<label>Description:</label><br>
 						<textarea ng-model="job.description"></textarea><br>
 						<label>Completed By:</label><br>
@@ -141,7 +144,10 @@
 					<td>$200 (hard coded)</td>
 				</tr>
 			</table>
-			<a href="" ng-show="user_type=='trucker'"><button>Accept Job</button></a><br><br>
 		</div>
-	</div>	
+	</div>
+
+	<div class="row" ng-show="mode=='success'">
+		SUCCESS MESSAGE HERE
+	</div>
 </div>

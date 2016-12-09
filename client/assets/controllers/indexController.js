@@ -1,4 +1,4 @@
-app.controller('indexController', function ($scope, $location, $routeParams, $cookies, $anchorScroll, jobsFactory) {
+app.controller('indexController', function ($scope, $location, $routeParams, $cookies, jobsFactory) {
 	function getPayload(token) {
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace('-', '+').replace('_', '/');
@@ -16,14 +16,10 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 				$scope.error = "Something went wrong, please wait a while and try reloading."
 			else
 				$scope.jobs = data;
-
-			console.log($scope.jobs);
 		});
 	}
 	else
 		$location.url('/welcome');
-
-	$anchorScroll();
 
 	$scope.logout = function() {
 		$cookies.remove('token');

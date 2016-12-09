@@ -25,7 +25,7 @@
 
 <div class="row" ng-show="!error">
 	<h1>We Got Dirt</h1>
-	<div class="col-lg-2">
+	<div class="col-sm-2">
 		<h2>Sort By:</h2>
 		<form>
 	    <div class="radio">
@@ -36,12 +36,12 @@
 	    </div>
 	  </form>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-sm-10">
 		<div class="row" ng-repeat="job in jobs" style="margin-bottom: 10px;">
-			<div class="col-lg-3">
+			<div class="col-sm-3">
 				<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt="">
 			</div>
-			<div class="col-lg-9">
+			<div class="col-sm-9">
 				<h2>{{job.amount}} cubic yards {{id==job.contractor_id ? '(Posted by you)' : '(est __ miles away)'}}</h2>
 				<b>Description:</b><br>
 				<p ng-bind="job.description"></p>
@@ -49,7 +49,9 @@
 				<p>{{job.created_at | date:'fullDate'}} at {{job.created_at | date:'shortTime'}}</p>
 				<input type="checkbox" ng-checked="job.pickup_only" disabled/>Pickup Only
 				<input type="checkbox" ng-checked="job.loader_onsite" disabled/>Loader On-Site
-				<a href="#/jobs/{{job.id}}"><button class="btn btn-default pull-right">View Job</button></a>
+				<a href="#/jobs/{{job.id}}">
+					<button class="btn btn-default pull-right">{{job.accepted ? 'Job Accepted!' : 'View Job'}}</button>
+				</a>
 			</div>
 		</div>
 	</div>

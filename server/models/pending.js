@@ -11,12 +11,13 @@ module.exports = {
 			else {
 				var query;
 				if ('truck_type' in data)
-					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(contractor_id) \
-					AS contractor_id, IF(UNHEX(?) IN (pendings.trucker_id), 1, 0) AS accepted FROM jobs LEFT JOIN \
-					images ON jobs.id = job_id LEFT JOIN pendings ON jobs.id = pendings.job_id ORDER BY jobs.created_at DESC";
+					query = "SELECT HEX(pendings.id) AS id, pendings.created_at AS created_at, first_name, last_name, \
+					completion_date FROM pendings LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN contractors ON \
+					contractor_id = contractors.id WHERE HEX(pendings.trucker_id) = ? ORDER BY pendings.created_at DESC";
 				else
-					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at as created_at, HEX(contractor_id) \
-					AS contractor_id FROM jobs LEFT JOIN images ON jobs.id = job_id ORDER BY jobs.created_at DESC";
+					query = "SELECT HEX(pendings.id) AS id, pendings.created_at AS created_at, first_name, last_name, \
+					completion_date FROM pendings LEFT JOIN contractors ON contractor_id = contractors.id WHERE \
+					HEX(contractors.id) = ? ORDER BY pendings.created_at DESC";
 				connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
@@ -35,14 +36,14 @@ module.exports = {
 				var _data;
 				if ('truck_type' in data) {
 					_data = [data.id, req.params.id];
-					query = "SELECT *, HEX(jobs.id) AS id, HEX(contractor_id) AS contractor_id, IF(UNHEX(?) \
-					IN (pendings.trucker_id), 1, 0) AS accepted FROM jobs LEFT JOIN images ON jobs.id = job_id \
-					LEFT JOIN pendings ON jobs.id = pendings.job_id WHERE HEX(jobs.id) = ? LIMIT 1";
+					query = "SELECT *, HEX(pendings.id) AS id, HEX(contractor_id) AS contractor_id, IF(UNHEX(?) \
+					IN (pendings.trucker_id), 1, 0) AS accepted FROM pendings LEFT JOIN images ON pendings.id = pending_id \
+					LEFT JOIN pendings ON pendings.id = pendings.pending_id WHERE HEX(pendings.id) = ? LIMIT 1";
 				}
 				else {
 					_data = req.params.id;
-					query = "SELECT *, HEX(jobs.id) AS id, HEX(contractor_id) AS contractor_id FROM jobs \
-					LEFT JOIN images ON jobs.id = job_id WHERE HEX(jobs.id) = ? LIMIT 1";
+					query = "SELECT *, HEX(pendings.id) AS id, HEX(contractor_id) AS contractor_id FROM pendings \
+					LEFT JOIN images ON pendings.id = pending_id WHERE HEX(pendings.id) = ? LIMIT 1";
 				}
 				connection.query(query, _data, function(err, data) {
 					if (err)
@@ -57,37 +58,18 @@ module.exports = {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-			else if (!req.body.amount | req.body.amount <= 0 | !req.body.completion_date)
-				callback({errors: {form: {message: "Invalid details."}}});
-			else
-				connection.query("SET @temp = UNHEX(REPLACE(UUID(), '-', ''))", function(err) {
+			else if (!req.body.job_id | !('truck_type' in data))
+				callback({errors: {job: {message: "Either the job id was not provided, or you're not allowed to accept jobs."}}});
+			else {
+				var query = "INSERT INTO pendings SET job_id = UNHEX(?), trucker_id = UNHEX(?), \
+				id =  UNHEX(REPLACE(UUID(), '-', '')), created_at = NOW(), updated_at = NOW()"
+				connection.query(query, [req.body.job_id, data.id], function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else {
-						var _data = {
-							amount: req.body.amount,
-							completion_date: req.body.completion_date,
-							description: req.body.description,
-							pickup_only: req.body.pickup_only,
-							loader_onsite: req.body.loader_onsite,
-							address: req.body.address,
-							city: req.body.city,
-							zip: req.body.zip
-						};
-						connection.query("INSERT INTO jobs SET ?, id = @temp, contractor_id = UNHEX(?), \
-						created_at = NOW(), updated_at = NOW()", [_data, data.id], function(err) {
-							if (err)
-								callback({errors: {database: {message: "Please contact an admin."}}});
-							else
-								connection.query("SELECT HEX(@temp) AS id", function(err, data) {
-									if (err)
-										callback({errors: {database: {message: "Please contact an admin."}}});
-									else
-										callback(false, data[0]);
-								});
-						});
-					}				
+					else
+						callback(false);
 				});
+			}				
 		});
 	},
 	update: function(req, callback) {
@@ -105,7 +87,7 @@ module.exports = {
 					city: req.body.city,
 					zip: req.body.zip
 				}
-				var query = "UPDATE jobs SET ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(contractor_id) = ? LIMIT 1";
+				var query = "UPDATE pendings SET ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(contractor_id) = ? LIMIT 1";
 				connection.query(query, [_data, req.params.id, data.id], function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
@@ -120,7 +102,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else
-				var query = "DELETE FROM jobs WHERE HEX(id) = ? AND HEX(contractor_id) = ? LIMIT 1";
+				var query = "DELETE FROM pendings WHERE HEX(id) = ? AND HEX(contractor_id) = ? LIMIT 1";
 				connection.query(query, [req.params.id, data.id], function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});

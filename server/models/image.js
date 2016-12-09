@@ -7,7 +7,7 @@ module.exports = {
 	// index: function(callback) {
 	// 	connection.query("SELECT *, HEX(id) AS id, HEX(job_id) AS job_id FROM images", function(err, data) {
 	// 		if (err)
-	// 			callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+	// 			callback({errors: {database: {message: "Please contact an admin."}}});
 	// 		else
 	// 			callback(false, data)
 	// 	});
@@ -16,7 +16,7 @@ module.exports = {
 	// 	var query = "SELECT *, HEX(id) AS id, HEX(job_id) AS job_id FROM images WHERE HEX(id) = ? LIMI 1";
 	// 	connection.query(query, req.params.id, function(err, data) {
 	// 		if (err)
-	// 			callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+	// 			callback({errors: {database: {message: "Please contact an admin."}}});
 	// 		else
 	// 			callback(false, data);
 	// 	});
@@ -28,7 +28,7 @@ module.exports = {
 			connection.query("INSERT INTO images SET id = UNHEX(REPLACE(UUID(), '-', '')), uri = ?, \
 			job_id = UNHEX(?), created_at = NOW(), updated_at = NOW()", [req.body.uri, req.body.job_id], function(err) {
 				if (err)
-					callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+					callback({errors: {database: {message: "Please contact an admin."}}});
 				else
 					callback(false);				
 			});
@@ -51,7 +51,7 @@ module.exports = {
 	// 			var query = "UPDATE images SET ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(job_id) = ? LIMIT 1";
 	// 			connection.query(query, [_data, req.params.id, data.id], function(err, data) {
 	// 				if (err)
-	// 					callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+	// 					callback({errors: {database: {message: "Please contact an admin."}}});
 	// 				else
 	// 					callback(false);
 	// 			});
@@ -69,7 +69,7 @@ module.exports = {
 				WHERE HEX(contractors.id) = ? AND HEX(images.id) = ? LIMIT 1) LIMIT 1";
 				connection.query(query, [data.id, req.params.id], function(err) {
 					if (err)
-						callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
 						callback(false);
 				});

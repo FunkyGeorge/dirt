@@ -1,4 +1,4 @@
-app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, imagesFactory) {
+app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, imagesFactory, pendingsFactory) {
 	function getPayload(token) {
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace('-', '+').replace('_', '/');
@@ -13,7 +13,7 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 		$scope.error = null;
 		jobsFactory.show($routeParams.id, function(data) {
 			if (data.errors) {
-				$scope.error = 'Invalid job/job no longer availale. You will now be redirected.'
+				$scope.error = "Invalid job/job no longer availale. You will now be redirected."
 				$timeout(function() {
 					$location.url('/');
 				}, 3000);				
@@ -30,18 +30,63 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 	else
 		$location.url('/welcome');
 
-	$scope.update = function() {
+	$scope.logout = function() {
+		$cookies.remove('token');
+		$location.url('/welcome');
+	}
+	
+	//////////////////////////////////////////////////////
+	//										JOB
+	//////////////////////////////////////////////////////
+	$scope.deleteJob = function() {
+
+	}
+
+	$scope.updateJob = function() {
 		$scope.error = null;
 		jobsFactory.update($scope.job, function(data) {
-			if (data.errors)
-				$scope.error = "Something went wrong. Changes not saved.";
+			if (data.errors) {
+				$scope.error = "Not able to save changes. ";
+				for (key in data.errors) {
+					$scope.error += data.errors[key].message;
+					break;
+				}							
+			}
 			else
 				$scope.mode = 'show';
 		});
 	}
 
-	$scope.logout = function() {
-		$cookies.remove('token');
-		$location.url('/welcome');
+	//////////////////////////////////////////////////////
+	//										IMAGE
+	//////////////////////////////////////////////////////
+	$scope.createImage = function() {
+
 	}
+
+	$scope.deleteImage = function() {
+
+	}
+
+	//////////////////////////////////////////////////////
+	//										PENDING
+	//////////////////////////////////////////////////////
+	$scope.createPending = function() {
+		pendingsFactory.create({job_id: $scope.job.id}, function(data) {
+			if (data.errors) {
+				$scope.error = "You were not able to accept the job. ";
+				for (key in data.errors) {
+					$scope.error += data.errors[key].message;
+					break;
+				}			
+			}
+			else {
+				$scope.mode = 'success';			
+				$timeout(function() {
+					$location.url('/');
+				}, 3000);				
+			}
+		});
+	}
+
 });

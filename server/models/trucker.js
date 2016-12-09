@@ -8,7 +8,7 @@ module.exports = {
 	// index: function(callback) {
 	// 	connection.query("SELECT *, HEX(id) AS id FROM users", function(err, data) {
 	// 		if (err)
-	// 			callback({errors: {database: {message: `Database error: ${err.code}.`}}})
+	// 			callback({errors: {database: {message: "Please contact an admin."}}})
 	// 		else
 	// 			callback(false, data)
 	// 	});
@@ -48,13 +48,13 @@ module.exports = {
 				var query = "UPDATE truckers SET ? WHERE HEX(id) = ? LIMIT 1";
 				connection.query(query, [req.body, data.id], function(err) {
 					if (err)
-						callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+						callback({errors: {database: {message: "Please contact an admin."}}});
 					else {
 						// Retrieve updated trucker:
 						var query = "SELECT *, HEX(id) AS id FROM truckers WHERE HEX(id) = ? LIMIT 1";
 						connection.query(query, data.id, function(err, data) {
 							if (err)
-								callback({errors: {database: {message: `Database error: ${err.code}.`}}})
+								callback({errors: {database: {message: "Please contact an admin."}}})
 							else {
 								var token = jwt.sign({
 									id: data[0].id,
@@ -78,7 +78,7 @@ module.exports = {
 			else
 				connection.query("DELETE FROM truckers WHERE HEX(id) = ? LIMIT 1", data.id, function(err) {
 					if (err)
-						callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
 						callback(false);
 				});
@@ -92,7 +92,7 @@ module.exports = {
 			var query = "SELECT email FROM truckers WHERE email = ? LIMIT 1";
 			connection.query(query, req.body.email, function(err, data) {
 				if (err)
-					callback({errors: {database: {message: `Database error: ${err.code}.`}}})
+					callback({errors: {database: {message: "Please contact an admin."}}})
 				// If email already exists:
 				else if (data.length > 0) 
 					callback({errors: {email: {message: "Email already in use, please log in."}}});
@@ -132,13 +132,13 @@ module.exports = {
 									connection.query("INSERT INTO truckers SET ?, id = UNHEX(REPLACE(UUID(), '-', '')), \
 									created_at = NOW(), updated_at = NOW()", data, function(err) {
 										if (err)
-											callback({errors: {database: {message: `Database error: ${err.code}.`}}})
+											callback({errors: {database: {message: "Please contact an admin."}}})
 										else {
 											// Retrieve new trucker:
 											var query = "SELECT *, HEX(id) AS id FROM truckers WHERE email = ? LIMIT 1";
 											connection.query(query, req.body.email, function(err, data) {
 												if (err)
-													callback({errors: {database: {message: `Database error: ${err.code}.`}}})
+													callback({errors: {database: {message: "Please contact an admin."}}})
 												else {
 													var token = jwt.sign({
 														id: data[0].id,
@@ -169,7 +169,7 @@ module.exports = {
 			var query = "SELECT *, HEX(id) AS id FROM truckers WHERE email = ? LIMIT 1";
 			connection.query(query, req.body.email, function(err, data) {
 				if (err)
-					callback({errors: {database: {message: `Database error: ${err.code}.`}}});
+					callback({errors: {database: {message: "Please contact an admin."}}});
 				else if (data.length == 0)
 					callback({errors: {email: {message: "Email does not exist, please register."}}});
 				else

@@ -1,8 +1,8 @@
-var job = require('../models/job');
+var pending = require('../models/pending');
 
 module.exports = {
 	index: function(req, res) {
-		job.index(req, function(err, data) {
+		pending.index(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -13,7 +13,7 @@ module.exports = {
 		});
 	},
 	show: function(req, res) {
-		job.show(req, function(err, data) {
+		pending.show(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -24,7 +24,7 @@ module.exports = {
 		});
 	},
 	create: function(req, res) {
-		job.create(req, function(err, data) {
+		pending.create(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -35,7 +35,7 @@ module.exports = {
 		});
 	},
 	update: function(req, res) {
-		job.update(req, function(err, data) {
+		pending.update(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -46,7 +46,7 @@ module.exports = {
 		});	
 	},
 	delete: function(req, res) {
-		job.delete(req, function(err) {
+		pending.delete(req, function(err) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
