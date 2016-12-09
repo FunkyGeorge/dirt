@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'ngCookies']);
+var app = angular.module('app', ['ngRoute', 'ngCookies','infinite-scroll']);
 app.config(function ($routeProvider) {
 	$routeProvider
 	.when('/',{
@@ -7,7 +7,7 @@ app.config(function ($routeProvider) {
 	})
 	.when('/welcome',{
 		templateUrl: 'partials/welcome.html',
-		controller: 'welcomeController'		
+		controller: 'welcomeController'
 	})
 	.when('/register/:user_type?',{
 		templateUrl: 'partials/register.html',
