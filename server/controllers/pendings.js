@@ -12,17 +12,17 @@ module.exports = {
 				res.json(data);
 		});
 	},
-	show: function(req, res) {
-		pending.show(req, function(err, data) {
-			if (err)
-				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
-				else
-					res.json(err);
-			else
-				res.json(data);
-		});
-	},
+	// show: function(req, res) {
+	// 	pending.show(req, function(err, data) {
+	// 		if (err)
+	// 			if (err.errors.jwt)
+	// 				res.clearCookie('token').json(err);
+	// 			else
+	// 				res.json(err);
+	// 		else
+	// 			res.json(data);
+	// 	});
+	// },
 	create: function(req, res) {
 		pending.create(req, function(err, data) {
 			if (err)

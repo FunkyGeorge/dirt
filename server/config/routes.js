@@ -35,7 +35,7 @@ module.exports = function(app) {
 
 	// PENDINGS
 	app.get('/api/pendings', pendings.index);
-	app.get('/api/pendings/:id', pendings.show);
+	// app.get('/api/pendings/:id', pendings.show);
 	app.post('/api/pendings', pendings.create);
 	app.put('/api/pendings/:id', pendings.update);
 	app.delete('/api/pendings/:id', pendings.delete);

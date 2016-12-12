@@ -23,10 +23,10 @@
 <!-- MAIN -->
 <div class="row error" ng-bind="error"></div>
 
-<div class="row" ng-show="!error">
+<div class="row" ng-show="mode=='message'">
 	<h1>Messages</h1>
 	<div class="col-sm-2 div_chat">
-		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id)">
+		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id, pending.job_id);">
 			<b>{{pending.first_name}} {{pending.last_name}}</b>
 			<p>
 				Complete by: {{pending.completion_date | date:"shortDate"}}<br>
@@ -38,14 +38,46 @@
 		<div class="div_chat">
 			<b ng-show="!messages">You can view your conversations here. Click on a conversation on the left to view the conversation.</b>
 			<div ng-repeat="message in messages">
-			<p class="pull-right">&nbsp;{{message.created_at | date:'shortTime'}}</p>
-				<p ng-class="{'pull-right': user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender}">{{message.message}}</p>
+			<p class="pull-right">&nbsp;<b>{{message.created_at | date:'shortTime'}}</b></p>
+				<p ng-class="{'pull-right': user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender}"
+				ng-bind="message.message"></p>
 				<span ng-if="user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender"><br><br></span>
 			</div>
 		</div>
-		<form ng-submit="createMessage(); ">
-			<input type="text" placeholder="Type a message here..." ng-model="new_message.message">
+		<form ng-show="messages" ng-submit="createMessage()">
+			<input type="text" placeholder="Type a message here..." ng-model="new_message.message" required>
 			<input type="submit" value="Send">
 		</form>
+		<button ng-show="messages && user_type=='trucker'" ng-click="showJob()">Invoice Client</button>		
 	</div>
+</div>
+
+<div class="row" ng-show="!error && mode=='invoice'">
+	<h1>Create Invoice</h1><button ng-click="mode='message'">Back</button>
+	<p>Review the details before it's sent:</p>
+	<table>
+		<tr>
+			<th>Completion Date:</th>
+			<td ng-bind="job.completion_date | date:'fullDate'"></td>
+		</tr>
+		<tr>
+			<th>Amount of Dirt:</th>
+			<td>{{job.amount}} cubic yards</td>
+		</tr>
+		<tr>
+			<th>Distance:</th>
+			<td>10 miles (hard coded)</td>
+		</tr>
+		<tr>
+			<th>Pickup Location:</th>
+			<td>Some hard coded address</td>
+		</tr>
+		<tr>
+			<th>Estimated Cost:</th>
+			<td>$300</td>
+		</tr>
+	</table>
+	Notes:<br>
+	<textarea></textarea>
+	<button ng-click="">Send Invoice</button>
 </div>

@@ -31,8 +31,8 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query;
 				var _data;
+				var query;
 				if ('truck_type' in data) {
 					_data = [data.id, req.params.id];
 					query = "SELECT *, HEX(jobs.id) AS id, HEX(contractor_id) AS contractor_id, IF(UNHEX(?) \
@@ -45,6 +45,7 @@ module.exports = {
 					LEFT JOIN images ON jobs.id = job_id WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				connection.query(query, _data, function(err, data) {
+					console.log(this.sql)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else

@@ -11,6 +11,8 @@
 	<script src="jquery/dist/jquery.min.js"></script>
 	<!-- Mobile -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Icon -->
+	<!-- <link rel="icon" type="image/png" href="static/images/favicon.png"> -->
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="static/css/stylesheet.css">
 	<!-- Font -->
@@ -18,11 +20,9 @@
 	<!-- BOOTSTRAP -->
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap-theme.min.css">
-	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js">
-
-	</script>
-	<!-- Icon -->
-	<!-- <link rel="icon" type="image/png" href="static/images/favicon.png"> -->
+	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- Socket.IO -->
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 	<!-- Angular components -->
 	<script src="angular/angular.js" charset="utf-8"></script>
 	<script src="angular-route/angular-route.js" charset="utf-8"></script>
@@ -37,14 +37,17 @@
 	<script src='assets/factories/messagesFactory.js'></script>
 	<script src='assets/controllers/indexController.js'></script>
 	<script src='assets/controllers/welcomeController.js'></script>
-	<script src='assets/controllers/registerController.js'></script>
+	<script src='assets/controllers/registerControlle	r.js'></script>
 	<script src='assets/controllers/loginController.js'></script>
 	<script src='assets/controllers/jobsController.js'></script>
 	<script src='assets/controllers/jobsShowController.js'></script>
 	<script src='assets/controllers/messagesController.js'></script>
+	<!-- Infinite Scroll -->
+	<script src="ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 	<!-- JS -->
-	<script type="text/javascript" src="ngInfiniteScroll/build/ng-infinite-scroll.min.js">
-
+	<script>
+		var socket;
+		socket = io.connect();
 	</script>
 </head>
 <body>

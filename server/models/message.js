@@ -36,15 +36,17 @@ module.exports = {
 				console.log(this.sql, err);
 				if (err)
 					callback({errors: {database: {message: "Please contact an admin."}}});
-				else {
-					var query = "SELECT * FROM messages WHERE HEX(pending_id) = ? ORDER BY created_at";
-					connection.query(query, req.body.pending_id, function(err, data) {
-						if (err)
-							callback({errors: {database: {message: "Please contact an admin."}}});
-						else
-							callback(false, data);
-					});
-				}
+				else
+					callback(false);
+				// else {
+				// 	var query = "SELECT * FROM messages WHERE HEX(pending_id) = ? ORDER BY created_at";
+				// 	connection.query(query, req.body.pending_id, function(err, data) {
+				// 		if (err)
+				// 			callback({errors: {database: {message: "Please contact an admin."}}});
+				// 		else
+				// 			callback(false, data);
+				// 	});
+				// }
 			});
 		}
 	},

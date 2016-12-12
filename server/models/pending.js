@@ -12,14 +12,13 @@ module.exports = {
 				var query;
 				if ('truck_type' in data)
 					query = "SELECT HEX(pendings.id) AS id, pendings.created_at AS created_at, first_name, last_name, \
-					completion_date FROM pendings LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN contractors ON \
+					HEX(jobs.id) AS job_id, completion_date FROM pendings LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN contractors ON \
 					contractor_id = contractors.id WHERE HEX(pendings.trucker_id) = ? ORDER BY pendings.created_at DESC";
 				else
 					query = "SELECT HEX(pendings.id) AS id, pendings.created_at AS created_at, first_name, last_name, \
 					completion_date FROM pendings LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN truckers ON \
 					pendings.trucker_id = truckers.id WHERE HEX(contractor_id) = ? ORDER BY pendings.created_at DESC";
 				connection.query(query, data.id, function(err, data) {
-			console.log(err, data)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
@@ -28,33 +27,33 @@ module.exports = {
 			}
 		});
 	},
-	show: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
-			if (err)
-				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-			else {
-				var query;
-				var _data;
-				if ('truck_type' in data) {
-					_data = [data.id, req.params.id];
-					query = "SELECT *, HEX(pendings.id) AS id, HEX(contractor_id) AS contractor_id, IF(UNHEX(?) \
-					IN (pendings.trucker_id), 1, 0) AS accepted FROM pendings LEFT JOIN images ON pendings.id = pending_id \
-					LEFT JOIN pendings ON pendings.id = pendings.pending_id WHERE HEX(pendings.id) = ? LIMIT 1";
-				}
-				else {
-					_data = req.params.id;
-					query = "SELECT *, HEX(pendings.id) AS id, HEX(contractor_id) AS contractor_id FROM pendings \
-					LEFT JOIN images ON pendings.id = pending_id WHERE HEX(pendings.id) = ? LIMIT 1";
-				}
-				connection.query(query, _data, function(err, data) {
-					if (err)
-						callback({errors: {database: {message: "Please contact an admin."}}});
-					else
-						callback(false, data[0]);
-				});
-			}
-		});
-	},	
+	// show: function(req, callback) {
+	// 	jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+	// 		if (err)
+	// 			callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+	// 		else {
+	// 			var query;
+	// 			var _data;
+	// 			if ('truck_type' in data) {
+	// 				_data = [data.id, req.params.id];
+	// 				query = "SELECT *, HEX(pendings.id) AS id, HEX(contractor_id) AS contractor_id, IF(UNHEX(?) \
+	// 				IN (pendings.trucker_id), 1, 0) AS accepted FROM pendings LEFT JOIN images ON pendings.id = pending_id \
+	// 				LEFT JOIN pendings ON pendings.id = pendings.pending_id WHERE HEX(pendings.id) = ? LIMIT 1";
+	// 			}
+	// 			else {
+	// 				_data = req.params.id;
+	// 				query = "SELECT *, HEX(pendings.id) AS id, HEX(contractor_id) AS contractor_id FROM pendings \
+	// 				LEFT JOIN images ON pendings.id = pending_id WHERE HEX(pendings.id) = ? LIMIT 1";
+	// 			}
+	// 			connection.query(query, _data, function(err, data) {
+	// 				if (err)
+	// 					callback({errors: {database: {message: "Please contact an admin."}}});
+	// 				else
+	// 					callback(false, data[0]);
+	// 			});
+	// 		}
+	// 	});
+	// },	
 	create: function(req, callback) {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)
