@@ -33,7 +33,6 @@ module.exports = {
 			var query = "INSERT INTO messages SET ?, pending_id = UNHEX(?), id = UNHEX(REPLACE(UUID(), '-', '')), \
 			created_at = NOW(), updated_at = NOW()";
 			connection.query(query, [data, req.body.pending_id], function(err) {
-				console.log(this.sql, err);
 				if (err)
 					callback({errors: {database: {message: "Please contact an admin."}}});
 				else
