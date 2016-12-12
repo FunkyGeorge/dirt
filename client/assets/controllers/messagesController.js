@@ -29,12 +29,14 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 		$location.url("/welcome");
 
 	socket.on('message', function(data) {
-		$scope.messages.push(data);
-		$scope.$apply();
-		$timeout(function() {
-			var _ = document.getElementsByClassName("div_chat")[1];
-			_.scrollTop = _.scrollHeight;				
-		}, 0, false);		
+		if ($scope.new_message.pending_id == data.room) {
+			$scope.messages.push(data);
+			$scope.$apply();
+			$timeout(function() {
+				var _ = document.getElementsByClassName("div_chat")[1];
+				_.scrollTop = _.scrollHeight;				
+			}, 0, false);		
+		}
 	});
 
 
