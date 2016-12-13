@@ -5,6 +5,22 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		return JSON.parse(window.atob(base64));
 	}
 
+	function appendJobs(){
+		if(!$scope.jobs){
+			$scope.jobs = [];
+		}
+		for(var i = $scope.data[1]*5; i < ($scope.data[1]+1)*5; i++){
+			$scope.jobs[i] = $scope.data[0][i];
+			if ($scope.data[0][i+1])
+				continue;
+			else
+				break;
+
+		}
+		if ($scope.data[0][$scope.jobs.length])
+			$scope.data[1] += 1;
+	}
+	
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
 		$scope.data = ["waiting"];
@@ -25,21 +41,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 	else
 		$location.url('/welcome');
 
-	function appendJobs(){
-		if(!$scope.jobs){
-			$scope.jobs = [];
-		}
-		for(var i = $scope.data[1]*5; i < ($scope.data[1]+1)*5; i++){
-			$scope.jobs[i] = $scope.data[0][i];
-			if ($scope.data[0][i+1])
-				continue;
-			else
-				break;
-
-		}
-		if ($scope.data[0][$scope.jobs.length])
-			$scope.data[1] += 1;
-	}
 
 	$scope.append = function(){
 		appendJobs();

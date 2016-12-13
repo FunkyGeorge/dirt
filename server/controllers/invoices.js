@@ -1,27 +1,30 @@
-var message = require('../models/message');
+var invoice = require('../models/invoice');
 
 module.exports = {
-	// index: function(req, res) {
-	// 	message.index(req, function(err, data) {
-	// 		if (err)
-	// 			if (err.errors.jwt)
-	// 				res.clearCookie('token').json(err);
-	// 			else
-	// 				res.json(err);
-	// 		else
-	// 			res.json(data);
-	// 	});
-	// },
-	show: function(req, res) {
-		message.show(req, function(err, data) {
+	index: function(req, res) {
+		invoice.index(req, function(err, data) {
 			if (err)
-				res.json(err);
+				if (err.errors.jwt)
+					res.clearCookie('token').json(err);
+				else
+					res.json(err);
+			else
+				res.json(data);
+		});
+	},
+	show: function(req, res) {
+		invoice.show(req, function(err, data) {
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('token').json(err);
+				else
+					res.json(err);
 			else
 				res.json(data);
 		});
 	},
 	create: function(req, res) {
-		message.create(req, function(err, data) {
+		invoice.create(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -32,7 +35,7 @@ module.exports = {
 		});
 	},
 	update: function(req, res) {
-		message.update(req, function(err, data) {
+		invoice.update(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -43,7 +46,7 @@ module.exports = {
 		});	
 	},
 	delete: function(req, res) {
-		message.delete(req, function(err) {
+		invoice.delete(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -52,5 +55,5 @@ module.exports = {
 			else
 				res.json(data);
 		});	
-	}
+	}	
 }

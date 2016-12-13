@@ -1,4 +1,4 @@
-app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, imagesFactory, pendingsFactory) {
+app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, pendingsFactory) {
 	function getPayload(token) {
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace('-', '+').replace('_', '/');
@@ -80,12 +80,8 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 					break;
 				}			
 			}
-			else {
-				$scope.mode = 'success';			
-				$timeout(function() {
-					$location.url('/');
-				}, 3000);				
-			}
+			else
+				$scope.mode = 'success';
 		});
 	}
 
