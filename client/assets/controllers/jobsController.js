@@ -23,8 +23,33 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 	$scope.step = 1;
 	$scope.progress = {'width': '30%'};
 
+	$scope.calculate = function(){
+
+				switch ($scope.shape) {
+					case '1':  //rectangle
+						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
+						break;
+					case '2':  //wedge
+						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 50)/100;
+						break;
+					case '3':  //cylinder
+						$scope.preview = Math.round(Math.PI * $scope.depth * (($scope.width/2)**2) * 100)/100;
+						break;
+					case '4':  //cone
+						$scope.preview = Math.round(Math.PI * ($scope.depth/3) * (($scope.width/2)**2) * 100)/100;
+						break;
+					case '5': //bowl
+						$scope.preview = Math.round((2 * Math.PI * $scope.length * $scope.depth * $scope.width)/3 * 100)/100;
+						break;
+					case '6':
+						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
+						break;
+					default:
+				}
+	}
+
 	$scope.setAmount = function() {
-		$scope.new_job.amount = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
+		$scope.new_job.amount = $scope.preview;
 		$scope.step = 1;
 	}
 
