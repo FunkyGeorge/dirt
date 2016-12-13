@@ -10,15 +10,17 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
 				var query;
+				var limit = (req.headers.scroll * 5) + "";
 				if ('truck_type' in data){
-					var limit = (req.headers.scroll * 5) + "";
 					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(contractor_id) \
 					AS contractor_id, IF(UNHEX(?) IN (pendings.trucker_id), 1, 0) AS applied FROM jobs \
 					LEFT JOIN pendings ON jobs.id = pendings.job_id ORDER BY jobs.created_at DESC \
 					LIMIT " + limit;
+				}
 				else
 					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at as created_at, HEX(contractor_id) \
-					AS contractor_id FROM jobs ORDER BY jobs.created_at DESC";
+					AS contractor_id FROM jobs ORDER BY jobs.created_at DESC \
+					LIMIT " + limit;
 				connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
