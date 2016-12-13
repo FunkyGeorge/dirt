@@ -1,15 +1,18 @@
 app.factory('jobsFactory', function($http, $cookies) {
 	return {
-		index: function(callback) {
+		index: function(data, callback) {
 			$http.get('/api/jobs', {
-				headers: {'authorization': `Bearer ${$cookies.get('token')}`}
+				headers: {
+					'authorization': `Bearer ${$cookies.get('token')}`,
+					'scroll': data
+				}
 			}).then(function(res) {
 				callback(res.data);
 			});
 		},
 		show: function(id, callback) {
 			$http.get(`/api/jobs/${id}`, {
-				headers: {'authorization': `Bearer ${$cookies.get('token')}`}				
+				headers: {'authorization': `Bearer ${$cookies.get('token')}`}
 			}).then(function(res) {
 				callback(res.data);
 			});

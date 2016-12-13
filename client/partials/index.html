@@ -13,8 +13,8 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='contractor'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/" ng-click="logout()">Logout</a></li>
+				<li ng-if="user_type=='contractor'"><a href="/jobs">Post New Job</a></li>
+				<li><a href="/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
@@ -51,7 +51,7 @@
 					<p>{{job.created_at | date:'fullDate'}} at {{job.created_at | date:'shortTime'}}</p>
 					<input type="checkbox" ng-checked="job.pickup_only" disabled/>Pickup Only
 					<input type="checkbox" ng-checked="job.loader_onsite" disabled/>Loader On-Site
-					<a href="#/jobs/{{job.id}}">
+					<a href="/jobs/{{job.id}}">
 						<button class="btn btn-default pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button>
 					</a>
 				</div>
