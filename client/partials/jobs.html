@@ -154,15 +154,15 @@
 		</div>
 		<div class="form-group col-md-4" ng-hide="shape==3 || shape==4">
 			<label>Length (yards)</label>
-			<input type="number" step="0.01" ng-model="length" ng-init="length=0" required>
+			<input type="number" step="0.01" ng-model="length" ng-init="length=0" ng-change="calculate();" required>
 		</div>
 		<div class="form-group col-md-4">
 			<label>Width (yards)</label>
-			<input type="number" step="0.01" ng-model="width" ng-init="width=0" required>
+			<input type="number" step="0.01" ng-model="width" ng-init="width=0" ng-change="calculate();" required>
 		</div>
 		<div class="form-group col-md-4">
 			<label>Depth (yards)</label>
-			<input type="number" step="0.01" ng-model="depth" ng-init="depth=0" required>
+			<input type="number" step="0.01" ng-model="depth" ng-init="depth=0" ng-change="calculate();" required>
 		</div>
 		<label>Looks like you'll need:</label><br>
 		<b>{{ preview|number:2}} cubic yards</b>
