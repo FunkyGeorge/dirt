@@ -43,7 +43,7 @@ module.exports = {
 					res.json(err);
 			else
 				res.json(data);
-		});	
+		});
 	},
 	delete: function(req, res) {
 		job.delete(req, function(err) {
@@ -54,6 +54,6 @@ module.exports = {
 					res.json(err);
 			else
 				res.json(data);
-		});	
+		});
 	}
 }

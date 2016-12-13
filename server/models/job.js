@@ -10,10 +10,13 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
 				var query;
-				if ('truck_type' in data)
+				if ('truck_type' in data){
+					var limit = (req.headers.scroll * 5) + "";
 					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(contractor_id) \
 					AS contractor_id, IF(UNHEX(?) IN (pendings.trucker_id), 1, 0) AS accepted FROM jobs LEFT JOIN \
-					images ON jobs.id = job_id LEFT JOIN pendings ON jobs.id = pendings.job_id ORDER BY jobs.created_at DESC";
+					images ON jobs.id = job_id LEFT JOIN pendings ON jobs.id = pendings.job_id ORDER BY jobs.created_at DESC \
+					LIMIT " + limit;
+				}
 				else
 					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at as created_at, HEX(contractor_id) \
 					AS contractor_id FROM jobs LEFT JOIN images ON jobs.id = job_id ORDER BY jobs.created_at DESC";
@@ -52,7 +55,7 @@ module.exports = {
 				});
 			}
 		});
-	},	
+	},
 	create: function(req, callback) {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)
@@ -86,7 +89,7 @@ module.exports = {
 										callback(false, data[0]);
 								});
 						});
-					}				
+					}
 				});
 		});
 	},

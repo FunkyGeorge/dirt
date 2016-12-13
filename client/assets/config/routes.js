@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'ngCookies','infinite-scroll']);
-app.config(function ($routeProvider) {
+app.config(function ($routeProvider, $locationProvider) {
 	$routeProvider
 	.when('/',{
 		templateUrl: 'partials/index.html',
@@ -32,4 +32,6 @@ app.config(function ($routeProvider) {
 	.otherwise({
 		redirectTo: '/welcome'
 	});
+	$locationProvider
+	.html5Mode(true);
 });
