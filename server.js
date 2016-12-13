@@ -22,6 +22,9 @@ app.use(cookieParser());
 require('./server/config/mysql.js');
 require('./server/config/routes.js')(app);
 
-app.listen(port, function() {
+var server = app.listen(port, function() {
 	console.log(`server running on port ${ port }`);
 });
+
+require('./server/config/socket.js')(server);
+

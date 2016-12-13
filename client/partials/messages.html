@@ -13,7 +13,7 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li><a href="/jobs" ng-show="user_type=='contractor'">Post New Job</a></li>
+				<li ng-if="user_type=='contractor'"><a href="/jobs">Post New Job</a></li>
 				<li><a href="/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -23,29 +23,93 @@
 <!-- MAIN -->
 <div class="row error" ng-bind="error"></div>
 
-<div class="row" ng-show="!error">
+<!-- MESSAGE -->
+<div class="row" ng-show="mode=='message'">
 	<h1>Messages</h1>
-	<div class="col-sm-2 div_chat">
-		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id)">
+	<div class="col-sm-3 div_chat">
+		<h4>Pending Applications</h4>
+		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id, pending.job_id);">
 			<b>{{pending.first_name}} {{pending.last_name}}</b>
 			<p>
 				Complete by: {{pending.completion_date | date:"shortDate"}}<br>
-				Accepted on: {{pending.created_at | date:"shortDate"}}
+				Applied on: {{pending.created_at | date:"shortDate"}}<br>
+				<div ng-if="user_type=='contractor'">
+					<button style="color: green">Accept</button><button style="color: red">Decline</button>
+				</div>
+				<div ng-if="user_type=='trucker'">
+					<button style="color: red">Remove Application</button>
+				</div>
+			</p>
+		</div>
+		<hr>
+		<h4>Accepted Applications</h4>
+		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id, pending.job_id);">
+			<b>{{pending.first_name}} {{pending.last_name}}</b>
+			<p>
+				Complete by: {{pending.completion_date | date:"shortDate"}}<br>
+				Applied on: {{pending.created_at | date:"shortDate"}}<br>
 			</p>
 		</div>
 	</div>
-	<div class="col-sm-10">
+	<div class="col-sm-9">
 		<div class="div_chat">
 			<b ng-show="!messages">You can view your conversations here. Click on a conversation on the left to view the conversation.</b>
 			<div ng-repeat="message in messages">
-			<p class="pull-right">&nbsp;{{message.created_at | date:'shortTime'}}</p>
-				<p ng-class="{'pull-right': user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender}">{{message.message}}</p>
-				<span ng-if="user_type=='trucker' && message.sender || user_type=='contractor' && !message.sender"><br><br></span>
+			<p class="pull-right">&nbsp;<b>{{message.created_at | date:'shortTime'}}</b></p>
+				<p ng-class="{'pull-right': id==message.trucker_id || id==message.contractor_id}"
+				ng-bind="message.message"></p>
+				<span ng-if="id==message.trucker_id || id==message.contractor_id"><br><br></span>
 			</div>
 		</div>
-		<form ng-submit="createMessage(); ">
-			<input type="text" placeholder="Type a message here..." ng-model="new_message.message">
+		<form ng-show="messages" ng-submit="createMessage()">
+			<input type="text" placeholder="Type a message here..." ng-model="new_message.message" required>
 			<input type="submit" value="Send">
 		</form>
+		<button ng-show="messages && user_type=='trucker'" ng-click="showJob()">Invoice Client</button>
 	</div>
+</div>
+
+<!-- INVOICE -->
+<div class="row" ng-show="!error && mode=='invoice'">
+	<h1>Create Invoice</h1>
+	<button ng-click="mode='message'">Back</button>
+	<p>Review the details before it's sent:</p>
+	<table>
+		<tr>
+			<th>Completion Date:</th>
+			<td ng-bind="job.completion_date | date:'fullDate'"></td>
+		</tr>
+		<tr>
+			<th>Amount of Dirt:</th>
+			<td>{{job.amount}} cubic yards</td>
+		</tr>
+		<tr>
+			<th>Type of Dirt:</th>
+			<td ng-bind="job.type"></td>
+		</tr>
+		<tr>
+			<th>Distance:</th>
+			<td>10 miles (hard coded)</td>
+		</tr>
+		<tr>
+			<th>Pickup Location:</th>
+			<td>Some hard coded address</td>
+		</tr>
+		<tr>
+			<th>Estimated Cost:</th>
+			<td>$300</td>
+		</tr>
+	</table>
+	<label>Notes:</label><br>
+	<textarea ng-model="new_invoice.notes"></textarea><br>
+	<button ng-click="createInvoice()">Send Invoice</button>
+</div>
+
+<!-- SUCCESS -->
+<div class="row" ng-show="!error && mode=='success'">
+	<h1>Success!</h1>
+	<p>Your invoice has been sent.</p>
+	<p>Your funds will be available to view in the top right menu under invoices.</p>
+	<p>Or just click below:</p>
+	<a href="#/invoices"><button>View Invoices</button></a>
 </div>

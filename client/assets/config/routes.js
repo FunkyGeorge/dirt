@@ -29,6 +29,10 @@ app.config(function ($routeProvider, $locationProvider) {
 		templateUrl: 'partials/messages.html',
 		controller: 'messagesController'
 	})
+	.when('/invoices',{
+		templateUrl: 'partials/invoices.html',
+		controller: 'invoicesController'
+	})
 	.otherwise({
 		redirectTo: '/welcome'
 	});

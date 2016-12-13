@@ -13,7 +13,7 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li><a href="/jobs" ng-show="user_type=='contractor'">Post New Job</a></li>
+				<li ng-if="user_type=='contractor'"><a href="/jobs">Post New Job</a></li>
 				<li><a href="/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -44,8 +44,8 @@
 				</div>
 				<div class="col-md-6">
 					<b ng-show="id==job.contractor_id">Posted by you!</b><br><br>
-					<b>Description:</b><br>
-					<p ng-bind="job.description"></p><br>
+					<b>Type:</b><br>
+					<p ng-bind="job.type"></p><br>
 					<div ng-show="id!=job.contractor_id">
 						<b>Distance:</b><br>
 						<p>5 miles (estimated) (hard coded)</p><br>
@@ -84,8 +84,8 @@
 				</tr>
 			</table>
 			<br>
-			<button ng-show="user_type=='trucker' && !job.accepted" ng-click="createPending()">Accept Job</button>
-			<b ng-show="user_type=='trucker' && job.accepted">You've accepted this job!</b>
+			<button ng-show="user_type=='trucker' && !job.applied" ng-click="createPending()">Apply to Job</button>
+			<b ng-show="user_type=='trucker' && job.applied">You've applied to this job!</b>
 			<br><br>
 			<button ng-show="id==job.contractor_id" ng-click="mode='edit'">Edit Job</button>
 		</div>
@@ -105,8 +105,49 @@
 				</div>
 				<div class="col-md-6">
 					<form ng-submit="updateJob()">
-						<label>Description:</label><br>
-						<textarea ng-model="job.description"></textarea><br>
+						<label>Type of dirt:</label><br>
+						<select ng-init="job.type" ng-model="job.type">
+							<option value="Sand">Sand</option>
+							<option value="Sandyclay">Sandyclay</option>
+							<option value="Clay">Clay</option>
+							<option value="Gravel">Gravel</option>
+							<option value="Recycled Asphalt">Recycled Asphalt</option>
+							<option value="Recycled Concrete">Recycled Concrete</option>
+							<option value="Recycled Base Material">Recycled Base Material</option>
+							<option value="Clean Fill">Clean Fill</option>
+							<option value="Rough Fill">Rough Fill</option>
+							<option value="Topsoil - Nice">Topsoil - Nice</option>
+							<option value="Topsoil - Average">Topsoil - Average</option>
+							<option value="Topsoil - Economy">Topsoil - Economy</option>
+							<option value="Peat">Peat</option>
+							<option value="River Rock">River Rock</option>
+							<option value="Rip-Rap">Rip-Rap</option>
+							<option value="Boulders">Boulders</option>
+							<option value="Asphalt Chunks">Asphalt Chunks</option>
+							<option value="Concrete Chunks">Concrete Chunks</option>
+							<option value="Contaminated Fill">Contaminated Fill</option>
+							<option value="Snow">Snow</option>
+						</select><br>
+						<p ng-show="job.type=='Sand'">Natural or screened / washed / crushed granular that can be compacted</p>
+						<p ng-show="job.type=='Sandyclay'">Contains both sand and clay.</p>
+						<p ng-show="job.type=='Clay'">Clay that can be compacted.</p>
+						<p ng-show="job.type=='Gravel'">Natural or screened / washed / crushed rock that can be compacted.</p>
+						<p ng-show="job.type=='Recycled Asphalt'">Crushed for reuse, from a recycling plant or staging area.</p>
+						<p ng-show="job.type=='Recycled Concrete'">	Crushed for reuse, from a recycling plant or staging area.</p>
+						<p ng-show="job.type=='Recycled Base Material'">Ready for reuse, from under roads &amp; parking lots.</p>
+						<p ng-show="job.type=='Clean Fill'">Sand, sandyclay, clay, topsoil or a mixture of any of these with less than 5% clumps or rocks or sod or roots or weeds or concrete chunks, etc.</p>
+						<p ng-show="job.type=='Rough Fill'">Same as Clean Fill, with 5% or more clumps or rocks or sod or roots or weeds, or concrete chunks, etc. Also gumbo clay and marsh bottom.</p>
+						<p ng-show="job.type=='Topsoil - Nice'">High quality, rich black organic, natural or screened.</p>
+						<p ng-show="job.type=='Topsoil - Average'">Average quality, medium black organic, little or no clumps, rocks, sod, or roots, etc.</p>
+						<p ng-show="job.type=='Topsoil - Economy'">Low quality, some black organic, could have some clumps, rocks, sod, or roots, etc.</p>
+						<p ng-show="job.type=='Peat'">Decomposed plant material, marsh bottom, could be wet or dry.</p>
+						<p ng-show="job.type=='River Rock'">Rounded stones varies in color, 1/2 inch to 3 inches.</p>
+						<p ng-show="job.type=='Rip-Rap'">Rock, 3 inches to 10 inches.</p>
+						<p ng-show="job.type=='Boulders'">Rock, larger than 10 inches.</p>
+						<p ng-show="job.type=='Asphalt Chunks'">Broken pieces of asphalt, not been recycled.</p>
+						<p ng-show="job.type=='Concrete Chunks'">Broken pieces of concrete, not been recycled.</p>
+						<p ng-show="job.type=='Contaminated Fill'">Dirtfill with gas, diesel fuel, PCBs, toxic chemicals, etc.</p>
+						<p ng-show="job.type=='Snow'">Removed from streets, parking lots or driveways.</p>
 						<label>Completed By:</label><br>
 						<input  type="date" ng-model="job.completion_date" min="{{today|date:'yyyy-MM-dd'}}" required><br><br>
 						<input type="checkbox" ng-model="job.pickup_only">Pickup Only
@@ -148,6 +189,10 @@
 	</div>
 
 	<div class="row" ng-show="mode=='success'">
-		SUCCESS MESSAGE HERE
+		<h1>Successfully Applied to Job!</h1>
+		<p>The contractor has been notified.<br>Go to your inbox and say hello!</p>
+		<p>If they have not responded in 30 minutes, the job will become live again.<br>
+		Check your inbox for updates.</p>
+		<a href="#/messages"><button>My Inbox</button></a>
 	</div>
 </div>

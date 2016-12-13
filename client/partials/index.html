@@ -13,7 +13,7 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li><a href="/jobs" ng-show="user_type=='contractor'">Post New Job</a></li>
+				<li ng-if="user_type=='contractor'"><a href="/jobs">Post New Job</a></li>
 				<li><a href="/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -23,9 +23,9 @@
 <!-- MAIN -->
 <div class="row error" ng-bind="error"></div>
 
-<div class="row" ng-show="!error">
+<div class="row" ng-if="!error">
 	<h1>We Got Dirt</h1>
-	<div class="col-sm-2">
+	<div class="col-sm-3">
 		<h2>Sort By:</h2>
 		<form>
 	    <div class="radio">
@@ -36,7 +36,7 @@
 	    </div>
 	  </form>
 	</div>
-	<div class="col-sm-10">
+	<div class="col-sm-9">
 		<!-- nfinite scroll zone ########################################################### -->
 		<div infinite-scroll="append();" infinite-scroll-distance="0">
 			<div class="row" ng-repeat="job in jobs" style="margin-bottom: 10px;">
@@ -45,14 +45,14 @@
 				</div>
 				<div class="col-sm-9">
 					<h2>{{job.amount}} cubic yards {{id==job.contractor_id ? '(Posted by you)' : '(est __ miles away)'}}</h2>
-					<b>Description:</b><br>
-					<p ng-bind="job.description"></p>
+					<b>Type:</b><br>
+					<p ng-bind="job.type"></p>
 					<b>Posted:</b><br>
 					<p>{{job.created_at | date:'fullDate'}} at {{job.created_at | date:'shortTime'}}</p>
 					<input type="checkbox" ng-checked="job.pickup_only" disabled/>Pickup Only
 					<input type="checkbox" ng-checked="job.loader_onsite" disabled/>Loader On-Site
 					<a href="/jobs/{{job.id}}">
-						<button class="btn btn-default pull-right">{{job.accepted ? 'Job Accepted!' : 'View Job'}}</button>
+						<button class="btn btn-default pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button>
 					</a>
 				</div>
 			</div>

@@ -35,16 +35,6 @@ app.factory('truckersFactory', function($http, $cookies) {
 			$http.post('/truckers/login', data).then(function(res) {
 				callback(res.data);
 			});
-		},
-		fb_register: function(data, callback) {
-			$http.post('/truckers/fb_register', data).then(function(res) {
-				callback(res.data);
-			});
-		},
-		fb_login: function(data, callback) {
-			$http.post('/truckers/fb_login', data).then(function(res) {
-				callback(res.data);
-			});
-		}		
+		}
 	}
 })
