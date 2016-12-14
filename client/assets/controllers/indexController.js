@@ -27,28 +27,26 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		$scope.name = payload.first_name + " " + payload.last_name;
 		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
 		$scope.error = null;
-		$scope.scroll = [1, true];
-		// appendJobs();
+		$scope.flags = [1, true, false];  //Flag variable [int scroll, bool keepscrolling flag, bool distance/latest flag]
 	}
 	else
 		$location.url('/welcome');
 
 	function appendJobs(){
-		jobsFactory.index($scope.scroll[0], function(data) {
+		jobsFactory.index($scope.flags, function(data) {
 			if (data.errors)
 				$scope.error = "Something went wrong, please wait a while and try reloading."
 			else {
 				if ($scope.jobs && $scope.jobs.length == data.length)
-					$scope.scroll[1] = false;
+					$scope.flags[1] = false;
 				$scope.jobs = data;
-				$scope.scroll[0]++;
+				$scope.flags[0]++;
 			}
 		});
 	}
 
 	$scope.append = function(){
-		if ($scope.scroll && $scope.scroll[1]){
-			console.log("appending");
+		if ($scope.flags && $scope.flags[1]){
 			appendJobs();
 		}
 	};
