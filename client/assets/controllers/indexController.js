@@ -47,7 +47,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 	}
 
 	$scope.append = function(){
-		if ($scope.scroll[1]){
+		if ($scope.scroll && $scope.scroll[1]){
 			console.log("appending");
 			appendJobs();
 		}
