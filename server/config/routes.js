@@ -1,18 +1,18 @@
-var contractors = require('../controllers/contractors.js');
+var users = require('../controllers/users.js');
 var truckers = require('../controllers/truckers.js');
 var jobs = require('../controllers/jobs.js');
-var pendings = require('../controllers/pendings.js');
+var applications = require('../controllers/applications.js');
 var messages = require('../controllers/messages.js');
 var invoices = require('../controllers/invoices.js');
 
 module.exports = function(app) {
-	// CONTRACTORS
-	// app.get('/contractors', contractors.index);
-	// app.get('/api/contractors/:username', contractors.show);
-	app.put('/api/contractors', contractors.update);
-	app.delete('/api/contractors', contractors.delete);
-	app.post('/contractors/register', contractors.register);
-	app.post('/contractors/login', contractors.login);
+	// users
+	// app.get('/users', users.index);
+	// app.get('/api/users/:username', users.show);
+	app.put('/api/users', users.update);
+	app.delete('/api/users', users.delete);
+	app.post('/users/register', users.register);
+	app.post('/users/login', users.login);
 
 	// TRUCKERS
 	// app.get('/truckers', truckers.index);
@@ -29,12 +29,12 @@ module.exports = function(app) {
 	app.put('/api/jobs/:id', jobs.update);
 	app.delete('/api/jobs/:id', jobs.delete);
 
-	// PENDINGS
-	app.get('/api/pendings', pendings.index);
-	// app.get('/api/pendings/:id', pendings.show);
-	app.post('/api/pendings', pendings.create);
-	app.put('/api/pendings/:id', pendings.update);
-	app.delete('/api/pendings/:id', pendings.delete);
+	// applications
+	app.get('/api/applications', applications.index);
+	// app.get('/api/applications/:id', applications.show);
+	app.post('/api/applications', applications.create);
+	app.put('/api/applications/:id', applications.update);
+	app.delete('/api/applications/:id', applications.delete);
 
 	// // MESSAGES
 	// app.get('/api/messages', messages.index);

@@ -12,15 +12,13 @@ module.exports = {
 				var query;
 				if ('truck_type' in data)
 					query = "SELECT *, HEX(jobs.id) AS id, invoices.created_at AS created_at FROM invoices LEFT JOIN jobs \
-					ON job_id = jobs.id LEFT JOIN contractors ON contractor_id = contractors.id WHERE HEX(trucker_id) = ? \
+					ON job_id = jobs.id LEFT JOIN users ON user_id = users.id WHERE HEX(trucker_id) = ? \
 					ORDER BY invoices.created_at DESC";
 				else
 					query = "SELECT *, HEX(jobs.id) AS id, invoices.created_at AS created_at FROM invoices LEFT JOIN jobs \
-					ON job_id = jobs.id LEFT JOIN truckers ON trucker_id = truckers.id WHERE HEX(contractor_id) = ? \
+					ON job_id = jobs.id LEFT JOIN truckers ON trucker_id = truckers.id WHERE HEX(user_id) = ? \
 					ORDER BY invoices.created_at DESC";
 				connection.query(query, data.id, function(err, data) {
-					console.log(this.sql)
-					console.log(data)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
@@ -40,7 +38,7 @@ module.exports = {
 					ON job_id = jobs.id WHERE HEX(trucker_id) = ? AND HEX(job_id) = ? LIMIT 1";
 				else
 					query = "SELECT *, invoices.created_at AS created_at FROM invoices LEFT JOIN jobs \
-					ON job_id = jobs.id WHERE HEX(contractor_id) = ? AND HEX(job_id) = ? LIMIT 1";
+					ON job_id = jobs.id WHERE HEX(user_id) = ? AND HEX(job_id) = ? LIMIT 1";
 				connection.query(query, [data.id, req.params.id], function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
@@ -86,7 +84,7 @@ module.exports = {
 					AND HEX(job_id) = ? LIMIT 1) LIMIT 1";
 				else
 					query = "UPDATE invoices SET status = ?, updated_at = NOW() WHERE HEX(trucker_id) = \
-					(SELECT trucker_id FROM invoices LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(contractor_id) = ? \
+					(SELECT trucker_id FROM invoices LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(user_id) = ? \
 					AND HEX(job_id) = ? LIMIT 1) LIMIT 1";
 				connection.query(query, [req.body.status, data.id, req.params.id], function(err, data) {
 					if (err)

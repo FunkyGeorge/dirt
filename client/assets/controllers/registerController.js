@@ -1,4 +1,4 @@
-app.controller('registerController', function ($scope, $location, $cookies, $routeParams, $timeout, truckersFactory, contractorsFactory) {
+app.controller('registerController', function ($scope, $location, $cookies, $routeParams, $timeout, truckersFactory, usersFactory) {
 	if ($cookies.get('token'))
 		$location.url('/');
 
@@ -28,8 +28,8 @@ app.controller('registerController', function ($scope, $location, $cookies, $rou
 					}, 3000);
 				}
 			});
-		else if ($scope.step == 2 && $scope.user_type == 'contractor')
-			contractorsFactory.register($scope.new_user, function(data) {
+		else if ($scope.step == 2 && $scope.user_type == 'user')
+			usersFactory.register($scope.new_user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
 						$scope.error = data.errors[key].message;

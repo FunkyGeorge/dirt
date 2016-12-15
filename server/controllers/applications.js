@@ -1,8 +1,8 @@
-var pending = require('../models/pending');
+var application = require('../models/application');
 
 module.exports = {
 	index: function(req, res) {
-		pending.index(req, function(err, data) {
+		application.index(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -13,7 +13,7 @@ module.exports = {
 		});
 	},
 	// show: function(req, res) {
-	// 	pending.show(req, function(err, data) {
+	// 	application.show(req, function(err, data) {
 	// 		if (err)
 	// 			if (err.errors.jwt)
 	// 				res.clearCookie('token').json(err);
@@ -24,7 +24,7 @@ module.exports = {
 	// 	});
 	// },
 	create: function(req, res) {
-		pending.create(req, function(err, data) {
+		application.create(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -35,7 +35,7 @@ module.exports = {
 		});
 	},
 	update: function(req, res) {
-		pending.update(req, function(err, data) {
+		application.update(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);
@@ -46,7 +46,7 @@ module.exports = {
 		});	
 	},
 	delete: function(req, res) {
-		pending.delete(req, function(err) {
+		application.delete(req, function(err) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('token').json(err);

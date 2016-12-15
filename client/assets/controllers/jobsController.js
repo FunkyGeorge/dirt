@@ -8,15 +8,15 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
 		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
-		if ($scope.user_type != 'contractor')
+		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
+		if ($scope.user_type != 'user')
 			$location.url('/');
-		else if($scope.user_type == 'contractor') {
-			$scope.new_job = {
+		else if($scope.user_type == 'user') {
+			$scope.job = {
 				type: 'Sand',
 				pickup_only: false,
-				loader_onsite: false,
-				d_loader_onsite: false
+				loader_pickup: false,
+				loader_dropoff: false
 			};
 			$scope.src = "../static/images/dirt_types/sand.jpg";
 			$scope.today = new Date();
@@ -28,7 +28,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 		$location.url('/welcome');
 
 	$scope.change = function() {
-		switch($scope.new_job.type) {
+		switch($scope.job.dirt_type) {
 			case 'Sand':
 				$scope.description = "Natural or screened / washed / crushed granular that can be compacted."
 				$scope.src = "../static/images/dirt_types/sand.jpg";
@@ -55,7 +55,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 				break;
 			case 'Recycled Base Material':
 				$scope.description = "Ready for reuse, from under roads &amp; parking lots."
-				$scope.src = "../static/images/dirt_types/recycled_base.jpg";
+				$scope.src = "../static/images/dirt_types/recycled_base_material.jpg";
 				break;
 			case 'Clean Fill':
 				$scope.description = "Sand, sandyclay, clay, topsoil or a mixture of any of these with less than 5% clumps or rocks or sod or roots or weeds or concrete chunks, etc."
@@ -117,13 +117,20 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	}
 
 	$scope.setAmount = function() {
-		$scope.new_job.amount = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
+		$scope.job.amount = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
 		$scope.step = 1;
 	}
 
 	$scope.create = function() {
+		var data = {
+			job: $scope.job,
+			pickup: $scope.pickup
+		};
+		if (!$scope.pickup_only)
+			data.dropoff = $scope.dropoff;
+
 		$scope.error = null;
-		jobsFactory.create($scope.new_job, function(data) {
+		jobsFactory.create(data, function(data) {
 			if (data.errors) {
 				$scope.error = 'Could not create new job. '
 				for (key in data.errors) {

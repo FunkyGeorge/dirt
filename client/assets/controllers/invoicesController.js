@@ -1,4 +1,4 @@
-app.controller("invoicesController", function ($scope, $location, $cookies, $timeout, pendingsFactory, messagesFactory, jobsFactory, invoicesFactory) {
+app.controller("invoicesController", function ($scope, $location, $cookies, invoicesFactory) {
 	function getPayload(token) {
 		var base64Url = token.split(".")[1];
 		var base64 = base64Url.replace("-", "+").replace("_", "/");
@@ -8,7 +8,7 @@ app.controller("invoicesController", function ($scope, $location, $cookies, $tim
 	if ($cookies.get("token")) {
 		var payload = getPayload($cookies.get("token"));
 		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = "truck_type" in payload ? "trucker" : "contractor";
+		$scope.user_type = "truck_type" in payload ? "trucker" : "user";
 		$scope.error = null;
 		invoicesFactory.index(function(data) {
 			if (data.errors) {

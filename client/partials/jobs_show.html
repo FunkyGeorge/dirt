@@ -7,13 +7,15 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand">Got Dirt, Need Dirt</a>
+		<a class="navbar-brand" href="#/">Got Dirt, Need Dirt</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='contractor'"><a href="#/jobs">Post New Job</a></li>
+				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
+				<li><a href="#/messages">Messages</a></li>
+				<li><a href="#/invoices">Invoices</a></li>
 				<li><a href="#/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -36,17 +38,12 @@
 			<div class="row">
 				<div class="col-md-6">
 					<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt=""><br>
-					<div class="row">
-						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
-						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
-						<img class="img-rounded img-responsive col-xs-4" src="http://placehold.it/350x350" alt="">
-					</div>
 				</div>
 				<div class="col-md-6">
-					<b ng-show="id==job.contractor_id">Posted by you!</b><br><br>
+					<b ng-show="id==job.user_id">Posted by you!</b><br><br>
 					<b>Type:</b><br>
 					<p ng-bind="job.type"></p><br>
-					<div ng-show="id!=job.contractor_id">
+					<div ng-show="id!=job.user_id">
 						<b>Distance:</b><br>
 						<p>5 miles (estimated) (hard coded)</p><br>
 					</div>
@@ -54,7 +51,7 @@
 					<p ng-bind="job.completion_date|date:'fullDate'"></p><br>
 					<input type="checkbox" ng-checked="job.pickup_only" disabled>Pickup Only
 					<input type="checkbox" ng-checked="job.loader_onsite" disabled>Loader On-Site<br><br>
-					<div ng-show="id==job.contractor_id && !job.pickup_only">
+					<div ng-show="id==job.user_id && !job.pickup_only">
 						<b>Drop-Off Location:</b>
 						<p ng-bind="job.address"></p>
 						<p ng-show="job.city && job.zip">{{job.city}}, {{job.zip}}</p>						
@@ -84,10 +81,10 @@
 				</tr>
 			</table>
 			<br>
-			<button ng-show="user_type=='trucker' && !job.applied" ng-click="createPending()">Apply to Job</button>
+			<button ng-show="user_type=='trucker' && !job.applied" ng-click="createApplication()">Apply to Job</button>
 			<b ng-show="user_type=='trucker' && job.applied">You've applied to this job!</b>
 			<br><br>
-			<button ng-show="id==job.contractor_id" ng-click="mode='edit'">Edit Job</button>
+			<button ng-show="id==job.user_id" ng-click="mode='edit'">Edit Job</button>
 		</div>
 	</div>
 
@@ -190,7 +187,7 @@
 
 	<div class="row" ng-show="mode=='success'">
 		<h1>Successfully Applied to Job!</h1>
-		<p>The contractor has been notified.<br>Go to your inbox and say hello!</p>
+		<p>The user has been notified.<br>Go to your inbox and say hello!</p>
 		<p>If they have not responded in 30 minutes, the job will become live again.<br>
 		Check your inbox for updates.</p>
 		<a href="#/messages"><button>My Inbox</button></a>

@@ -7,13 +7,15 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand">Got Dirt, Need Dirt</a>
+		<a class="navbar-brand" href="#/">Got Dirt, Need Dirt</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='contractor'"><a href="#/jobs">Post New Job</a></li>
+				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
+				<li><a href="#/messages">Messages</a></li>
+				<li><a href="#/invoices">Invoices</a></li>
 				<li><a href="#/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -28,12 +30,12 @@
 	<h1>Messages</h1>
 	<div class="col-sm-3 div_chat">
 		<h4>Pending Applications</h4>
-		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id, pending.job_id);">
-			<b>{{pending.first_name}} {{pending.last_name}}</b>
+		<div ng-repeat="application in applications" ng-click="showMessages(application.id, application.job_id);">
+			<b>{{application.first_name}} {{application.last_name}}</b>
 			<p>
-				Complete by: {{pending.completion_date | date:"shortDate"}}<br>
-				Applied on: {{pending.created_at | date:"shortDate"}}<br>
-				<div ng-if="user_type=='contractor'">
+				Complete by: {{application.completion_date | date:"shortDate"}}<br>
+				Applied on: {{application.created_at | date:"shortDate"}}<br>
+				<div ng-if="user_type=='user'">
 					<button style="color: green">Accept</button><button style="color: red">Decline</button>
 				</div>
 				<div ng-if="user_type=='trucker'">
@@ -43,11 +45,11 @@
 		</div>
 		<hr>
 		<h4>Accepted Applications</h4>
-		<div ng-repeat="pending in pendings" ng-click="showMessages(pending.id, pending.job_id);">
-			<b>{{pending.first_name}} {{pending.last_name}}</b>
+		<div ng-repeat="application in applications" ng-click="showMessages(application.id, application.job_id);">
+			<b>{{application.first_name}} {{application.last_name}}</b>
 			<p>
-				Complete by: {{pending.completion_date | date:"shortDate"}}<br>
-				Applied on: {{pending.created_at | date:"shortDate"}}<br>
+				Complete by: {{application.completion_date | date:"shortDate"}}<br>
+				Applied on: {{application.created_at | date:"shortDate"}}<br>
 			</p>
 		</div>		
 	</div>
@@ -56,9 +58,9 @@
 			<b ng-show="!messages">You can view your conversations here. Click on a conversation on the left to view the conversation.</b>
 			<div ng-repeat="message in messages">
 			<p class="pull-right">&nbsp;<b>{{message.created_at | date:'shortTime'}}</b></p>
-				<p ng-class="{'pull-right': id==message.trucker_id || id==message.contractor_id}"
+				<p ng-class="{'pull-right': id==message.trucker_id || id==message.user_id}"
 				ng-bind="message.message"></p>
-				<span ng-if="id==message.trucker_id || id==message.contractor_id"><br><br></span>
+				<span ng-if="id==message.trucker_id || id==message.user_id"><br><br></span>
 			</div>
 		</div>
 		<form ng-show="messages" ng-submit="createMessage()">

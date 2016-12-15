@@ -1,4 +1,4 @@
-app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, pendingsFactory) {
+app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, applicationsFactory) {
 	function getPayload(token) {
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace('-', '+').replace('_', '/');
@@ -9,7 +9,7 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 		var payload = getPayload($cookies.get('token'));
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
+		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
 		$scope.error = null;
 		jobsFactory.show($routeParams.id, function(data) {
 			if (data.errors) {
@@ -69,10 +69,10 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 	}
 
 	//////////////////////////////////////////////////////
-	//										PENDING
+	//										APPLICATION
 	//////////////////////////////////////////////////////
-	$scope.createPending = function() {
-		pendingsFactory.create({job_id: $scope.job.id}, function(data) {
+	$scope.createApplication = function() {
+		applicationsFactory.create({job_id: $scope.job.id}, function(data) {
 			if (data.errors) {
 				$scope.error = "You were not able to accept the job. ";
 				for (key in data.errors) {

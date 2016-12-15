@@ -23,16 +23,20 @@
 	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- Socket.IO -->
 	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<script>
+		var socket;
+		socket = io.connect();
+	</script>
 	<!-- Angular components -->
 	<script src="angular/angular.js" charset="utf-8"></script>
 	<script src="angular-route/angular-route.js" charset="utf-8"></script>
 	<script src="angular-cookies/angular-cookies.js" charset="utf-8"></script>
 	<!-- Angular files -->
 	<script src="assets/config/routes.js"></script>
-	<script src='assets/factories/contractorsFactory.js'></script>
+	<script src='assets/factories/usersFactory.js'></script>
 	<script src='assets/factories/truckersFactory.js'></script>
 	<script src='assets/factories/jobsFactory.js'></script>
-	<script src='assets/factories/pendingsFactory.js'></script>
+	<script src='assets/factories/applicationsFactory.js'></script>
 	<script src='assets/factories/messagesFactory.js'></script>
 	<script src='assets/factories/invoicesFactory.js'></script>
 	<script src='assets/controllers/indexController.js'></script>
@@ -46,10 +50,6 @@
 	<!-- Infinite Scroll -->
 	<script src="ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 	<!-- JS -->
-	<script>
-		var socket;
-		socket = io.connect();
-	</script>
 </head>
 <body>
 	<!-- Partials -->

@@ -16,42 +16,18 @@ module.exports = {
 	// show: function(req, callback) {
 	// 	var data = {};
 	// 	var username = req.params.username;
-
-	// 	// Get posts:
-	// 	var query = "SELECT * FROM posts LEFT JOIN users ON user_id = users.id WHERE username = ?";
-	// 	connection.query(query, username, function(err, posts) {
-	// 		if (err) {
-	// 			callback(err);
-	// 			return;
-	// 		}
-	// 		data.posts = posts;
-	// 	});
-
-	// 	// Get favorites:
-	// 	var query = "SELECT * FROM favorites LEFT JOIN users ON user_id = users.id \
-	// 	LEFT JOIN posts ON post_id = posts.id WHERE username = ?";
-	// 	connection.query(query, username, function(err, favorites) {
-	// 		if (err) {
-	// 			callback(err);
-	// 			return;
-	// 		}
-	// 		data.favorites = favorites;
-	// 	});
-
-	// 	callback(false, data)
-	// },	
 	update: function(req, callback) {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query = "UPDATE contractors SET ? WHERE HEX(id) = ? LIMIT 1";
+				var query = "UPDATE users SET ? WHERE HEX(id) = ? LIMIT 1";
 				connection.query(query, [req.body, data.id], function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else {
-						// Retrieve updated contractor:
-						var query = "SELECT *, HEX(id) AS id FROM contractors WHERE HEX(id) = ? LIMIT 1";
+						// Retrieve updated user:
+						var query = "SELECT *, HEX(id) AS id FROM users WHERE HEX(id) = ? LIMIT 1";
 						connection.query(query, data.id, function(err, data) {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}})
@@ -75,7 +51,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else
-				connection.query("DELETE FROM contractors WHERE HEX(id) = ? LIMIT 1", data.id, function(err) {
+				connection.query("DELETE FROM users WHERE HEX(id) = ? LIMIT 1", data.id, function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
@@ -88,7 +64,7 @@ module.exports = {
 			callback({errors: {form : {message: "All form fields are required."}}});
 		else {
 			// Check for unique email:
-			var query = "SELECT email FROM contractors WHERE email = ? LIMIT 1";
+			var query = "SELECT email FROM users WHERE email = ? LIMIT 1";
 			connection.query(query, req.body.email, function(err, data) {
 				if (err)
 					callback({errors: {database: {message: "Please contact an admin."}}})
@@ -110,7 +86,7 @@ module.exports = {
 				// Validate confirm_password:
 				else if (req.body.password != req.body.confirm_password)
 					callback({errors: {confirm_password: {message: "Passwords do not match."}}});
-				// Else valid new contractor:
+				// Else valid new user:
 				else
 					// Encrypt password and save:
 					bcrypt.genSalt(10, function(err, salt) {
@@ -127,13 +103,13 @@ module.exports = {
 										last_name: req.body.last_name,
 										password: hash
 									};
-									connection.query("INSERT INTO contractors SET ?, id = UNHEX(REPLACE(UUID(), '-', '')), \
+									connection.query("INSERT INTO users SET ?, id = UNHEX(REPLACE(UUID(), '-', '')), \
 									created_at = NOW(), updated_at = NOW()", data, function(err) {
 										if (err)
 											callback({errors: {database: {message: "Please contact an admin."}}})
 										else {
-											// Retrieve new contractor:
-											var query = "SELECT *, HEX(id) as id FROM contractors WHERE email = ? LIMIT 1";
+											// Retrieve new user:
+											var query = "SELECT *, HEX(id) as id FROM users WHERE email = ? LIMIT 1";
 											connection.query(query, req.body.email, function(err, data) {
 												if (err)
 													callback({errors: {database: {message: "Please contact an admin."}}})
@@ -162,8 +138,8 @@ module.exports = {
 		else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&](?=.{7,})/.test(req.body.password))
 			callback({errors: {password: {message: "Invalid password."}}});		
 		else {
-			// Get contractor by email:
-			var query = "SELECT *, HEX(id) AS id FROM contractors WHERE email = ? LIMIT 1";
+			// Get user by email:
+			var query = "SELECT *, HEX(id) AS id FROM users WHERE email = ? LIMIT 1";
 			connection.query(query, req.body.email, function(err, data) {
 				if (err)
 					callback({errors: {database: {message: "Please contact an admin."}}});

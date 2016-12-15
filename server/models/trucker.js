@@ -16,30 +16,6 @@ module.exports = {
 	// show: function(req, callback) {
 	// 	var data = {};
 	// 	var username = req.params.username;
-
-	// 	// Get posts:
-	// 	var query = "SELECT * FROM posts LEFT JOIN users ON user_id = users.id WHERE username = ?";
-	// 	connection.query(query, username, function(err, posts) {
-	// 		if (err) {
-	// 			callback(err);
-	// 			return;
-	// 		}
-	// 		data.posts = posts;
-	// 	});
-
-	// 	// Get favorites:
-	// 	var query = "SELECT * FROM favorites LEFT JOIN users ON user_id = users.id \
-	// 	LEFT JOIN posts ON post_id = posts.id WHERE username = ?";
-	// 	connection.query(query, username, function(err, favorites) {
-	// 		if (err) {
-	// 			callback(err);
-	// 			return;
-	// 		}
-	// 		data.favorites = favorites;
-	// 	});
-
-	// 	callback(false, data)
-	// },	
 	update: function(req, callback) {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)

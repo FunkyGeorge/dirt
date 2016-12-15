@@ -1,4 +1,4 @@
-app.controller("messagesController", function ($scope, $location, $cookies, $timeout, pendingsFactory, messagesFactory, jobsFactory, invoicesFactory) {
+app.controller("messagesController", function ($scope, $location, $cookies, $timeout, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	function getPayload(token) {
 		var base64Url = token.split(".")[1];
 		var base64 = base64Url.replace("-", "+").replace("_", "/");
@@ -9,9 +9,9 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 		var payload = getPayload($cookies.get("token"));
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = "truck_type" in payload ? "trucker" : "contractor";
+		$scope.user_type = "truck_type" in payload ? "trucker" : "user";
 		$scope.error = null;
-		pendingsFactory.index(function(data) {
+		applicationsFactory.index(function(data) {
 			if (data.errors) {
 				$scope.error = "Could not load conversation. "
 				for (key in data.errors) {
@@ -20,7 +20,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 				}
 			}
 			else {
-				$scope.pendings = data;
+				$scope.applications = data;
 				$scope.mode = "message";
 			}
 		});
@@ -29,7 +29,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 		$location.url("/welcome");
 
 	socket.on('message', function(data) {
-		if ($scope.new_message.pending_id == data.pending_id) {
+		if ($scope.new_message.application_id == data.application_id) {
 			$scope.messages.push(data);
 			$scope.$apply();
 			$timeout(function() {
@@ -48,11 +48,11 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 	//////////////////////////////////////////////////////
 	//										MESSAGE
 	//////////////////////////////////////////////////////
-	$scope.showMessages = function(pending_id, job_id) {
+	$scope.showMessages = function(application_id, job_id) {
 		$scope.job_id = job_id;
-		socket.emit('subscribe', pending_id);		
+		socket.emit('subscribe', application_id);		
 		
-		messagesFactory.show(pending_id, function(data) {
+		messagesFactory.show(application_id, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not load conversation. "
 				for (key in data.errors) {
@@ -61,7 +61,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 				}
 			}
 			else {
-				$scope.new_message = {pending_id: pending_id};
+				$scope.new_message = {application_id: application_id};
 				$scope.messages = data;
 				$timeout(function() {
 					var _ = document.getElementsByClassName("div_chat")[1];
@@ -73,11 +73,11 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 
 	$scope.createMessage = function() {
 		var data = {
-			pending_id: $scope.new_message.pending_id,
+			application_id: $scope.new_message.application_id,
 			message: $scope.new_message.message,
 			created_at: new Date()
 		}
-		$scope.user_type == "trucker" ? data.trucker_id = $scope.id : data.contractor_id = $scope.id;
+		$scope.user_type == "trucker" ? data.trucker_id = $scope.id : data.user_id = $scope.id;
 		socket.emit('send', data);
 
 		messagesFactory.create($scope.new_message, function(data) {
