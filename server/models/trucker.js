@@ -85,7 +85,8 @@ module.exports = {
 		});
 	},
 	register: function(req, callback) {
-		if (!req.body.first_name | !req.body.last_name | !req.body.email | !req.body.password | !req.body.confirm_password | !req.body.truck_type) 
+		if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password 
+		|| !req.body.confirm_password || !req.body.truck_type) 
 			callback({errors: {form : {message: "All form fields are required."}}});
 		else {
 			// Check for unique email:
@@ -160,7 +161,7 @@ module.exports = {
 	},	
 	login: function(req, callback) {
 		// Validate login data:
-		if (!req.body.email | !req.body.password)
+		if (!req.body.email || !req.body.password)
 			callback({errors: {login: {message: "All form fields are required."}}});
 		else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&](?=.{7,})/.test(req.body.password))
 			callback({errors: {password: {message: "Invalid password."}}});		

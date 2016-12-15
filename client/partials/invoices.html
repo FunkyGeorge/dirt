@@ -1,0 +1,58 @@
+<!-- NAVIGATION -->
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand">Got Dirt, Need Dirt</a>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav navbar-right">
+				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='contractor'"><a href="#/jobs">Post New Job</a></li>
+				<li><a href="#/" ng-click="logout()">Logout</a></li>
+			</ul>
+		</div>
+	</div><!--/.nav-collapse -->
+</nav>
+
+<!-- MAIN -->
+<div class="row error" ng-bind="error"></div>
+
+<!-- MESSAGE -->
+<div class="row">
+	<h1>Messages</h1>
+	<div class="col-sm-2">
+		<p ng-click="mode='pending'">Pending Invoices</p>
+		<p ng-click="mode='history'">Invoice History</p>
+		<p ng-click="mode='bank'">Bank Account</p>
+	</div>
+	<div class="col-sm-10">
+		<!-- PENDING -->
+		<div ng-repeat="invoice in invoices | filter:{status: 0}" ng-if="mode=='pending'">
+			<h4>{{invoice.first_name}} {{invoice.last_name}} - ${{invoice.cost}}</h4>
+			<p>Request sent {{invoice.created_at | date:"fullDate"}}</p>
+			<button ng-if="user_type=='trucker'" ng-click="">Send Reminder</button>
+			<button ng-if="user_type=='contractor'" ng-click="">Make Payment</button>
+		</div>
+
+		<!-- HISTORY -->
+		<div ng-repeat="invoice in invoices | filter:{status: 1}" ng-if="mode=='history'">
+			<h4>{{invoice.first_name}} {{invoice.last_name}} - ${{invoice.cost}}</h4>
+			<p>Payment received {{invoice.updated_at | date:"fullDate"}}</p>
+		</div>
+
+		<div ng-if="mode=='bank'">
+			<h4>Edit Bank Account</h4>
+			<label>Routing Number</label><br>
+			<input type="text" ng-model="bank.routing_number"><br>
+			<label>Account Number</label><br>				
+			<input type="text" ng-model="bank.account_number"><br>
+			<button ng-click="">Cancel???</button><button ng-click="editBank()">Save</button>
+		</div>
+	</div>
+</div>

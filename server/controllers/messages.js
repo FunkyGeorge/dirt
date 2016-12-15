@@ -15,10 +15,7 @@ module.exports = {
 	show: function(req, res) {
 		message.show(req, function(err, data) {
 			if (err)
-				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
-				else
-					res.json(err);
+				res.json(err);
 			else
 				res.json(data);
 		});

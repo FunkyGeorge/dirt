@@ -30,8 +30,49 @@
 	<form class="form-horizontal" ng-submit="step = 3; progress={'width':'90%'}">
 		<div class="form-group">
 			<div class="col-md-7">
-				<h4>Description of Dirt:</h4>
-				<textarea class="form-control" ng-model="new_job.description" placeholder="Grainy, ashy, big chunkys, etc."></textarea>
+				<h4>What type of dirt:</h4>
+				<select ng-init="new_job.type='Sand'" ng-model="new_job.type">
+					<option value="Sand">Sand</option>
+					<option value="Sandyclay">Sandyclay</option>
+					<option value="Clay">Clay</option>
+					<option value="Gravel">Gravel</option>
+					<option value="Recycled Asphalt">Recycled Asphalt</option>
+					<option value="Recycled Concrete">Recycled Concrete</option>
+					<option value="Recycled Base Material">Recycled Base Material</option>
+					<option value="Clean Fill">Clean Fill</option>
+					<option value="Rough Fill">Rough Fill</option>
+					<option value="Topsoil - Nice">Topsoil - Nice</option>
+					<option value="Topsoil - Average">Topsoil - Average</option>
+					<option value="Topsoil - Economy">Topsoil - Economy</option>
+					<option value="Peat">Peat</option>
+					<option value="River Rock">River Rock</option>
+					<option value="Rip-Rap">Rip-Rap</option>
+					<option value="Boulders">Boulders</option>
+					<option value="Asphalt Chunks">Asphalt Chunks</option>
+					<option value="Concrete Chunks">Concrete Chunks</option>
+					<option value="Contaminated Fill">Contaminated Fill</option>
+					<option value="Snow">Snow</option>
+				</select>
+				<p ng-show="new_job.type=='Sand'">Natural or screened / washed / crushed granular that can be compacted</p>
+				<p ng-show="new_job.type=='Sandyclay'">Contains both sand and clay.</p>
+				<p ng-show="new_job.type=='Clay'">Clay that can be compacted.</p>
+				<p ng-show="new_job.type=='Gravel'">Natural or screened / washed / crushed rock that can be compacted.</p>
+				<p ng-show="new_job.type=='Recycled Asphalt'">Crushed for reuse, from a recycling plant or staging area.</p>
+				<p ng-show="new_job.type=='Recycled Concrete'">	Crushed for reuse, from a recycling plant or staging area.</p>
+				<p ng-show="new_job.type=='Recycled Base Material'">Ready for reuse, from under roads &amp; parking lots.</p>
+				<p ng-show="new_job.type=='Clean Fill'">Sand, sandyclay, clay, topsoil or a mixture of any of these with less than 5% clumps or rocks or sod or roots or weeds or concrete chunks, etc.</p>
+				<p ng-show="new_job.type=='Rough Fill'">Same as Clean Fill, with 5% or more clumps or rocks or sod or roots or weeds, or concrete chunks, etc. Also gumbo clay and marsh bottom.</p>
+				<p ng-show="new_job.type=='Topsoil - Nice'">High quality, rich black organic, natural or screened.</p>
+				<p ng-show="new_job.type=='Topsoil - Average'">Average quality, medium black organic, little or no clumps, rocks, sod, or roots, etc.</p>
+				<p ng-show="new_job.type=='Topsoil - Economy'">Low quality, some black organic, could have some clumps, rocks, sod, or roots, etc.</p>
+				<p ng-show="new_job.type=='Peat'">Decomposed plant material, marsh bottom, could be wet or dry.</p>
+				<p ng-show="new_job.type=='River Rock'">Rounded stones varies in color, 1/2 inch to 3 inches.</p>
+				<p ng-show="new_job.type=='Rip-Rap'">Rock, 3 inches to 10 inches.</p>
+				<p ng-show="new_job.type=='Boulders'">Rock, larger than 10 inches.</p>
+				<p ng-show="new_job.type=='Asphalt Chunks'">Broken pieces of asphalt, not been recycled.</p>
+				<p ng-show="new_job.type=='Concrete Chunks'">Broken pieces of concrete, not been recycled.</p>
+				<p ng-show="new_job.type=='Contaminated Fill'">Dirtfill with gas, diesel fuel, PCBs, toxic chemicals, etc.</p>
+				<p ng-show="new_job.type=='Snow'">Removed from streets, parking lots or driveways.</p>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" ng-model="new_job.pickup_only">
@@ -116,7 +157,7 @@
 	<h1>Success!</h1>
 	<p>Your job is now live.</p>
 	<p>You can now view the new job to make edits and upload pictures.</p>
-	<a href="#/jobs/{{id}}"><button class="btn btn-primary">View Job</button></a>
+	<a href="/jobs/{{id}}"><button class="btn btn-primary">View Job</button></a>
 </div>
 
 <!-- STEP 5/FILL CALCULATOR -->

@@ -54,21 +54,5 @@ module.exports = {
 			else
 				res.cookie('token', data).end();
 		});	
-	},
-	fb_register: function(req, res) {
-		contractor.fb_register(req, function(err, data) {
-			if (err)
-				res.json(err);
-			else
-				res.cookie('token', data).end();
-		});
-	},	
-	fb_login: function(req, res) {
-		contractor.fb_login(req, function(err, data) {
-			if (err)
-				res.json(err);
-			else
-				res.cookie('token', data).end();
-		});	
-	}	
+	}
 }

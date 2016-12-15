@@ -7,13 +7,13 @@ app.factory('pendingsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
-		show: function(id, callback) {
-			$http.get(`/api/pendings/${id}`, {
-				headers: {'authorization': `Bearer ${$cookies.get('token')}`}				
-			}).then(function(res) {
-				callback(res.data);
-			});
-		},
+		// show: function(id, callback) {
+		// 	$http.get(`/api/pendings/${id}`, {
+		// 		headers: {'authorization': `Bearer ${$cookies.get('token')}`}				
+		// 	}).then(function(res) {
+		// 		callback(res.data);
+		// 	});
+		// },
 		create: function(data, callback) {
 			$http.post('/api/pendings', data, {
 				headers: {'authorization': `Bearer ${$cookies.get('token')}`}

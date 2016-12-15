@@ -35,16 +35,6 @@ app.factory('contractorsFactory', function($http, $cookies) {
 			$http.post('/contractors/login', data).then(function(res) {
 				callback(res.data);
 			});
-		},
-		fb_register: function(data, callback) {
-			$http.post('/contractors/fb_register', data).then(function(res) {
-				callback(res.data);
-			});
-		},
-		fb_login: function(data, callback) {
-			$http.post('/contractors/fb_login', data).then(function(res) {
-				callback(res.data);
-			});
-		}		
+		}	
 	}
 })
