@@ -33,10 +33,10 @@ app.controller('jobsController', function ($scope, $location, $cookies, $routePa
 						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 50)/100;
 						break;
 					case '3':  //cylinder
-						$scope.preview = Math.round(Math.PI * $scope.depth * (($scope.width/2)**2) * 100)/100;
+						$scope.preview = Math.round(Math.PI * $scope.depth * Math.pow(($scope.width/2),2) * 100)/100;
 						break;
 					case '4':  //cone
-						$scope.preview = Math.round(Math.PI * ($scope.depth/3) * (($scope.width/2)**2) * 100)/100;
+						$scope.preview = Math.round(Math.PI * ($scope.depth/3) * Math.pow(($scope.width/2),2) * 100)/100;
 						break;
 					case '5': //bowl
 						$scope.preview = Math.round((2 * Math.PI * $scope.length * $scope.depth * $scope.width)/3 * 100)/100;
