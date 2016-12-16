@@ -73,13 +73,15 @@ module.exports = {
 				callback({errors: {completion_date: {message: "Completion date is required."}}});			
 			else if (!req.body.job.dirt_type)
 				callback({errors: {dirt_type: {message: "Dirt type is required."}}});
-			else if (req.body.job.pickup_only === undefined || req.body.job.need_only === undefined || req.body.job.loader_pickup === undefined ||
-			req.body.job.loader_dropoff === undefined)
-				callback({errors: {form: {message: "Missing job details."}}});
-			else if (!req.body.pickup.address || !req.body.pickup.city || !req.body.pickup.state || !req.body.pickup.zip)
-				callback({errors: {form: {message: "Missing address details for pick-up location."}}});
-			else if (req.body.dropoff && (!req.body.dropoff.address || !req.body.dropoff.city || !req.body.dropoff.state || !req.body.dropoff.zip))
-				callback({errors: {form: {message: "Missing address details for drop-off location."}}});
+			else if (req.body.job.pickup_only === undefined || req.body.job.need_only === undefined || 
+			req.body.job.loader_pickup === undefined || req.body.job.loader_dropoff === undefined)
+				callback({errors: {check: {message: "Missing check fields."}}});
+			else if (req.body.pickup && (!req.body.pickup.address || !req.body.pickup.city || 
+			!req.body.pickup.state || !req.body.pickup.zip))
+				callback({errors: {pickup: {message: "Missing details for pick-up location."}}});
+			else if (req.body.dropoff && (!req.body.dropoff.address || !req.body.dropoff.city || 
+			!req.body.dropoff.state || !req.body.dropoff.zip))
+				callback({errors: {dropoff: {message: "Missing address details for drop-off location."}}});
 			else
 				connection.query("SET @temp = UNHEX(REPLACE(UUID(), '-', ''))", function(err) {
 					if (err)
@@ -89,6 +91,7 @@ module.exports = {
 							volume: req.body.job.volume,
 							completion_date: req.body.job.completion_date,
 							dirt_type: req.body.job.dirt_type,
+							need_only: req.body.job.need_only,
 							pickup_only: req.body.job.pickup_only,
 							loader_pickup: req.body.job.loader_pickup,
 							loader_dropoff: req.body.job.loader_dropoff
@@ -99,47 +102,47 @@ module.exports = {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
 							else {
-								var data = {
-									address: req.body.pickup.address,
-									city: req.body.pickup.city,
-									state: req.body.pickup.state,
-									zip: req.body.pickup.zip
-								};
-								var query = "INSERT INTO pickup SET ?, job_id = @temp, created_at = NOW(), updated_at = NOW()";
-								connection.query(query, data, function(err) {
-									if (err)
+								if (req.body.job.pickup) {
+									var data = {
+										address: req.body.pickup.address,
+										city: req.body.pickup.city,
+										state: req.body.pickup.state,
+										zip: req.body.pickup.zip
+									};
+									var query = "INSERT INTO pickup SET ?, job_id = @temp, created_at = NOW(), updated_at = NOW()";
+									connection.query(query, data, function(err) {
+										if (err) {
+											callback({errors: {database: {message: "Please contact an admin."}}});											
+											return;
+										}
+									});
+								}
+								if (req.body.dropoff) {
+									var data = {
+										address: req.body.dropoff.address,
+										city: req.body.dropoff.city,
+										state: req.body.dropoff.state,
+										zip: req.body.dropoff.zip
+									};
+									var query = "INSERT INTO dropoff SET ?, job_id = @temp, created_at = NOW(), updated_at = NOW()";
+									connection.query(query, data, function(err) {
+										if (err) {
+											callback({errors: {database: {message: "Please contact an admin."}}});											
+											return;
+										}
+									});
+								}
+								connection.query("SELECT HEX(@temp) AS id", function(err, data) {
+									if (err) {
 										callback({errors: {database: {message: "Please contact an admin."}}});
-									else if (!req.body.job.pickup_only && req.body.dropoff) {
-										var data = {
-											address: req.body.dropoff.address,
-											city: req.body.dropoff.city,
-											state: req.body.dropoff.state,
-											zip: req.body.dropoff.zip
-										};
-										var query = "INSERT INTO dropoff SET ?, job_id = @temp, created_at = NOW(), updated_at = NOW()";
-										connection.query(query, data, function(err) {
-											if (err)
-												callback({errors: {database: {message: "Please contact an admin."}}});
-												else
-													connection.query("SELECT HEX(@temp) AS id", function(err, data) {
-														if (err)
-															callback({errors: {database: {message: "Please contact an admin."}}});
-														else
-															callback(false, data[0]);
-													});
-											});
+										return;
 									}
 									else
-										connection.query("SELECT HEX(@temp) AS id", function(err, data) {
-											if (err)
-												callback({errors: {database: {message: "Please contact an admin."}}});
-											else
-												callback(false, data[0]);
-										});
+										callback(false, data[0]);
 								});
 							}
 						});
-					}				
+					}
 				});
 		});
 	},
