@@ -20,122 +20,68 @@
 </nav>
 
 <!-- MAIN -->
-<h1 class="center-content">Create an Account</h1>
-
 <!-- STEP 1 -->
-<div class="row" ng-show="step == 1">
-	<form ng-submit="step = 2; progress = {'width':'50%'};">
-		<div class="row">
-			<div class="col-md-6 center-content">
-				<img class="img-responsive center-block"  src="../static/images/user_icon.png" alt="OOPS!">
-				<label class="radio-inline">
-					<input type="radio" name="inlineRadioOptions" ng-model="user_type" value="user" required>
-				</label>
-				<hr>
-				<p>I'm a user that has dirt</p>
-			</div>
-			<div class="col-md-6 center-content">
-				<img class="img-responsive center-block" src="../static/images/truck_icon.png" alt="OOPS!">
-				<label class="radio-inline">
-					<input type="radio" name="inlineRadioOptions" ng-model="user_type" value="trucker" required>
-				</label>
-				<hr>
-				<p>I'm a trucker that can move dirt</p>
-			</div>
+<div class="row" ng-show="step==1">
+	<div class="col-sm-7">
+		<h1>The Down and Dirty</h1>
+		<h4>Got Dirt, Need Dirt is a platform that provides truckers to help you move, remove, and provide dirt.</h4>
+	</div>
+	<div class="col-sm-5">
+		<div ng-show="user_type=='trucker'">
+			<h4>Need a Trucker?</h4>
+			<a href="" ng-click="user_type='user'">Sign-up</a>
+			<hr>
 		</div>
-		<div class="row">
-			<div class="col-md-1 col-md-offset-10">
-				<input type="submit" value="Next" class="btn btn-primary btn-large">
+		<form ng-submit="register()">
+			<h4 class="text-center" ng-show="user_type=='trucker'">Or sign-up as a Trucker</h4>
+			<h4 class="text-center" ng-show="user_type=='user'">Sign-up to post jobs and find truckers</h4>
+			<div class="row">
+				<div class="col-xs-6">
+					<input type="text" class="form-control" placeholder="First Name" ng-model="new_user.first_name" required>
+				</div>
+				<div class="col-xs-6">
+					<input type="text" class="form-control" placeholder='Last Name' ng-model="new_user.last_name" required><br>
+				</div>
 			</div>
-		</div>
-	</form>
-</div>
-
-<!-- STEP 2 -->
-<div ng-show="step==2">
-	<form ng-submit="register()">
-		<div class="row">
-			<div class="col-md-5">
-				<input type="text" class="form-control" placeholder="first name" ng-model="new_user.first_name" required>
-				<br>
-				<input type="text" class="form-control" placeholder='last name' ng-model="new_user.last_name" required>
-				<br>
-				<input type="email" class="form-control" placeholder='email' ng-model="new_user.email" required>
-				<br>
-				<input type="password" class="form-control" placeholder='password' ng-model="new_user.password" required>
-				<br>
-				<input type="password" class="form-control" placeholder='confirm password' ng-model="new_user.confirm_password" required>
-				<br>
+			<input type="email" class="form-control" placeholder='Email' ng-model="new_user.email" required><br>
+			<input type="password" class="form-control" placeholder='Password' ng-model="new_user.password" required><br>
+			<input type="password" class="form-control" placeholder='Confirm Password' ng-model="new_user.confirm_password" required><br>
+			<div ng-if="user_type=='trucker' && _">
+				<h4 class="text-center">Almost done! Tell us about your truck</h4>
+				<input type="text" class="form-control" placeholder='Make' ng-model="new_user.make" required><br>
+				<input type="text" class="form-control" placeholder='Model' ng-model="new_user.model" required><br>
+				<input type="number" class="form-control" placeholder='Year' min="1960" max="{{year}}" ng-model="new_user.year" required><br>
+				<label class="form-check-label">
+					<input type="checkbox" class="form-check-input" ng-model="new_user.truck_type">
+					This is a DOT commercial truck<br>
+					<small class="form-text text-muted">Check this if you have a truck for carrying very large loads.<br></small>
+				</label><br>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2">
-				<button class="btn btn-warning" ng-click="step = 1; progress = {'width':'20%'}">Back</button>
+			<input ng-show="user_type=='trucker'" class="form-control btn btn-info" type="submit" value="Sign-up as a Trucker">
+			<div class="row" ng-show="user_type=='user'">
+				<div class="col-xs-6 col-xs-push-6">
+					<input class="form-control btn btn-info" type="submit" value="Sign-up">
+				</div>
+				<div class="col-xs-6 col-xs-pull-6">
+					<button class="form-control btn btn-default" type="button" ng-click="user_type='trucker'"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Trucker Sign-up</button>
+				</div>
 			</div>
-			<div class="col-md-2 col-md-offset-8">
-				<input class="btn btn-primary" type="submit" value="Next">
-			</div>
+			<p class="text-center">
+				Already have an account? <a href="#/login/{{user_type}}">Log in</a>
+			</p>
 			<p class="error" ng-bind="error"></p>
 		</form>
 	</div>
-	<p>
-		Already have an account? <a href="#/login/{{user_type}}">Log in</a>
-	</p>
 </div>
 
-<!-- STEP 3 -->
-<div ng-show="step==3">
-	<form ng-submit="register()">
-		<div class="row">
-			<div class="col-md-4 center-content">
-				<img class="img-responsive center-block" src="../static/images/mini_truck.png" alt="OOPS!">
-				<label>
-					<input type="radio" name="truck_type" ng-model="new_user.truck_type" value="1" required>
-				</label>
-				<p>Load Size < 5</p>
-			</div>
-			<div class="col-md-4 center-content">
-				<img class="img-responsive center-block" src="../static/images/medium_truck.png" alt="OOPS!">
-				<label>
-					<input type="radio" name="truck_type" ng-model="new_user.truck_type" value="2" required>
-				</label>
-				<p>Load Size < 10</p>
-			</div>
-			<div class="col-md-4 center-content">
-				<img class="img-responsive center-block" src="../static/images/massive_truck.png" alt="OOPS!">
-				<label>
-					<input type="radio" name="truck_type" ng-model="new_user.truck_type" value="3" required>
-				</label>
-				<p>Load Size > 10</p>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2">
-				<button class="btn btn-warning" ng-click="step = 2; progress = {'width':'50%'}">Back</button>
-			</div>
-			<div class="col-md-2 col-md-offset-8">
-				<input type="submit" class="btn btn-primary" value="Next">
-			</div>
-		</div>
-	</form>
-
-</div>
-
-<!-- STEP 4: SUCCESS -->
-<div class="row" ng-show="step==4">
+<!-- STEP 2: SUCCESS -->
+<div class="row" ng-show="step==2">
 	<div class="col-md-12 center-content">
 		<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 		<h1>Success!</h1>
-		<h5>Your account has been created</h5>
-		<h5>You will be redirected soon...</h5>
-	</div>
-</div>
-
-<div class="row" ng-show="step<4">
-	<hr>
-	<h1>Step {{step}}</h1>
-	<div class="progress">
-		<div ng-model="progressbar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ng-style="progress">
-		</div>
+		<p>Your account has been created</p>
+		<p>Check your email for an email from us and click the provided link to activate your account<span ng-if="user_type=='trucker'"> and start finding jobs</span>.<br><span ng-if="user_type=='user'">Let's find you a trucker.</span></p>
+		<a href="#/" ng-if="user_type=='trucker'"><button class="btn btn-info">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+		<a href="#/jobs" ng-if="user_type=='user'"><button class="btn btn-info">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
 	</div>
 </div>

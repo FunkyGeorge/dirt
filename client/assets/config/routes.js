@@ -9,7 +9,7 @@ app.config(function ($routeProvider) {
 		templateUrl: 'partials/welcome.html',
 		controller: 'welcomeController'
 	})
-	.when('/register/:user_type?',{
+	.when('/register',{
 		templateUrl: 'partials/register.html',
 		controller: 'registerController'
 	})

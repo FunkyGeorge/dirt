@@ -61,8 +61,9 @@ module.exports = {
 		});
 	},
 	register: function(req, callback) {
+		console.log(req.body)
 		if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password 
-		|| !req.body.confirm_password || !req.body.truck_type) 
+		|| !req.body.confirm_password || req.body.truck_type === undefined) 
 			callback({errors: {form : {message: "All form fields are required."}}});
 		else {
 			// Check for unique email:

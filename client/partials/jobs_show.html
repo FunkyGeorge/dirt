@@ -23,18 +23,82 @@
 </nav>
 
 <!-- MAIN -->
+<div class="row">
+	<a class="col-sm-4 col-sm-offset-8" href="#/">
+		<button class="btn btn-default center-block">Back to Job Listings</button>
+	</a>
+</div>
 <div class="row error" ng-bind="error"></div>
 
 <div class="row" ng-show="!error">
-	
-	<div class="row">
-		<h1 class="col-md-8">{{job.amount}} cubic yards</h1>
-		<a class="col-md-4" href="#/"><button>Back to Browse</button></a><br>
-	</div>
-
 	<!-- SHOW MODE -->
-	<div class="row" ng-show="mode=='show'">
-		<div class="col-md-8">
+	<div ng-show="mode=='show'">
+		<h4 class="text-center" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : 'You are 10 miles away from the pick-up location'}}</h4>
+		<div class="col-sm-3">
+			<img class="img-rounded img-responsive center-block" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
+			<hr>
+			<p ng-if="!job.pickup_only">This job requires pick-up and delivery.</p>
+			<p ng-if="job.pickup_only">Dirt available for sale.</p>
+		</div>
+		<div class="col-sm-6 center-content">
+			<table class="table table-bordered">
+				<tr>
+					<th>Type:</th>
+					<td ng-bind="job.dirt_type"></td>
+				</tr>
+				<tr>
+					<th>Volume:</th>
+					<td>{{job.volume | number:2}} yds<sup>3</sup></td>
+				</tr>
+				<tr>
+					<th>Posted On:</th>
+					<td ng-bind="job.created_at | date:'shortDate'"></td>
+				</tr>
+				<tr>
+					<th>Complete By:</th>
+					<td ng-bind="job.completion_date | date:'shortDate'"></td>
+				</tr>
+				<tr>
+					<th>Pick-Up Location:</th>
+					<td>To be shared upon job acceptance</td>
+				</tr>
+				<tr ng-if="!job.pickup_only">
+					<th>Drop-Off Location:</th>
+					<td>To be shared upon job acceptance</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-sm-3">
+			<input type="checkbox" ng-checked="job.pickup_only" disabled/> Pickup Only<br>
+			<input type="checkbox" ng-checked="job.loader_pickup" disabled/> Loader at Pick-Up<br>
+			<span ng-class="{strike: job.pickup_only}"><input type="checkbox" ng-checked="job.loader_dropoff" disabled/> Loader at Drop-Off</span><br>
+			<hr>
+			<table>
+				<tr>
+					<th>Load:</th>
+					<td class="pull-right" ng-bind="job.volume | number:2"></td>
+				</tr>
+				<tr>
+					<th>Distance:</th>
+					<td class="pull-right">10 mi</td>
+				</tr>
+				<tr style="border-bottom: 1px solid black">
+					<th>Lead Fee:</th>
+					<td class="pull-right">$25</td>
+				</tr>
+				<tr>
+					<th>Trucker's payout:</th>
+					<td class="pull-right">$200</td>
+				</tr>
+			</table>
+			<br>
+			<b style="color: darkorange" ng-show="user_type=='trucker' && job.applied">You've applied to this job!</b>
+			<button class="form-control btn btn-info" ng-show="user_type=='trucker' && !job.applied" ng-click="createApplication()">Apply to Job</button>
+			<button class="form-control btn btn-info" ng-show="id==job.user_id" ng-click="mode='edit'">Edit Job</button>			
+			<small style="color: darkorange" class="text-muted" ng-if="!job.loader_pickup">*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small><br>
+			<small style="color: darkorange" class="text-muted" ng-if="!job.pickup_only && !job.loader_dropoff">*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
+		</div>
+<!-- 		<div class="col-sm-3">
 			<div class="row">
 				<div class="col-md-6">
 					<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt=""><br>
@@ -85,7 +149,7 @@
 			<b ng-show="user_type=='trucker' && job.applied">You've applied to this job!</b>
 			<br><br>
 			<button ng-show="id==job.user_id" ng-click="mode='edit'">Edit Job</button>
-		</div>
+		</div> -->
 	</div>
 
 	<!-- EDIT MODE -->
@@ -185,6 +249,7 @@
 		</div>
 	</div>
 
+	<!-- SUCCESS MODE -->
 	<div class="row" ng-show="mode=='success'">
 		<h1>Successfully Applied to Job!</h1>
 		<p>The user has been notified.<br>Go to your inbox and say hello!</p>

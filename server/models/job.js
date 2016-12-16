@@ -38,15 +38,16 @@ module.exports = {
 				var query;
 				if ('truck_type' in data) {
 					_data = [data.id, req.params.id];
-					query = "SELECT *, HEX(jobs.id) AS id, HEX(user_id) AS user_id, IF(UNHEX(?) \
-					IN (applications.trucker_id), 1, 0) AS applied FROM jobs LEFT JOIN pickup \
-					ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id \
+					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
+					AS user_id, IF(UNHEX(?) IN (applications.trucker_id), 1, 0) AS applied FROM jobs \
+					LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id \
 					LEFT JOIN applications ON jobs.id = applications.job_id WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				else {
 					_data = req.params.id;
-					query = "SELECT *, HEX(jobs.id) AS id, HEX(user_id) AS user_id FROM jobs LEFT JOIN pickup \
-					ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id WHERE HEX(jobs.id) = ? LIMIT 1";
+					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
+					AS user_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff \
+					ON jobs.id = dropoff.job_id WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				connection.query(query, _data, function(err, data) {
 					console.log(data)
@@ -64,10 +65,15 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else if ('truck_type' in data)
 				callback({errors: {user_type: {message: "Only users can create jobs."}}});
-			else if (!req.body.job || !req.body.pickup)
-				callback({errors: {details: {message: "Invalid details submitted."}}});
-			else if (!req.body.job.volume || req.body.job.volume <= 0 || !req.body.job.completion_date || 
-			!req.body.job.dirt_type || req.body.job.pickup_only === undefined || req.body.job.loader_pickup === undefined ||
+			else if (!req.body.job || (!req.body.pickup && !req.body.dropoff))
+				callback({errors: {form: {message: "Invalid details submitted."}}});
+			else if (!req.body.job.volume || req.body.job.volume <= 0)
+				callback({errors: {volume: {message: "You must submit a volume that is greater than 0."}}});
+			else if (!req.body.job.completion_date)
+				callback({errors: {completion_date: {message: "Completion date is required."}}});			
+			else if (!req.body.job.dirt_type)
+				callback({errors: {dirt_type: {message: "Dirt type is required."}}});
+			else if (req.body.job.pickup_only === undefined || req.body.job.need_only === undefined || req.body.job.loader_pickup === undefined ||
 			req.body.job.loader_dropoff === undefined)
 				callback({errors: {form: {message: "Missing job details."}}});
 			else if (!req.body.pickup.address || !req.body.pickup.city || !req.body.pickup.state || !req.body.pickup.zip)

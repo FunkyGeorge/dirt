@@ -19,11 +19,13 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 				}, 3000);				
 			}
 			else {
-				$scope.mode = 'show';
 				$scope.job = data;
+				$scope.job.src = $scope.job.dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
 				$scope.job.completion_date = new Date(data.completion_date);
 				$scope.job.pickup_only = Boolean(data.pickup_only);
-				$scope.job.loader_onsite = Boolean(data.loader_onsite);
+				$scope.job.loader_pickup = Boolean(data.loader_pickup);
+				$scope.job.loader_dropoff = Boolean(data.loader_dropoff);
+				$scope.mode = 'show';
 			}
 		});
 	}

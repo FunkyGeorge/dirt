@@ -63,7 +63,7 @@
 							<td><b>Posted:</b> {{job.created_at | date:'shortDate'}}</td>
 						</tr>
 						<tr>
-							<td><b>Volume:</b> {{job.volume}} yds<sup>3</sup></td>
+							<td><b>Volume:</b> {{job.volume | number:2}} yds<sup>3</sup></td>
 							<td><b>Complete by:</b> {{job.completion_date | date:'shortDate'}}</td>
 						</tr>
 					</table>
