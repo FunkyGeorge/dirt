@@ -11,21 +11,21 @@ module.exports = {
 			else {
 				var query;
 				var sort;
-				if (req.headers.flags[2])
-					sort = "jobs.created_at"
+				if (req.headers.sort == "true")
+					sort = "jobs.created_at DESC"
 				else {
-					sort = "";//change to distance
+					sort = `field(zip, ${req.headers.zips})`; //change to distance
 				}
-				var limit = (req.headers.flags[0] * 5) + "";
+				var limit = (req.headers.scroll * 5) + "";
 				if ('truck_type' in data){
 					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(contractor_id) \
 					AS contractor_id, IF(UNHEX(?) IN (pendings.trucker_id), 1, 0) AS applied FROM jobs \
-					LEFT JOIN pendings ON jobs.id = pendings.job_id ORDER BY ${sort} DESC \
+					LEFT JOIN pendings ON jobs.id = pendings.job_id ORDER BY ${sort} \
 					LIMIT ${limit}`;
 				}
 				else
 					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at as created_at, HEX(contractor_id) \
-					AS contractor_id FROM jobs ORDER BY ${sort} DESC \
+					AS contractor_id FROM jobs ORDER BY ${sort} \
 					LIMIT ${limit}`;
 				connection.query(query, data.id, function(err, data) {
 					if (err)
