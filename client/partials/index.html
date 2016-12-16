@@ -28,11 +28,11 @@
 	<div class="col-sm-3">
 		<h2>Sort By:</h2>
 		<form>
+			<div class="radio">
+				<label><input type="radio" ng-click="state[2] = true" name="sorting-option" checked>Latest</label>
+			</div>
 	    <div class="radio">
-	      <label><input type="radio" name="sorting-option" checked>Distance</label>
-	    </div>
-	    <div class="radio">
-	      <label><input type="radio" name="sorting-option">Latest</label>
+	      <label><input type="radio" ng-click="state[2] = false" name="sorting-option">Distance</label>
 	    </div>
 	  </form>
 	</div>

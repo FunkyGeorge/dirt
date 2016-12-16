@@ -1,4 +1,4 @@
-app.controller('indexController', function ($scope, $location, $routeParams, $cookies, jobsFactory) {
+app.controller('indexController', function ($scope, $location, $routeParams, $cookies, jobsFactory, geoFactory) {
 	function getPayload(token) {
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace('-', '+').replace('_', '/');
@@ -28,27 +28,43 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		$scope.name = payload.first_name + " " + payload.last_name;
 		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
 		$scope.error = null;
-		$scope.state = [1, true, false];  //state variable [int scroll, bool keepscrolling flag, bool distance/latest flag]
-		navigator.geolocation.getCurrentPosition(showPosition)
-		function showPosition(position){
-			console.log(position.coords.latitude);
-			console.log(position.coords.longitude);
+
+		//state variable [scroll, keepscrolling flag, distance/latest flag, isLoadedflag]
+		$scope.state = [1, true, true, false];
+
+		//#####  Commented to save api calls  #####
+		// navigator.geolocation.getCurrentPosition(showPosition)
+		// function showPosition(position){
+		// 	geoFactory.getCurrentZip(position.coords.latitude, position.coords.longitude, zipList(data));
+		// }
+		function zipList (data){
+			geoFactory.getNearbyZips(data, function(res){
+				$scope.zipcodes = res;
+				$scope.state[3] = true;
+				appendJobs();
+			}); //result is 95112... insert near zips here
 		}
+
+		//TEMP
+		zipList(95112);
 	}
 	else
 		$location.url('/welcome');
 
 	function appendJobs(){
-		jobsFactory.index($scope.state, function(data) {
-			if (data.errors)
+		if ($scope.state[3]){ //isLoaded?
+			jobsFactory.index($scope.state, $scope.zipcodes, function(data) {
+				if (data.errors)
 				$scope.error = "Something went wrong, please wait a while and try reloading."
-			else {
-				if ($scope.jobs && $scope.jobs.length == data.length)
+				else {
+					//CHECK HERE TO MAKE SURE I DIDN'T MESS UP FLAG
+					if ($scope.jobs && $scope.jobs.length == data.length)
 					$scope.state[1] = false;
-				$scope.jobs = data;
-				$scope.state[0]++;
-			}
-		});
+					$scope.jobs = data;
+					$scope.state[0]++;
+				}
+			});
+		}
 	}
 
 	$scope.append = function(){

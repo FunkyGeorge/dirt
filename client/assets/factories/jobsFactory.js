@@ -1,10 +1,11 @@
 app.factory('jobsFactory', function($http, $cookies) {
 	return {
-		index: function(data, callback) {
+		index: function(data, zips, callback) {
 			$http.get('/api/jobs', {
 				headers: {
 					'authorization': `Bearer ${$cookies.get('token')}`,
-					'flags': data
+					'flags': data,
+					'zips': zips
 				}
 			}).then(function(res) {
 				callback(res.data);
