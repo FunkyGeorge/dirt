@@ -14,7 +14,7 @@ module.exports = {
 				if (req.headers.flags[2])
 					sort = "jobs.created_at"
 				else {
-					sort = "";//change to distance
+					sort = "field(zip, )"; //change to distance
 				}
 				var limit = (req.headers.flags[0] * 5) + "";
 				if ('truck_type' in data){

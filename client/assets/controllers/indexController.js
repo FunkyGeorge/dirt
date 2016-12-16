@@ -23,30 +23,36 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
+		var position;
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
 		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
 		$scope.error = null;
-		$scope.flags = [1, true, false];  //Flag variable [int scroll, bool keepscrolling flag, bool distance/latest flag]
+		$scope.state = [1, true, false];  //state variable [int scroll, bool keepscrolling flag, bool distance/latest flag]
+		navigator.geolocation.getCurrentPosition(showPosition)
+		function showPosition(position){
+			console.log(position.coords.latitude);
+			console.log(position.coords.longitude);
+		}
 	}
 	else
 		$location.url('/welcome');
 
 	function appendJobs(){
-		jobsFactory.index($scope.flags, function(data) {
+		jobsFactory.index($scope.state, function(data) {
 			if (data.errors)
 				$scope.error = "Something went wrong, please wait a while and try reloading."
 			else {
 				if ($scope.jobs && $scope.jobs.length == data.length)
-					$scope.flags[1] = false;
+					$scope.state[1] = false;
 				$scope.jobs = data;
-				$scope.flags[0]++;
+				$scope.state[0]++;
 			}
 		});
 	}
 
 	$scope.append = function(){
-		if ($scope.flags && $scope.flags[1]){
+		if ($scope.state && $scope.state[1]){
 			appendJobs();
 		}
 	};
