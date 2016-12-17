@@ -11,15 +11,16 @@ app.controller('loginController', function ($scope, $location, $cookies, $routeP
 
 	$scope.login = function() {
 		$scope.error = null;
-		if ($routeParams.user_type == 'trucker') 
+		if ($routeParams.user_type == 'trucker')
 			truckersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
 						$scope.error = data.errors[key].message;
 						break;
 					}
-				else
+				else {
 					$location.url('/');
+				}
 			});
 		else if ($routeParams.user_type == 'user')
 			usersFactory.login($scope.user, function(data) {

@@ -428,42 +428,57 @@
 <!-- STEP 8: FILL CALCULATOR -->
 <div class="row" ng-show="step==8">
 	<h1>Fill Calculator</h1>
-	<form ng-submit="setVolume()">
-		<label>What shape best represents the volume you're trying to fill?</label><br>
-		<label>
-			<input type="radio" name="shape" ng-model="shape" value="1" required>
-			Shape 1 here
-		</label><br>
-		<label>
-			<input type="radio" name="shape" ng-model="shape" value="2" required>
-			Shape 2 here
-		</label><br>
-		<label>
-			<input type="radio" name="shape" ng-model="shape" value="3" required>
-			Shape 3 here
-		</label><br>
-		<label>
-			<input type="radio" name="shape" ng-model="shape" value="4" required>
-			Shape 4 here
-		</label><br>
-		<label>
-			<input type="radio" name="shape" ng-model="shape" value="5" required>
-			Shape 5 here
-		</label><br>
-		<label>
-			<input type="radio" name="shape" ng-model="shape" value="6" required>
-			Shape 6 here
-		</label><br>
-		<label>Length (yards)</label><br>
-		<input type="number" step="0.01" ng-model="length" required><br>
-		<label>Depth (yards)</label><br>
-		<input type="number" step="0.01" ng-model="depth" required><br>
-		<label>Height (yards)</label><br>
-		<input type="number" step="0.01" ng-model="height" required><br>
+	<form ng-submit="setAmount()" class="form-horizontal">
+		<label>What shape best represents the amount you're trying to fill?</label><br>
+		<div class="form-group">
+			<label>
+				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="1" required>
+				<img src="static/images/box_shape.png" alt="OOPS!">
+			</label>
+			<label>
+				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="2" required>
+				<img src="static/images/wedge_shape.png" alt="OOPS!">
+			</label>
+			<label>
+				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="3" required>
+				<img src="static/images/can_shape.png" alt="OOPS!">
+			</label>
+		</div>
+		<div class="form-group">
+			<label>
+				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="4" required>
+				<img src="static/images/cone_shape.png" alt="OOPS!">
+			</label>
+			<label>
+				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="5" required>
+				<img src="static/images/bowl_shape.png" alt="OOPS!">
+			</label>
+			<label>
+				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="6" required>
+				<img src="static/images/box_shape.png" alt="OOPS!">
+			</label>
+		</div>
+		<div class="form-group col-md-4" ng-hide="shape==3 || shape==4">
+			<label>Length (yards)</label>
+			<input type="number" step="0.01" ng-model="length" ng-init="length=0" ng-change="calculate();" required>
+		</div>
+		<div class="form-group col-md-4">
+			<label>Width (yards)</label>
+			<input type="number" step="0.01" ng-model="width" ng-init="width=0" ng-change="calculate();" required>
+		</div>
+		<div class="form-group col-md-4">
+			<label>Depth (yards)</label>
+			<input type="number" step="0.01" ng-model="depth" ng-init="depth=0" ng-change="calculate();" required>
+		</div>
 		<label>Looks like you'll need:</label><br>
-		<b>{{(length*depth*height)|number:2}} cubic yards</b>
+		<b>{{ preview|number:2}} cubic yards</b>
 		<hr>
-		<button type="button" ng-click="step=2">Return to Form</button><input type="submit" value="Use This Volume">
+		<div class="form-group col-md-2">
+			<button class="btn btn-primary" type="button" ng-click="step=3">Return to Form</button>
+		</div>
+		<div class="form-group col-md-2 col-md-3">
+			<input class="btn btn-primary" type="submit" value="Use This Amount">
+		</div>
 	</form>
 </div>
 

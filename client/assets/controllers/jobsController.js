@@ -118,6 +118,30 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 		$scope.step = 3;
 	}
 
+	$scope.calculate = function(){
+				switch ($scope.shape) {
+					case '1':  //rectangle
+						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
+						break;
+					case '2':  //wedge
+						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 50)/100;
+						break;
+					case '3':  //cylinder
+						$scope.preview = Math.round(Math.PI * $scope.depth * Math.pow(($scope.width/2),2) * 100)/100;
+						break;
+					case '4':  //cone
+						$scope.preview = Math.round(Math.PI * ($scope.depth/3) * Math.pow(($scope.width/2),2) * 100)/100;
+						break;
+					case '5': //bowl
+						$scope.preview = Math.round((2 * Math.PI * $scope.length * $scope.depth * $scope.width)/3 * 100)/100;
+						break;
+					case '6':
+						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
+						break;
+					default:
+				}
+	}
+
 	$scope.create = function() {
 		$scope.error = null;
 		jobsFactory.create($scope.job, function(data) {

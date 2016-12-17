@@ -51,7 +51,7 @@
 				Complete by: {{application.completion_date | date:"shortDate"}}<br>
 				Applied on: {{application.created_at | date:"shortDate"}}<br>
 			</p>
-		</div>		
+		</div>
 	</div>
 	<div class="col-sm-9">
 		<div class="div_chat">
@@ -67,7 +67,7 @@
 			<input type="text" placeholder="Type a message here..." ng-model="new_message.message" required>
 			<input type="submit" value="Send">
 		</form>
-		<button ng-show="messages && user_type=='trucker'" ng-click="showJob()">Invoice Client</button>		
+		<button ng-show="messages && user_type=='trucker'" ng-click="showJob()">Invoice Client</button>
 	</div>
 </div>
 
@@ -88,7 +88,7 @@
 		<tr>
 			<th>Type of Dirt:</th>
 			<td ng-bind="job.type"></td>
-		</tr>		
+		</tr>
 		<tr>
 			<th>Distance:</th>
 			<td>10 miles (hard coded)</td>
