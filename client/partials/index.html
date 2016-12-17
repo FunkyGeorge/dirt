@@ -44,7 +44,7 @@
 					<img class="img-rounded img-responsive" src="http://placehold.it/350x350" alt="">
 				</div>
 				<div class="col-sm-9">
-					<h2>{{job.amount}} cubic yards {{id==job.contractor_id ? '(Posted by you)' : '(est __ miles away)'}}</h2>
+					<h2>{{job.amount}} cubic yards {{id==job.contractor_id ? '(Posted by you)' : '(est '+  getDistance(job.zip) +' miles away)'}}</h2>
 					<b>Type:</b><br>
 					<p ng-bind="job.type"></p>
 					<b>Posted:</b><br>

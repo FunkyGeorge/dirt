@@ -61,6 +61,20 @@ app.factory('geoFactory',['$http',function($http){
       }
     };
 
+    this.toDictionary = function(){
+      if(this.head){
+        var dict = {};
+        var current = this.head.next;
+        dict[this.head.val.zip_code] = this.head.val.distance;
+        while (current){
+          dict[current.val.zip_code] = current.val.distance;
+          current = current.next;
+        }
+
+        return dict;
+      }
+    };
+
   }
 
   function node(val){
@@ -83,14 +97,15 @@ app.factory('geoFactory',['$http',function($http){
       url += `${apiKeyZipcodeAPI}/radius.json/${zip}/${radius}/mile`;
       $http.get(url).then(function(res){
         var list = new SLL();
+
         for (var i = 0; i < res.data.zip_codes.length; i++){
-          //sort into a SLL?
           list.insert(res.data.zip_codes[i]);
         }
+
         var zipList = list.toStringList();
-        //sort array by distance
-        // send back sorted array
-        callback(zipList);
+        var distances = list.toDictionary();
+
+        callback(zipList, distances);
       })
     }
   }
