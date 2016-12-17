@@ -5,43 +5,13 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		return JSON.parse(window.atob(base64));
 	}
 
-<<<<<<< HEAD
-=======
-	function appendJobs(){
-		if(!$scope.jobs){
-			$scope.jobs = [];
-		}
-		for(var i = $scope.data[1]*5; i < ($scope.data[1]+1)*5; i++){
-			$scope.jobs[i] = $scope.data[0][i];
-			if ($scope.data[0][i+1])
-				continue;
-			else
-				break;
-
-		}
-		if ($scope.data[0][$scope.jobs.length])
-			$scope.data[1] += 1;
-	}
-
->>>>>>> 66b96954692fec94376521df70135c47d9c1e6e1
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
 		var position;
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
+		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
 		$scope.error = null;
-<<<<<<< HEAD
-		jobsFactory.index(function(data) {
-			if (data.errors)
-				$scope.error = "Something went wrong, please wait a while and try reloading."
-			else {
-				for (var i = 0; i < data.length; i++)
-					data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
-
-				$scope.data[0] = data;
-				$scope.data[1] = 0;
-=======
 
 		//state variable
 		$scope.state = [
@@ -62,7 +32,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 				$scope.distances = distances
 				console.log(distances);
 				$scope.state[3] = true;
->>>>>>> 66b96954692fec94376521df70135c47d9c1e6e1
 				appendJobs();
 			}); //result is 95112... insert near zips here
 		}
@@ -75,31 +44,16 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 	}
 	else
 		$location.url('/welcome');
-	
-	function appendJobs(){
-		if(!$scope.jobs){
-			$scope.jobs = [];
-		}
-		for(var i = $scope.data[1]*5; i < ($scope.data[1]+1)*5; i++){
-			$scope.jobs[i] = $scope.data[0][i];
-			if ($scope.data[0][i+1])
-				continue;
-			else
-				break;
 
-<<<<<<< HEAD
-		}
-		if ($scope.data[0][$scope.jobs.length])
-			$scope.data[1] += 1;
-	}
-	
-=======
 	function appendJobs(){
 		if ($scope.state[3]){ //isLoaded?
 			jobsFactory.index($scope.state, $scope.zipcodes, function(data) {
 				if (data.errors)
 					$scope.error = "Something went wrong, please wait a while and try reloading."
 				else {
+					for (var i = 0; i < data.length; i++)
+						data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+
 					//CHECK HERE TO MAKE SURE I DIDN'T MESS UP FLAG
 					if ($scope.jobs && $scope.jobs.length == data.length)
 					$scope.state[1] = false;
@@ -110,7 +64,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		}
 	}
 
->>>>>>> 66b96954692fec94376521df70135c47d9c1e6e1
 	$scope.append = function(){
 		if ($scope.state && $scope.state[1]){
 			appendJobs();
