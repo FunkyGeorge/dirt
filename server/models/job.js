@@ -20,7 +20,6 @@ module.exports = {
 					AS user_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff \
 					ON jobs.id = dropoff.job_id ORDER BY jobs.created_at DESC";
 				connection.query(query, data.id, function(err, data) {
-					console.log(data)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
@@ -50,7 +49,6 @@ module.exports = {
 					ON jobs.id = dropoff.job_id WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				connection.query(query, _data, function(err, data) {
-					console.log(data)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
@@ -65,22 +63,19 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else if ('truck_type' in data)
 				callback({errors: {user_type: {message: "Only users can create jobs."}}});
-			else if (!req.body.job || (!req.body.pickup && !req.body.dropoff))
-				callback({errors: {form: {message: "Invalid details submitted."}}});
-			else if (!req.body.job.volume || req.body.job.volume <= 0)
-				callback({errors: {volume: {message: "You must submit a volume that is greater than 0."}}});
-			else if (!req.body.job.completion_date)
-				callback({errors: {completion_date: {message: "Completion date is required."}}});			
-			else if (!req.body.job.dirt_type)
+			else if (req.body.job_type === undefined || !(req.body.job_type == 0 || req.body.job_type == 1 || req.body.job_type == 2))
+				callback({errors: {check: {message: "Job type is invalid or wasn't provided."}}});
+			else if (!req.body.dirt_type)
 				callback({errors: {dirt_type: {message: "Dirt type is required."}}});
-			else if (req.body.job.pickup_only === undefined || req.body.job.need_only === undefined || 
-			req.body.job.loader_pickup === undefined || req.body.job.loader_dropoff === undefined)
-				callback({errors: {check: {message: "Missing check fields."}}});
-			else if (req.body.pickup && (!req.body.pickup.address || !req.body.pickup.city || 
-			!req.body.pickup.state || !req.body.pickup.zip))
+			else if (!req.body.volume || req.body.volume <= 0)
+				callback({errors: {volume: {message: "You must submit a volume that is greater than 0."}}});
+			else if (!req.body.completion_date)
+				callback({errors: {completion_date: {message: "Completion date is required."}}});			
+			else if ((req.body.job_type == 0 || req.body.job_type == 2) && (!req.body.p_address || !req.body.p_city || 
+			!req.body.p_state || !req.body.p_zip || req.body.p_loader === undefined))
 				callback({errors: {pickup: {message: "Missing details for pick-up location."}}});
-			else if (req.body.dropoff && (!req.body.dropoff.address || !req.body.dropoff.city || 
-			!req.body.dropoff.state || !req.body.dropoff.zip))
+			else if ((req.body.job_type == 1 || req.body.job_type == 2) && (!req.body.d_address || !req.body.d_city || 
+			!req.body.d_state || !req.body.d_zip || req.body.d_loader === undefined))
 				callback({errors: {dropoff: {message: "Missing address details for drop-off location."}}});
 			else
 				connection.query("SET @temp = UNHEX(REPLACE(UUID(), '-', ''))", function(err) {
@@ -88,13 +83,10 @@ module.exports = {
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else {
 						var _data = {
-							volume: req.body.job.volume,
-							completion_date: req.body.job.completion_date,
-							dirt_type: req.body.job.dirt_type,
-							need_only: req.body.job.need_only,
-							pickup_only: req.body.job.pickup_only,
-							loader_pickup: req.body.job.loader_pickup,
-							loader_dropoff: req.body.job.loader_dropoff
+							job_type: req.body.job_type,
+							dirt_type: req.body.dirt_type,
+							volume: req.body.volume,
+							completion_date: req.body.completion_date
 						};
 						var query = "INSERT INTO jobs SET ?, id = @temp, user_id = UNHEX(?), \
 						created_at = NOW(), updated_at = NOW()";
@@ -102,30 +94,30 @@ module.exports = {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
 							else {
-								if (req.body.job.pickup) {
+								if (req.body.job_type == 0 || req.body.job_type == 2) {
 									var data = {
-										address: req.body.pickup.address,
-										city: req.body.pickup.city,
-										state: req.body.pickup.state,
-										zip: req.body.pickup.zip
+										p_address: req.body.p_address,
+										p_city: req.body.p_city,
+										p_state: req.body.p_state,
+										p_zip: req.body.p_zip,
+										p_loader: req.body.p_loader
 									};
-									var query = "INSERT INTO pickup SET ?, job_id = @temp, created_at = NOW(), updated_at = NOW()";
-									connection.query(query, data, function(err) {
+									connection.query("INSERT INTO pickup SET ?, job_id = @temp", data, function(err) {
 										if (err) {
 											callback({errors: {database: {message: "Please contact an admin."}}});											
 											return;
 										}
 									});
 								}
-								if (req.body.dropoff) {
+								if (req.body.job_type == 1 || req.body.job_type == 2) {
 									var data = {
-										address: req.body.dropoff.address,
-										city: req.body.dropoff.city,
-										state: req.body.dropoff.state,
-										zip: req.body.dropoff.zip
+										d_address: req.body.d_address,
+										d_city: req.body.d_city,
+										d_state: req.body.d_state,
+										d_zip: req.body.d_zip,
+										d_loader: req.body.d_loader
 									};
-									var query = "INSERT INTO dropoff SET ?, job_id = @temp, created_at = NOW(), updated_at = NOW()";
-									connection.query(query, data, function(err) {
+									connection.query("INSERT INTO dropoff SET ?, job_id = @temp", data, function(err) {
 										if (err) {
 											callback({errors: {database: {message: "Please contact an admin."}}});											
 											return;
@@ -152,12 +144,10 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
 				var _data = {
+					job_type: req.body.job_type,
+					dirt_type: req.body.dirt_type,
 					volume: req.body.volume,
 					completion_date: req.body.completion_date,
-					dirt_type: req.body.dirt_type,
-					pickup_only: req.body.pickup_only,
-					loader_pickup: req.body.loader_pickup,
-					loader_dropoff: req.body.loader_dropoff
 				};
 				var query = "UPDATE jobs SET ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
 				connection.query(query, [_data, req.params.id, data.id], function(err, data) {

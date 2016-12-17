@@ -13,11 +13,12 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 			$location.url('/');
 		else if($scope.user_type == 'user') {
 			$scope.job = {
-				type: 'Sand',
-				pickup_only: false,
-				loader_pickup: false,
-				loader_dropoff: false
+				job_type: 0,
+				dirt_type: 'Sand',
+				p_loader: false,
+				d_loader: false
 			};
+			$scope.description = "Natural or screened / washed / crushed granular that can be compacted."
 			$scope.src = "../static/images/dirt_types/sand.jpg";
 			$scope.today = new Date();
 			$scope.step = 1;
@@ -109,28 +110,17 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 				$scope.description = "Removed from streets, parking lots or driveways."
 				$scope.src = "../static/images/dirt_types/snow.jpg";
 				break;
-			default:
-				$scope.description = "Natural or screened / washed / crushed granular that can be compacted."
-				$scope.src = "../static/images/dirt_types/sand.jpg";
-				break;
 		}
 	}
 
-	$scope.setAmount = function() {
-		$scope.job.amount = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
-		$scope.step = 1;
+	$scope.setVolume = function() {
+		$scope.job.volume = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
+		$scope.step = 3;
 	}
 
 	$scope.create = function() {
-		var data = {
-			job: $scope.job,
-			pickup: $scope.pickup
-		};
-		if (!$scope.pickup_only)
-			data.dropoff = $scope.dropoff;
-
 		$scope.error = null;
-		jobsFactory.create(data, function(data) {
+		jobsFactory.create($scope.job, function(data) {
 			if (data.errors) {
 				$scope.error = 'Could not create new job. '
 				for (key in data.errors) {
@@ -140,9 +130,14 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 			}
 			else {
 				$scope.id = data.id;
-				$scope.step = 6;
+				$scope.step = 7;
 			}
 			console.log($scope.step)
 		});
 	}
+
+	$scope.logout = function() {
+		$cookies.remove('token');
+		$location.url('/welcome');
+	}	
 });

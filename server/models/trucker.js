@@ -63,7 +63,8 @@ module.exports = {
 	register: function(req, callback) {
 		console.log(req.body)
 		if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password 
-		|| !req.body.confirm_password || req.body.truck_type === undefined) 
+		|| !req.body.confirm_password || req.body.truck_type === undefined || !req.body.make 
+		|| !req.body.model || !req.body.year) 
 			callback({errors: {form : {message: "All form fields are required."}}});
 		else {
 			// Check for unique email:
@@ -104,8 +105,12 @@ module.exports = {
 										email: req.body.email,
 										first_name: req.body.first_name,
 										last_name: req.body.last_name,
+										password: hash,
 										truck_type: req.body.truck_type,
-										password: hash
+										make: req.body.make,
+										model: req.body.model,
+										year: req.body.year,
+										description: req.body.description
 									};
 									connection.query("INSERT INTO truckers SET ?, id = UNHEX(REPLACE(UUID(), '-', '')), \
 									created_at = NOW(), updated_at = NOW()", data, function(err) {
