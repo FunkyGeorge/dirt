@@ -10,12 +10,12 @@ app.controller('loginController', function ($scope, $location, $cookies, $routeP
 		$location.url('/welcome');
 
 	$scope.login = function() {
-		$scope.error = null;
+		$scope.login_error = null;
 		if ($routeParams.user_type == 'trucker')
 			truckersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
-						$scope.error = data.errors[key].message;
+						$scope.login_error = data.errors[key].message;
 						break;
 					}
 				else {
@@ -26,11 +26,14 @@ app.controller('loginController', function ($scope, $location, $cookies, $routeP
 			usersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
-						$scope.error = data.errors[key].message;
+						console.log("err");
+						$scope.login_error = data.errors[key].message;
 						break;
 					}
-				else
+				else {
+					console.log("success");
 					$location.url('/');
+				}
 			});
 		else
 			$location.url('/welcome');

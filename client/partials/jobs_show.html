@@ -7,16 +7,16 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="#/">Got Dirt, Need Dirt</a>
+		<a class="navbar-brand" href="/">Got Dirt, Need Dirt</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/" ng-click="logout()">Logout</a></li>
+				<li ng-if="user_type=='user'"><a href="/jobs">Post New Job</a></li>
+				<li><a href="/messages">Messages</a></li>
+				<li><a href="/invoices">Invoices</a></li>
+				<li><a href="/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
@@ -24,7 +24,7 @@
 
 <!-- MAIN -->
 <div class="row">
-	<a class="col-sm-4 col-sm-offset-8" href="#/">
+	<a class="col-sm-4 col-sm-offset-8" href="/">
 		<button class="btn btn-default center-block">Back to Job Listings</button>
 	</a>
 </div>
@@ -94,7 +94,7 @@
 			<br>
 			<b style="color: darkorange" ng-show="user_type=='trucker' && job.applied">You've applied to this job!</b>
 			<button class="form-control btn btn-info" ng-show="user_type=='trucker' && !job.applied" ng-click="createApplication()">Apply to Job</button>
-			<button class="form-control btn btn-info" ng-show="id==job.user_id" ng-click="mode='edit'">Edit Job</button>			
+			<button class="form-control btn btn-info" ng-show="id==job.user_id" ng-click="mode='edit'">Edit Job</button>
 			<small style="color: darkorange" class="text-muted" ng-if="!job.loader_pickup">*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small><br>
 			<small style="color: darkorange" class="text-muted" ng-if="!job.pickup_only && !job.loader_dropoff">*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
 		</div>
@@ -203,6 +203,6 @@
 		<p>The user has been notified.<br>Go to your inbox and say hello!</p>
 		<p>If they have not responded in 30 minutes, the job will become live again.<br>
 		Check your inbox for updates.</p>
-		<a href="#/messages"><button>My Inbox</button></a>
+		<a href="/messages"><button>My Inbox</button></a>
 	</div>
 </div>

@@ -30,7 +30,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 			geoFactory.getNearbyZips(data, function(zips, distances){
 				$scope.zipcodes = zips;
 				$scope.distances = distances
-				console.log(distances);
 				$scope.state[3] = true;
 				appendJobs();
 			}); //result is 95112... insert near zips here
