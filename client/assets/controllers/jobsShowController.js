@@ -12,12 +12,17 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
 		$scope.error = null;
 		jobsFactory.show($routeParams.id, function(data) {
-			if (data.errors) {
-				$scope.error = "Invalid job/job no longer availale. You will now be redirected."
+			if (data.errors || data.length == 0) {
+				$scope.error = "Invalid job/job no longer availale. "
+				for (key in data.errors) {
+					$scope.error += data.errors[key].message;
+					break;
+				}
+				$scope.error += " You will now be redirected."
 				$timeout(function() {
 					$location.url('/');
 				}, 3000);				
-			}
+			}	
 			else {
 				$scope.job = data;
 				$scope.job.src = $scope.job.dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
@@ -41,34 +46,40 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 	//										JOB
 	//////////////////////////////////////////////////////
 	$scope.deleteJob = function() {
-
-	}
-
-	$scope.updateJob = function() {
 		$scope.error = null;
-		jobsFactory.update($scope.job, function(data) {
-			if (data.errors) {
-				$scope.error = "Not able to save changes. ";
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}							
-			}
-			else
-				$scope.mode = 'show';
-		});
+		if (confirm("Are you sure you want to delete this job listing? Doing so will remove all pending applications and conversations for this listing.\n\nClick\"OK\" to continue removing job.") == true) {
+			jobsFactory.delete($scope.job.id, function(data) {
+				if (data.errors) {
+					$scope.error = "Unable to remove the job listing. ";
+					for (key in data.errors) {
+						$scope.error += data.errors[key].message;
+						break;
+					}			
+				}
+				else {
+					$scope.mode = 'delete';
+					$timeout(function() {
+						$location.url('/');
+					}, 3000);	
+				}
+			});
+		}
 	}
 
-	//////////////////////////////////////////////////////
-	//										IMAGE
-	//////////////////////////////////////////////////////
-	$scope.createImage = function() {
-
-	}
-
-	$scope.deleteImage = function() {
-
-	}
+	// $scope.updateJob = function() {
+	// 	$scope.error = null;
+	// 	jobsFactory.update($scope.job, function(data) {
+	// 		if (data.errors) {
+	// 			$scope.error = "Not able to save changes. ";
+	// 			for (key in data.errors) {
+	// 				$scope.error += data.errors[key].message;
+	// 				break;
+	// 			}							
+	// 		}
+	// 		else
+	// 			$scope.mode = 'show';
+	// 	});
+	// }
 
 	//////////////////////////////////////////////////////
 	//										APPLICATION
@@ -85,6 +96,10 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 			else
 				$scope.mode = 'success';
 		});
+	}
+
+	$scope.removeApplication = function() {
+		
 	}
 
 });

@@ -53,7 +53,7 @@ module.exports = {
 				else
 					res.json(err);
 			else
-				res.json(data);
+				res.end();
 		});
 	}
 }

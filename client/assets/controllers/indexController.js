@@ -10,7 +10,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		var position;
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'contractor';
+		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
 		$scope.error = null;
 
 		//state variable

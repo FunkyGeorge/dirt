@@ -27,7 +27,7 @@
 
 <div class="row" ng-if="!error">
 	<div class="col-sm-3">
-		<h1 class="text-center">We Got Dirt</h1>
+		<h1 class="text-center">Dirt Feed</h1>
 		<h4 class="text-center">Sort By:</h4>
 		<form>
 			<div class="radio">
@@ -43,7 +43,7 @@
 		<div infinite-scroll="append();" infinite-scroll-distance="0">
 			<div class="row" ng-repeat="job in jobs">
 				<div class="col-sm-3 col-xs-6" style="margin-bottom: 20px;">
-					<img class="img-rounded img_dirt_type_1 " ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
+					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
 				</div>
 				<div class="col-sm-9">
 					<div class="row">
@@ -72,10 +72,10 @@
 							<input type="checkbox" ng-checked="job.pickup_only" disabled/> Pickup Only
 						</div>
 						<div class="col-xs-4">
-							<input type="checkbox" ng-checked="job.loader_pickup" disabled/> Loader at Pick-Up
+							<input type="checkbox" ng-checked="job.p_loader" disabled/> Loader at Pick-Up
 						</div>
 						<div class="col-xs-4">
-							<span ng-class="{strike: job.pickup_only}"><input type="checkbox" ng-checked="job.loader_dropoff" disabled/> Loader at Drop-Off</span>
+							<span ng-class="{strike: job.pickup_only}"><input type="checkbox" ng-checked="job.d_loader" disabled/> Loader at Drop-Off</span>
 						</div>
 					</div>
 					<hr>

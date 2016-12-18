@@ -39,21 +39,27 @@
 
 <!-- MAIN -->
 <div class="row">
-	<div class="col-md-5">
+	<div class="col-sm-4 col-sm-offset-4 center-content">
 		<form ng-submit="login()">
-			<h1 ng-show="user_type=='trucker'">Login</h1>
-			<h1 ng-show="user_type=='user'">Trucker login</h1>
+			<div class="form-group">
+				<h4>Are you a trucker?</h4>
+				<label>
+					<input type="radio" name="user_type" ng-model="user_type" value="user" required>
+					No, login as non-trucker
+				</label>
+				<label>
+					<input type="radio" name="user_type" ng-model="user_type" value="trucker" required>
+					Yes, login as trucker
+				</label>
+			</div>
 			<input class="form-control" type="email" placeholder='email' ng-model="user.email" required>
 			<br>
 			<input class="form-control" type="password" placeholder='password' ng-model="user.password" required>
 			<br>
-			<input class="btn btn-primary" class="button-primary" type="submit" value="Log In">
-			<p class="error" ng-bind="login_error"></p>
+			<input class="btn btn-info form-control" type="submit" value="Log In"><br>
+			<small class="form-text text-muted">Forgot password? <a href="">Reset Password</a></small><br>
+			<small class="form-text text-muted">Don't have an account? <a href="#/register">Register</a></small>
+			<p class="error" ng-bind="error"></p>
 		</form>
-		<p class="white_text">
-			Forgot Password? <a href="/reset">Reset Password</a>
-			<br>
-			or <a href="/register">Sign Up</a>
-		</p>
 	</div>
 </div>

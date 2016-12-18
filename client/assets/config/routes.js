@@ -13,7 +13,7 @@ app.config(function ($routeProvider, $locationProvider) {
 		templateUrl: 'partials/register.html',
 		controller: 'registerController'
 	})
-	.when('/login/:user_type',{
+	.when('/login',{
 		templateUrl: 'partials/login.html',
 		controller: 'loginController'
 	})
@@ -36,6 +36,6 @@ app.config(function ($routeProvider, $locationProvider) {
 	.otherwise({
 		redirectTo: '/welcome'
 	});
-	$locationProvider
-	.html5Mode(true);
+	// $locationProvider
+	// .html5Mode(true);
 });
