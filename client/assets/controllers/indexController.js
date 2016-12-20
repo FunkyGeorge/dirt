@@ -56,6 +56,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 					if ($scope.jobs && $scope.jobs.length == data.length)
 					$scope.state[1] = false;
 					$scope.jobs = data;
+					console.log($scope.jobs);
 					$scope.state[0]++;
 				}
 			});

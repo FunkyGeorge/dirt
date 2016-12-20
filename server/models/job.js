@@ -14,7 +14,7 @@ module.exports = {
 				if (req.headers.sort == "true")
 					sort = "jobs.created_at DESC"
 				else {
-					sort = `field(zip, ${req.headers.zips})`; //change to distance
+					sort = `field(pickup.zip, ${req.headers.zips})`; //change to distance
 				}
 				var limit = (req.headers.scroll * 5) + "";
 				if ('truck_type' in data){
@@ -30,8 +30,10 @@ module.exports = {
 				connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else
+					else{
+						console.log(data);
 						callback(false, data)
+					}
 				});
 			}
 		});
