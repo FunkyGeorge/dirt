@@ -13,14 +13,23 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 		$scope.error = null;
 		applicationsFactory.index(function(data) {
 			if (data.errors) {
-				$scope.error = "Could not load conversation. "
+				$scope.error = "Could not load job applications. "
 				for (key in data.errors) {
 					$scope.error += data.errors[key].message;
 					break;
 				}
 			}
 			else {
-				$scope.applications = data;
+				$scope.apps = [];
+				for (var i = 0; i < data.length; i++) {
+					if ($scope.apps.length == 0 || $scope.apps[$scope.apps.length - 1][0].job_id != data[i].job_id)
+						$scope.apps.push([data[i]]);
+					else if ($scope.apps[$scope.apps.length - 1][0].job_id == data[i].job_id)
+						$scope.apps[$scope.apps.length - 1].push(data[i]);
+				}
+
+				console.log($scope.apps)
+				$scope.status = 0;
 				$scope.mode = "message";
 			}
 		});
@@ -33,7 +42,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 			$scope.messages.push(data);
 			$scope.$apply();
 			$timeout(function() {
-				var _ = document.getElementsByClassName("div_chat")[1];
+				var _ = document.getElementById("chat");
 				_.scrollTop = _.scrollHeight;				
 			}, 0, false);		
 		}
@@ -48,11 +57,11 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 	//////////////////////////////////////////////////////
 	//										MESSAGE
 	//////////////////////////////////////////////////////
-	$scope.showMessages = function(application_id, job_id) {
-		$scope.job_id = job_id;
-		socket.emit('subscribe', application_id);		
+	$scope.showMessages = function(application) {
+		$scope.cur_app = application;
+		socket.emit('subscribe', application.id);		
 		
-		messagesFactory.show(application_id, function(data) {
+		messagesFactory.show(application.id, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not load conversation. "
 				for (key in data.errors) {
@@ -61,10 +70,11 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 				}
 			}
 			else {
-				$scope.new_message = {application_id: application_id};
+				console.log(data)
+				$scope.new_message = {application_id: application.id};
 				$scope.messages = data;
 				$timeout(function() {
-					var _ = document.getElementsByClassName("div_chat")[1];
+					var _ = document.getElementById("chat");
 					_.scrollTop = _.scrollHeight;				
 				}, 0, false);
 			}
@@ -97,7 +107,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 	//										JOB
 	//////////////////////////////////////////////////////
 	$scope.showJob = function() {
-		jobsFactory.show($scope.job_id, function(data) {
+		jobsFactory.show($scope.curr_app.job_id, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not load job. "
 				for (key in data.errors) {
@@ -117,7 +127,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 	//////////////////////////////////////////////////////
 	$scope.createInvoice = function() {
 		$scope.new_invoice.cost = 300;
-		$scope.new_invoice.job_id = $scope.job_id;
+		$scope.new_invoice.job_id = $scope.curr_app.job_id;
 		invoicesFactory.create($scope.new_invoice, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not create invoice. "

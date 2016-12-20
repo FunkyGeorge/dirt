@@ -1,5 +1,5 @@
 app.factory('jobsFactory', function($http, $cookies) {
-	return {
+	return {	
 		index: function(data, zips, callback) {
 			$http.get('/api/jobs', {
 				headers: {

@@ -18,9 +18,16 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query = "SELECT *, HEX(id) as id, HEX(user_id) as user_id, HEX(trucker_id) as trucker_id FROM messages \
-				WHERE HEX(application_id) = ? AND (HEX(user_id) = ? OR HEX(trucker_id) = ?) ORDER BY created_at";
-				connection.query(query, [req.params.id, data.id, data.id], function(err, data) {
+				var query;
+				if ('truck_type' in data)
+					query = "SELECT *, HEX(id) as id, HEX(user_id) as user_id, HEX(trucker_id) as trucker_id FROM messages \
+					WHERE HEX(application_id) = ? AND ? IN (SELECT HEX(trucker_id) FROM applications WHERE \
+					HEX(applications.id) = ?) ORDER BY created_at";
+				else				
+					query = "SELECT *, HEX(id) as id, HEX(user_id) as user_id, HEX(trucker_id) as trucker_id FROM messages \
+					WHERE HEX(application_id) = ? AND ? IN (SELECT HEX(user_id) FROM applications LEFT JOIN jobs \
+					ON job_id = jobs.id WHERE HEX(applications.id) = ?) ORDER BY created_at";
+				connection.query(query, [req.params.id, data.id, req.params.id], function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else

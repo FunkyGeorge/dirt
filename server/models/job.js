@@ -18,10 +18,10 @@ module.exports = {
 				}
 				var limit = (req.headers.scroll * 5) + "";
 				if ('truck_type' in data){
-					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
-					AS user_id, IF(UNHEX(?) IN (applications.trucker_id), 1, 0) AS applied FROM jobs \
-					LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id \
-					LEFT JOIN applications ON jobs.id = applications.job_id ORDER BY ${sort} LIMIT {$limit}`;
+					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
+					applications.id AS applied FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff \
+					ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id AND 
+					UNHEX(?) = applications.trucker_id ORDER BY ${sort} LIMIT {$limit}`;
 				}
 				else
 					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
@@ -35,7 +35,7 @@ module.exports = {
 				});
 			}
 		});
-	},
+	},	
 	show: function(req, callback) {
 		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
 			if (err)
@@ -46,9 +46,9 @@ module.exports = {
 				if ('truck_type' in data) {
 					_data = [data.id, req.params.id];
 					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
-					AS user_id, IF(UNHEX(?) IN (applications.trucker_id), 1, 0) AS applied FROM jobs \
-					LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id \
-					LEFT JOIN applications ON jobs.id = applications.job_id WHERE HEX(jobs.id) = ? LIMIT 1";
+					AS user_id, applications.id AS applied FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
+					LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
+					AND UNHEX(?) = applications.trucker_id WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				else {
 					_data = req.params.id;
