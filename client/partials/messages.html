@@ -61,12 +61,17 @@
 		<div ng-if="cur_app && user_type=='user'">
 			<div class="center-content" ng-if="cur_app.status==0">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.created_at | date:"shortDate"}}</b><br><br>
-				<button class="btn btn-success">Accept</button> <button class="btn btn-danger">Decline</button>				
+				<button class="btn btn-success">Accept</button> <button class="btn btn-danger">Decline</button><br><br>
+				<small class="text-muted">Accept {{cur_app.first_name}}'s application to start chatting.</small>
 			</div>
 			<div class="center-content" ng-if="cur_app.status==1">
-				<b><span class="darkorange">You've accepted {{cur_app.first_name}}</span>{{cur_app.last_name}} for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
-				<button class="btn btn-success">Accept</button> <button class="btn btn-danger">Decline</button>
+				<b>You've accepted <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
+				<small class="text-muted">You can start chatting once {{cur_app.first_name}} has paid our lead fee.</small><br>
 			</div>
+			<div class="center-content" ng-if="cur_app.status==2">
+				<b><span class="darkorange">You've accepted {{cur_app.first_name}}</span>{{cur_app.last_name}} for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
+				<button class="btn btn-success">Accept</button>
+			</div>			
 			<button class="btn btn-default" ng-if="cur_app.status==1" ng-click="">Cancel Job</button>
 		</div>
 		<hr>
