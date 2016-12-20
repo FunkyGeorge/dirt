@@ -7,16 +7,16 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="/">Got Dirt, Need Dirt</a>
+		<a class="navbar-brand" href="#/">Got Dirt, Need Dirt</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="/jobs">Post New Job</a></li>
-				<li><a href="/messages">Messages</a></li>
-				<li><a href="/invoices">Invoices</a></li>
-				<li><a href="/" ng-click="logout()">Logout</a></li>
+				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
+				<li><a href="#/messages">Messages</a></li>
+				<li><a href="#/invoices">Invoices</a></li>
+				<li><a href="#/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
@@ -420,15 +420,9 @@
 	<h1>Success!</h1>
 	<p>Your job is now live.</p>
 	<p>Truckers in the area will be notified and will reach out to assist you.</p>
-<<<<<<< HEAD
 	<p>you can check out your inbox below to see who has reached out. Or you can view your listed job.</p>
-	<a href="/messages"><button class="btn btn-info">Messages</button></a>
-	<a href="/jobs/{{id}}"><button class="btn btn-primary">View Job</button></a>
-=======
-	<p>You can check out your inbox below to see who has reached out. Or you can view your listed job.</p>
 	<a href="#/messages"><button class="btn btn-info">Messages</button></a>
 	<a href="#/jobs/{{id}}"><button class="btn btn-primary">View Job</button></a>
->>>>>>> 26f74903336bc9986c0287c46c93122258d5b3aa
 </div>
 
 <!-- STEP 8: FILL CALCULATOR -->

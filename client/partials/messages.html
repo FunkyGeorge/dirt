@@ -7,16 +7,16 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="/">Got Dirt, Need Dirt</a>
+		<a class="navbar-brand" href="#/">Got Dirt, Need Dirt</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="/jobs">Post New Job</a></li>
-				<li><a href="/messages">Messages</a></li>
-				<li><a href="/invoices">Invoices</a></li>
-				<li><a href="/" ng-click="logout()">Logout</a></li>
+				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
+				<li><a href="#/messages">Messages</a></li>
+				<li><a href="#/invoices">Invoices</a></li>
+				<li><a href="#/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
@@ -71,7 +71,7 @@
 			<div class="center-content" ng-if="cur_app.status==2">
 				<b><span class="darkorange">You've accepted {{cur_app.first_name}}</span>{{cur_app.last_name}} for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
 				<button class="btn btn-success">Accept</button>
-			</div>			
+			</div>
 			<button class="btn btn-default" ng-if="cur_app.status==1" ng-click="">Cancel Job</button>
 		</div>
 		<hr>
@@ -144,5 +144,5 @@
 	<p>Your invoice has been sent.</p>
 	<p>Your funds will be available to view in the top right menu under invoices.</p>
 	<p>Or just click below:</p>
-	<a href="/invoices"><button>View Invoices</button></a>
+	<a href="#/invoices"><button>View Invoices</button></a>
 </div>

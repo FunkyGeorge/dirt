@@ -7,7 +7,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="/">Got Dirt, Need Dirt</a>
+		<a class="navbar-brand" href="#/">Got Dirt, Need Dirt</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			<p class="text-center">
-				Already have an account? <a href="/login/{{user_type}}">Log in</a>
+				Already have an account? <a href="#/login/{{user_type}}">Log in</a>
 			</p>
 			<p class="error" ng-bind="error"></p>
 		</form>
@@ -81,7 +81,7 @@
 		<h1>Success!</h1>
 		<p>Your account has been created</p>
 		<p>Check your email for an email from us and click the provided link to activate your account<span ng-if="user_type=='trucker'"> and start finding jobs</span>.<br><span ng-if="user_type=='user'">Let's find you a trucker.</span></p>
-		<a href="/" ng-if="user_type=='trucker'"><button class="btn btn-info">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
-		<a href="/jobs" ng-if="user_type=='user'"><button class="btn btn-info">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+		<a href="#/" ng-if="user_type=='trucker'"><button class="btn btn-info">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+		<a href="#/jobs" ng-if="user_type=='user'"><button class="btn btn-info">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
 	</div>
 </div>
