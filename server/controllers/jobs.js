@@ -11,7 +11,7 @@ module.exports = {
 			else
 				res.json(data);
 		});
-	},
+	},	
 	show: function(req, res) {
 		job.show(req, function(err, data) {
 			if (err)

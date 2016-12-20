@@ -11,14 +11,16 @@ module.exports = {
 			else {
 				var query;
 				if ('truck_type' in data)
-					query = "SELECT HEX(applications.id) AS id, applications.created_at AS created_at, first_name, last_name, \
-					HEX(jobs.id) AS job_id, completion_date FROM applications LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN users \
-					ON user_id = users.id WHERE HEX(applications.trucker_id) = ? ORDER BY applications.created_at DESC";
+					query = "SELECT status, HEX(applications.id) AS id, HEX(job_id) AS job_id, applications.created_at \
+					AS created_at, first_name, last_name, dirt_type, volume, completion_date FROM applications LEFT JOIN jobs \
+					ON job_id = jobs.id LEFT JOIN users ON user_id = users.id WHERE HEX(applications.trucker_id) = ? \
+					ORDER BY applications.created_at DESC ";
 				else
-					query = "SELECT HEX(applications.id) AS id, applications.created_at AS created_at, first_name, last_name, \
-					completion_date FROM applications LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN truckers ON \
-					applications.trucker_id = truckers.id WHERE HEX(user_id) = ? ORDER BY applications.created_at DESC";
-				connection.query(query, data.id, function(err, data) {
+					query = "SELECT status, HEX(applications.id) AS id, HEX(job_id) AS job_id, applications.created_at \
+					AS created_at, first_name, last_name, dirt_type, volume, completion_date FROM applications LEFT JOIN jobs \
+					ON job_id = jobs.id LEFT JOIN truckers ON applications.trucker_id = truckers.id WHERE HEX(user_id) = ? \
+					ORDER BY jobs.created_at DESC, applications.created_at DESC ";
+					connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else
@@ -61,8 +63,8 @@ module.exports = {
 			else if (!req.body.job_id || !('truck_type' in data))
 				callback({errors: {job: {message: "Either a bad job was provided, or you're not allowed to accept jobs."}}});
 			else {
-				var query = "INSERT INTO applications SET job_id = UNHEX(?), trucker_id = UNHEX(?), \
-				id =  UNHEX(REPLACE(UUID(), '-', '')), created_at = NOW(), updated_at = NOW()"
+				var query = "INSERT INTO applications SET status = 0, job_id = UNHEX(?), trucker_id = UNHEX(?), \
+				id =  UNHEX(REPLACE(UUID(), '-', '')), created_at = NOW(), updated_at = NOW()";
 				connection.query(query, [req.body.job_id, data.id], function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
