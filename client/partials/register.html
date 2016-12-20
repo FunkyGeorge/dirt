@@ -12,8 +12,7 @@
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/login/user">Login</a></li>
-				<li><a href="/login/trucker">Login as Trucker</a></li>
+				<li><a href="#/login">Login</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
@@ -51,6 +50,7 @@
 				<input type="text" class="form-control" placeholder='Make' ng-model="new_user.make" required><br>
 				<input type="text" class="form-control" placeholder='Model' ng-model="new_user.model" required><br>
 				<input type="number" class="form-control" placeholder='Year' min="1960" max="{{year}}" ng-model="new_user.year" required><br>
+				<textarea class="form-control" ng-model="new_user.description" placeholder='Tell everyone a little about your truck. Example: "If you can no longer tell what color it is, you&#39;re doing it right."'></textarea><br>
 				<label class="form-check-label">
 					<input type="checkbox" class="form-check-input" ng-model="new_user.truck_type">
 					This is a DOT commercial truck<br>

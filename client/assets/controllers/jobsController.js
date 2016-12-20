@@ -74,7 +74,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 				$scope.description = "Average quality, medium black organic, little or no clumps, rocks, sod, or roots, etc."
 				$scope.src = "../static/images/dirt_types/topsoil_average.jpg";
 				break;
-			case 'Topsoil - Economoy':
+			case 'Topsoil - Economy':
 				$scope.description = "Low quality, some black organic, could have some clumps, rocks, sod, or roots, etc."
 				$scope.src = "../static/images/dirt_types/topsoil_economy.jpg";
 				break;

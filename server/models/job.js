@@ -21,12 +21,12 @@ module.exports = {
 					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
 					AS user_id, IF(UNHEX(?) IN (applications.trucker_id), 1, 0) AS applied FROM jobs \
 					LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id \
-					LEFT JOIN applications ON jobs.id = applications.job_id ORDER BY ${sort} LIMIT {$limit}`;
+					LEFT JOIN applications ON jobs.id = applications.job_id ORDER BY ${sort} LIMIT ${limit}`;
 				}
 				else
 					query = `SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
 					AS user_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id LEFT JOIN dropoff \
-					ON jobs.id = dropoff.job_id ORDER BY ${sort} LIMIT {$limit}`;
+					ON jobs.id = dropoff.job_id ORDER BY ${sort} LIMIT ${limit}`;
 				connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
@@ -78,11 +78,11 @@ module.exports = {
 			else if (!req.body.volume || req.body.volume <= 0)
 				callback({errors: {volume: {message: "You must submit a volume that is greater than 0."}}});
 			else if (!req.body.completion_date)
-				callback({errors: {completion_date: {message: "Completion date is required."}}});			
-			else if ((req.body.job_type == 0 || req.body.job_type == 2) && (!req.body.p_address || !req.body.p_city || 
+				callback({errors: {completion_date: {message: "Completion date is required."}}});
+			else if ((req.body.job_type == 0 || req.body.job_type == 2) && (!req.body.p_address || !req.body.p_city ||
 			!req.body.p_state || !req.body.p_zip || req.body.p_loader === undefined))
 				callback({errors: {pickup: {message: "Missing details for pick-up location."}}});
-			else if ((req.body.job_type == 1 || req.body.job_type == 2) && (!req.body.d_address || !req.body.d_city || 
+			else if ((req.body.job_type == 1 || req.body.job_type == 2) && (!req.body.d_address || !req.body.d_city ||
 			!req.body.d_state || !req.body.d_zip || req.body.d_loader === undefined))
 				callback({errors: {dropoff: {message: "Missing address details for drop-off location."}}});
 			else
@@ -112,7 +112,7 @@ module.exports = {
 									};
 									connection.query("INSERT INTO pickup SET ?, job_id = @temp", data, function(err) {
 										if (err) {
-											callback({errors: {database: {message: "Please contact an admin."}}});											
+											callback({errors: {database: {message: "Please contact an admin."}}});
 											return;
 										}
 									});
@@ -127,7 +127,7 @@ module.exports = {
 									};
 									connection.query("INSERT INTO dropoff SET ?, job_id = @temp", data, function(err) {
 										if (err) {
-											callback({errors: {database: {message: "Please contact an admin."}}});											
+											callback({errors: {database: {message: "Please contact an admin."}}});
 											return;
 										}
 									});
