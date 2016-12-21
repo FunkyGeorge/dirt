@@ -71,7 +71,7 @@
 			<div class="center-content" ng-if="cur_app.status==2">
 				<b><span class="darkorange">You've accepted {{cur_app.first_name}}</span>{{cur_app.last_name}} for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
 				<button class="btn btn-success">Accept</button>
-			</div>			
+			</div>
 			<button class="btn btn-default" ng-if="cur_app.status==1" ng-click="">Cancel Job</button>
 		</div>
 		<hr>
