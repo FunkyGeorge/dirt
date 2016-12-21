@@ -114,7 +114,8 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	}
 
 	$scope.setVolume = function() {
-		$scope.job.volume = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
+		$scope.job.volume = $scope.preview;
+		// $scope.job.volume = Math.round($scope.length * $scope.depth * $scope.height * 100)/100;
 		$scope.step = 3;
 	}
 
@@ -163,5 +164,5 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	$scope.logout = function() {
 		$cookies.remove('token');
 		$location.url('/welcome');
-	}	
+	}
 });

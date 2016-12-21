@@ -26,8 +26,9 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 			geoFactory.getCurrentZip(position.coords.latitude, position.coords.longitude, zipList);
 		}
 		function zipList (data){
+			$scope.zipcodes = [data]
 			geoFactory.getNearbyZips(data, function(zips, distances){
-				$scope.zipcodes = zips;
+				$scope.zipcodes[1] = zips;
 				$scope.distances = distances
 				$scope.state[3] = true;
 				appendJobs();
@@ -45,7 +46,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 
 	function appendJobs(){
 		if ($scope.state[3]){ //isLoaded?
-			jobsFactory.index($scope.state, $scope.zipcodes, function(data) {
+			jobsFactory.index($scope.state, $scope.zipcodes[1], function(data) {
 				if (data.errors)
 					$scope.error = "Something went wrong, please wait a while and try reloading."
 				else {
