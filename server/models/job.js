@@ -30,10 +30,8 @@ module.exports = {
 				connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else{
-						console.log(data);
+					else
 						callback(false, data)
-					}
 				});
 			}
 		});

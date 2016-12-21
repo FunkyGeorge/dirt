@@ -1,6 +1,6 @@
 app.factory('geoFactory',['$http',function($http){
-  var apiKeyTexasAM = "79f75c2a0b3e4c55ac77af0b27c4c379"; //add API key
-  var apiKeyZipcodeAPI = "js-Tpcw8udTEtPtcsbhWczJxWXEkFjryeysELYMfbFTFvmSXyaUKKDiGAW1ggsPu1i8"; //add API key
+  var apiKeyTexasAM = ""; //add API key
+  var apiKeyZipcodeAPI = ""; //add API key
 
   function SLL(){
     this.head = null;
