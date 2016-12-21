@@ -107,6 +107,14 @@ app.factory('geoFactory',['$http',function($http){
 
         callback(zipList, distances);
       })
+    },
+
+    distBetween: function(job, callback){
+      var url = "https://www.zipcodeapi.com/rest/";
+      url += `${apiKeyZipcodeAPI}/distance.json/${job.p_zip}/${job.d_zip}/mile`;
+      $http.get(url).then(function(res){
+        callback(res.distance);
+      })
     }
   }
 }]);

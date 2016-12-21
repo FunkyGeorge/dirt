@@ -69,9 +69,21 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		}
 	};
 
-	$scope.getDistance = function(zip){
-		if ($scope.distances[zip])
-			return $scope.distances[zip];
+	$scope.getDistance = function(job){
+
+		if(job.job_type == 0 && $scope.distances[job.p_zip])
+			return $scope.distances[job.p_zip];
+		else if (job.job_type == 1 && $scope.distances[job.d_zip])
+			return $scope.distances[job.d_zip];
+		else if (job.job_type == 2)
+			if (!$scope.distances[job.id])//distance not exist
+				geoFactory.distBetween(job, function(distance){
+					$scope.distances[job.id] = $scope.distances[job.p_zip] + distance;
+					return $scope.distances[job.id];
+				});
+			else {
+				return $scope.distances[job.id];
+			}
 		else
 			return '?'
 	};
