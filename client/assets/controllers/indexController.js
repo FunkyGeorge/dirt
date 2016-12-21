@@ -1,10 +1,8 @@
 app.controller('indexController', function ($scope, $location, $routeParams, $cookies, jobsFactory, geoFactory) {
-	function getPayload(token) {
-		var base64Url = token.split('.')[1];
-		var base64 = base64Url.replace('-', '+').replace('_', '/');
-		return JSON.parse(window.atob(base64));
-	}
 
+	//////////////////////////////////////////////////////
+	//										INITIALIZATION
+	//////////////////////////////////////////////////////
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
 		var position;
@@ -44,6 +42,15 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 	}
 	else
 		$location.url('/welcome');
+	
+	//////////////////////////////////////////////////////
+	//										HELPER FUNCTIONS
+	//////////////////////////////////////////////////////
+	function getPayload(token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace('-', '+').replace('_', '/');
+		return JSON.parse(window.atob(base64));
+	}
 
 	function appendJobs(){
 		if ($scope.state[3]){ //isLoaded?
@@ -91,4 +98,42 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		$cookies.remove('token');
 		$location.url('/welcome');
 	}
+
+	//////////////////////////////////////////////////////
+	//										SOCKET
+	//////////////////////////////////////////////////////
+	// socket.on('message', function(data) {
+	// 	$.notify({
+	// 		icon: "glyphicon glyphicon-envelope",
+	// 		message: `New message from ${data.name}.`,
+	// 		url: `#/messages/${data.application_id}`
+	// 	}, {
+	// 		placement: {
+	// 			from: "bottom"
+	// 		},
+	// 		delay: 4000,
+	// 		animate: {
+	// 			enter: 'animated fadeInUp',
+	// 			exit: 'animated fadeOutDown',
+	// 		}
+	// 	});
+	// });
+
+	// socket.on('accepted', function(data) {
+	// 	$.notify({
+	// 		icon: "glyphicon glyphicon-check",
+	// 		message: `${data.first_name} accepted your application!`,
+	// 		url: `#/messages/${data.id}`
+	// 	}, {
+	// 		placement: {
+	// 			from: "bottom"
+	// 		},
+	// 		delay: 4000,
+	// 		animate: {
+	// 			enter: 'animated fadeInUp',
+	// 			exit: 'animated fadeOutDown',
+	// 		}
+	// 	});
+	// });
+
 });

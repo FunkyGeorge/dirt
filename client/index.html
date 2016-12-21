@@ -16,23 +16,25 @@
 	<!-- <link rel="icon" type="image/png" href="static/images/favicon.png"> -->
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="static/css/stylesheet.css">
+	<!-- Animate CSS -->
+  <link rel="stylesheet" href="animate.css/animate.min.css">	
 	<!-- Font -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-	<!-- BOOTSTRAP -->
+	<!-- Bootstrap -->
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap-theme.min.css">
 	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- Socket.IO -->
 	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-	<script>
-		var socket;
-		socket = io.connect();
-	</script>
-	<!-- Angular components -->
+	<script src="assets/config/socket.js"></script>	
+	<!-- Angular Components -->
 	<script src="angular/angular.js" charset="utf-8"></script>
 	<script src="angular-route/angular-route.js" charset="utf-8"></script>
 	<script src="angular-cookies/angular-cookies.js" charset="utf-8"></script>
-	<!-- Angular files -->
+	<!-- Angular Moment -->
+	<script src="moment/moment.js"></script>
+	<script src="angular-moment/angular-moment.js"></script>
+	<!-- Angular Assets -->
 	<script src="assets/config/routes.js"></script>
 	<script src='assets/factories/usersFactory.js'></script>
 	<script src='assets/factories/truckersFactory.js'></script>
@@ -51,6 +53,8 @@
 	<script src='assets/controllers/invoicesController.js'></script>
 	<!-- Infinite Scroll -->
 	<script src="ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
+	<!-- Remarkable Bootstrap Notify -->
+	<script src="remarkable-bootstrap-notify/bootstrap-notify.min.js"></script>	
 	<!-- JS -->
 </head>
 <body>

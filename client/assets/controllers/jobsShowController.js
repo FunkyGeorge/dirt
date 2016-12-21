@@ -1,10 +1,9 @@
-app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, jobsFactory, applicationsFactory) {
-	function getPayload(token) {
-		var base64Url = token.split('.')[1];
-		var base64 = base64Url.replace('-', '+').replace('_', '/');
-		return JSON.parse(window.atob(base64));
-	}
+app.controller('jobsShowController', function ($scope, $location, $cookies, $timeout, $routeParams, 
+jobsFactory, applicationsFactory) {
 
+	//////////////////////////////////////////////////////
+	//										INITIALIZATION
+	//////////////////////////////////////////////////////
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
 		$scope.id = payload.id;
@@ -36,6 +35,15 @@ app.controller('jobsShowController', function ($scope, $location, $cookies, $tim
 	}
 	else
 		$location.url('/welcome');
+
+	//////////////////////////////////////////////////////
+	//										HELPER FUNCTIONS
+	//////////////////////////////////////////////////////
+	function getPayload(token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace('-', '+').replace('_', '/');
+		return JSON.parse(window.atob(base64));
+	}
 
 	$scope.logout = function() {
 		$cookies.remove('token');

@@ -12,12 +12,14 @@ module.exports = {
 				var query;
 				if ('truck_type' in data)
 					query = "SELECT status, HEX(applications.id) AS id, HEX(job_id) AS job_id, applications.created_at \
-					AS created_at, first_name, last_name, dirt_type, volume, completion_date FROM applications LEFT JOIN jobs \
+					AS created_at, applications.updated_at AS updated_at, first_name, last_name, dirt_type, volume, \
+					completion_date FROM applications LEFT JOIN jobs \
 					ON job_id = jobs.id LEFT JOIN users ON user_id = users.id WHERE HEX(applications.trucker_id) = ? \
 					ORDER BY applications.created_at DESC ";
 				else
 					query = "SELECT status, HEX(applications.id) AS id, HEX(job_id) AS job_id, applications.created_at \
-					AS created_at, first_name, last_name, dirt_type, volume, completion_date FROM applications LEFT JOIN jobs \
+					AS created_at, applications.updated_at AS updated_at, first_name, last_name, dirt_type, volume, \
+					completion_date FROM applications LEFT JOIN jobs \
 					ON job_id = jobs.id LEFT JOIN truckers ON applications.trucker_id = truckers.id WHERE HEX(user_id) = ? \
 					ORDER BY jobs.created_at DESC, applications.created_at DESC ";
 					connection.query(query, data.id, function(err, data) {

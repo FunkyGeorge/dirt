@@ -1,10 +1,7 @@
 app.controller('jobsController', function ($scope, $location, $cookies, jobsFactory) {
-	function getPayload(token) {
-		var base64Url = token.split('.')[1];
-		var base64 = base64Url.replace('-', '+').replace('_', '/');
-		return JSON.parse(window.atob(base64));
-	}
-
+	//////////////////////////////////////////////////////
+	//										INITIALIZATION
+	//////////////////////////////////////////////////////
 	if ($cookies.get('token')) {
 		var payload = getPayload($cookies.get('token'));
 		$scope.name = payload.first_name + " " + payload.last_name;
@@ -27,6 +24,15 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	}
 	else
 		$location.url('/welcome');
+
+	//////////////////////////////////////////////////////
+	//										HELPER FUNCTIONS
+	//////////////////////////////////////////////////////
+	function getPayload(token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace('-', '+').replace('_', '/');
+		return JSON.parse(window.atob(base64));
+	}
 
 	$scope.change = function() {
 		switch($scope.job.dirt_type) {
@@ -142,6 +148,34 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 				}
 	}
 
+	$scope.logout = function() {
+		$cookies.remove('token');
+		$location.url('/welcome');
+	}	
+
+	//////////////////////////////////////////////////////
+	//										SOCKET
+	//////////////////////////////////////////////////////
+	socket.on('message', function(data) {
+		$.notify({
+			icon: "glyphicon glyphicon-envelope",
+			message: `New message from ${data.name}.`,
+			url: `#/messages/${data.application_id}`
+		}, {
+			placement: {
+				from: "bottom"
+			},
+			delay: 4000,
+			animate: {
+				enter: 'animated fadeInUp',
+				exit: 'animated fadeOutDown',
+			}
+		});
+	});
+
+	//////////////////////////////////////////////////////
+	//										JOB
+	//////////////////////////////////////////////////////	
 	$scope.create = function() {
 		$scope.error = null;
 		jobsFactory.create($scope.job, function(data) {
@@ -160,8 +194,4 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 		});
 	}
 
-	$scope.logout = function() {
-		$cookies.remove('token');
-		$location.url('/welcome');
-	}	
 });

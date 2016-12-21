@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'ngCookies','infinite-scroll']);
+var app = angular.module('app', ['ngRoute', 'ngCookies', 'infinite-scroll', 'angularMoment']);
 app.config(function ($routeProvider, $locationProvider) {
 	$routeProvider
 	.when('/',{
@@ -8,6 +8,9 @@ app.config(function ($routeProvider, $locationProvider) {
 	.when('/welcome',{
 		templateUrl: 'partials/welcome.html',
 		controller: 'welcomeController'
+	})
+	.when('/about',{
+		templateUrl: 'partials/about.html'
 	})
 	.when('/register',{
 		templateUrl: 'partials/register.html',
@@ -25,11 +28,11 @@ app.config(function ($routeProvider, $locationProvider) {
 		templateUrl: 'partials/jobs_show.html',
 		controller: 'jobsShowController'
 	})
-	.when('/messages',{
+	.when('/messages/:id?',{
 		templateUrl: 'partials/messages.html',
 		controller: 'messagesController'
 	})
-	.when('/invoices',{
+	.when('/invoices/:id?',{
 		templateUrl: 'partials/invoices.html',
 		controller: 'invoicesController'
 	})

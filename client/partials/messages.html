@@ -16,6 +16,7 @@
 				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
 				<li><a href="#/messages">Messages</a></li>
 				<li><a href="#/invoices">Invoices</a></li>
+				<li><a href="#/about">About</a></li>
 				<li><a href="#/" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -27,6 +28,7 @@
 
 <!-- MESSAGE -->
 <div class="row" ng-show="mode=='message'">
+
 	<h1 class="col-xs-12">Messages</h1>
 	<div class="col-sm-4">
 		<ul class="nav nav-tabs">
@@ -36,15 +38,15 @@
 		<div class="tab-content">
 			<div class="tab-pane fade in active" >
 				<h4 class="text-center">{{status==0?'Pending':'Accepted'}} Applications</h4>
-				<div ng-repeat="app in apps | filter:{status: status}">
+				<div ng-repeat="app in apps | filter:filterByStatus">
 					<div class="text-center">
 						<b><a href="#/jobs/{{app[0].job_id}}">{{app[0].dirt_type}} | {{app[0].volume | number:0}} yds<sup>3</sup></a></b><br>
 						<small ng-if="user_type=='user'">{{app.length}} applicants</small>
 					</div>
-					<div ng-repeat="application in app | filter:{status: status}">
+					<div ng-repeat="application in app">
 						<li ng-if="user_type=='user'"><a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id == application.id}">{{application.first_name}} {{application.last_name}}</a></li>
 						<div class="text-center" ng-if="user_type=='trucker'">
-							<a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id == application.id}">{{application.first_name}} {{application.last_name}}</a>
+							<a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id==application.id}">{{application.first_name}} {{application.last_name}}</a>
 						</div>
 					</div>
 					<hr>
@@ -53,35 +55,60 @@
 		</div>
 	</div>
 	<div class="col-sm-8">
-		<div ng-if="cur_app && user_type=='trucker'">
-			<p class="text-center">You applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.created_at | date:"shortDate"}}</p>
-			<button class="btn btn-warning center-block" ng-if="cur_app.status==0" ng-click="">Cancel Application</button>
-			<button class="btn btn-warning center-block" ng-if="cur_app.status==1" ng-click="">Cancel Job</button>
-		</div>
+		<small class="text-muted" ng-show="!messages">You can view your conversations here. Click on a name on the left to view the conversation.</small>
+		<small class="text-muted" ng-show="!messages && user_type=='user'"><br>Note that accepting an application will cause all other pending applications for that same job to be declined.</small>
+		<small class="text-muted" ng-show="!messages && user_type=='trucker'"><br>Note that you will not be able to re-apply to jobs that you've cancelled.</small>
+		
+		<!-- USER -->
 		<div ng-if="cur_app && user_type=='user'">
+			<!-- STATUS 0 -->		
 			<div class="center-content" ng-if="cur_app.status==0">
-				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.created_at | date:"shortDate"}}</b><br><br>
-				<button class="btn btn-success">Accept</button> <button class="btn btn-danger">Decline</button><br><br>
-				<small class="text-muted">Accept {{cur_app.first_name}}'s application to start chatting.</small>
+				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
+				<button class="btn btn-success" ng-click="acceptApplication()">Accept</button> <button class="btn btn-danger">Decline</button><br><br>
+				<small class="text-muted">Accept {{cur_app.first_name}}'s application to start connecting.<br>You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
+			<!-- STATUS 1 -->
 			<div class="center-content" ng-if="cur_app.status==1">
-				<b>You've accepted <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
-				<small class="text-muted">You can start chatting once {{cur_app.first_name}} has paid our lead fee.</small><br>
+				<b>You've accepted <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
+				<small class="text-muted">You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
-			<div class="center-content" ng-if="cur_app.status==2">
-				<b><span class="darkorange">You've accepted {{cur_app.first_name}}</span>{{cur_app.last_name}} for this <a href="#/jobs/{{cur_app.job_id}}">job</a> on {{cur_app.updated_at | date:"shortDate"}}</b><br><br>
-				<button class="btn btn-success">Accept</button>
-			</div>			
-			<button class="btn btn-default" ng-if="cur_app.status==1" ng-click="">Cancel Job</button>
+			<!-- STATUS > 1 -->
+			<div class="center-content" ng-if="cur_app.status>1">
+				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
+				<small class="text-muted" ng-if="cur_app.status==2">{{cur_app.first_name}} will send you an invoice once the job has been completed.</small>
+				<small class="text-muted" ng-if="cur_app.status==3">{{cur_app.first_name}} has sent you an <a href="#/invoices/{{cur_app.id}}">invoice</a>.</small>
+				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
+			</div>
 		</div>
+
+		<!-- TRUCKER -->
+		<div ng-if="cur_app && user_type=='trucker'">
+			<!-- STATUS 0 -->
+			<div class="center-content" ng-if="cur_app.status==0">
+				<b class="text-center">You applied for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
+				<button class="btn btn-warning center-block" ng-click="">Cancel Application</button><br>
+				<small class="text-muted">Waiting for {{cur_app.first_name}} to accept your application.<br>You'll be connected after being accepted and paying our <a href="#/about#lead_fee">lead fee</a>.</small>
+			</div>
+			<!-- STATUS 1 -->
+			<div class="center-content" ng-if="cur_app.status==1">
+				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> accepted you for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
+				<button class="btn btn-info" ng-click="">Pay Lead Fee</button> <button class="btn btn-warning" ng-click="">Cancel Application</button>
+				<small class="text-muted">You'll be connected after paying our <a href="#/about#lead_fee">lead fee</a></small>
+			</div>
+			<!-- STATUS > 1 -->
+			<div class="center-content" ng-if="cur_app.status>1">
+				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
+				<button ng-if="cur_app.status==2" ng-click="">Invoice Client</button>
+				<small class="text-muted" ng-if="cur_app.status==2">Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
+				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices/{{cur_app.id}}">invoice</a>.</small>
+				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
+			</div>
+		</div>
+
 		<hr>
-		<small class="text-muted" ng-show="!messages">You can view your conversations here. Click on a conversation on the left to view the conversation.</small>
+
 		<div id="chat" class="row">
 			<div class="col-xs-12" ng-repeat="message in messages">
-<!-- 				<p class="pull-right">&nbsp;<b>{{message.created_at | date:'shortTime'}}</b></p>
-				<p ng-class="{'pull-right': id==message.trucker_id || id==message.user_id}"
-				ng-bind="message.message"></p>
-				<span ng-if="id==message.trucker_id || id==message.user_id"><br><br></span> -->
 				<p class="pull-right chat_time"><b>{{message.created_at | date:'shortTime'}}</b></p>
 				<p class="pull-right chat_me" ng-if="id==message.trucker_id || id==message.user_id" ng-bind="message.message"></p>
 				<p class="chat_you" ng-if="id!=message.trucker_id && id!=message.user_id" ng-bind="message.message"></p>
@@ -89,15 +116,12 @@
 		</div>
 		<form ng-show="messages" ng-submit="createMessage()">
 			<div class="col-xs-8">
-				<input class="form-control" type="text" placeholder="Type a message here..." ng-model="new_message.message" required>
+				<input class="form-control" type="text" placeholder="Type a message here..." ng-model="new_message" required ng-disabled="cur_app.status<2">
 			</div>
 			<div class="col-xs-4">
-				<input class="btn btn-info form-control pull-right" type="submit" value="Send">
+				<input class="btn btn-info form-control pull-right" type="submit" value="Send" ng-disabled="cur_app.status<2">
 			</div>
-			<div style="margin-top: 20px;" class="col-xs-12" ng-show="user_type=='trucker' && cur_app.status==0">
-				<button class="btn btn-primary form-control" type="button" ng-click="showJob()">Invoice Client</button>
-			</div>
-			<a class="error col-xs-4 pull-right text-center" href=""><small>Report User</small></a>
+			<a class="error col-xs-4 pull-right text-center" href="" ng-if="cur_app.status>1"><small>Report User</small></a>
 		</form>
 	</div>
 </div>
@@ -146,3 +170,4 @@
 	<p>Or just click below:</p>
 	<a href="#/invoices"><button>View Invoices</button></a>
 </div>
+

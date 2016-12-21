@@ -1,10 +1,9 @@
-app.controller("messagesController", function ($scope, $location, $cookies, $timeout, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
-	function getPayload(token) {
-		var base64Url = token.split(".")[1];
-		var base64 = base64Url.replace("-", "+").replace("_", "/");
-		return JSON.parse(window.atob(base64));
-	}
+app.controller("messagesController", function ($scope, $location, $cookies, $routeParams, 
+$timeout, moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 
+	//////////////////////////////////////////////////////
+	//										INITIALIZATION
+	//////////////////////////////////////////////////////
 	if ($cookies.get("token")) {
 		var payload = getPayload($cookies.get("token"));
 		$scope.id = payload.id;
@@ -21,46 +20,119 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 			}
 			else {
 				$scope.apps = [];
-				for (var i = 0; i < data.length; i++) {
+				// Organize applications into groups:
+				for (var i = 0; i < data.length; i++) {						
 					if ($scope.apps.length == 0 || $scope.apps[$scope.apps.length - 1][0].job_id != data[i].job_id)
 						$scope.apps.push([data[i]]);
 					else if ($scope.apps[$scope.apps.length - 1][0].job_id == data[i].job_id)
 						$scope.apps[$scope.apps.length - 1].push(data[i]);
 				}
 
-				console.log($scope.apps)
 				$scope.status = 0;
 				$scope.mode = "message";
+
+				// Check if certain application requested in URL:
+				if ($routeParams.id)
+					for (var i = 0; i < data.length; i++)
+						if ($routeParams.id == data[i].id) {
+							$scope.showMessages(data[i]);
+							break;
+						}
 			}
 		});
 	}
 	else
 		$location.url("/welcome");
 
-	socket.on('message', function(data) {
-		if ($scope.new_message.application_id == data.application_id) {
-			$scope.messages.push(data);
-			$scope.$apply();
-			$timeout(function() {
-				var _ = document.getElementById("chat");
-				_.scrollTop = _.scrollHeight;				
-			}, 0, false);		
-		}
-	});
+	//////////////////////////////////////////////////////
+	//										HELPER FUNCTIONS
+	//////////////////////////////////////////////////////
+	function getPayload(token) {
+		var base64Url = token.split(".")[1];
+		var base64 = base64Url.replace("-", "+").replace("_", "/");
+		return JSON.parse(window.atob(base64));
+	}
 
+	$scope.filterByStatus = function(value) {
+		if ($scope.status == 0 && value[0].status == 0)
+			return true;
+		else if ($scope.status == 1 && value[0].status > 0)
+			return true;
+		else
+			return false;
+	}
 
 	$scope.logout = function() {
 		$cookies.remove("token");
 		$location.url("/welcome");
+	}
+	
+	//////////////////////////////////////////////////////
+	//										SOCKET
+	//////////////////////////////////////////////////////
+	// socket.on('message', function(data) {
+	// 	if ($scope.cur_app.id == data.application_id) {
+	// 		$scope.messages.push(data);
+	// 		$scope.$apply();
+	// 		$timeout(function() {
+	// 			var _ = document.getElementById("chat");
+	// 			_.scrollTop = _.scrollHeight;				
+	// 		}, 0, false);		
+	// 	}
+	// 	else
+	// 		$.notify({
+	// 			icon: "glyphicon glyphicon-envelope",
+	// 			message: `New message from ${data.name}.`,
+	// 			url: `#/messages/${data.application_id}`
+	// 		}, {
+	// 			placement: {
+	// 				from: "bottom"
+	// 			},
+	// 			delay: 4000,
+	// 			animate: {
+	// 				enter: 'animated fadeInUp',
+	// 				exit: 'animated fadeOutDown',
+	// 			}
+	// 		});
+	// });
+
+	// socket.on('accepted', function(data) {
+	// 	$.notify({
+	// 		icon: "glyphicon glyphicon-check",
+	// 		message: `${data.first_name} accepted your application!`,
+	// 		url: `#/messages/${data.id}`
+	// 	}, {
+	// 		placement: {
+	// 			from: "bottom"
+	// 		},
+	// 		delay: 4000,
+	// 		animate: {
+	// 			enter: 'animated fadeInUp',
+	// 			exit: 'animated fadeOutDown',
+	// 		}
+	// 	});
+	// });
+
+	//////////////////////////////////////////////////////
+	//										APPLICATION
+	//////////////////////////////////////////////////////
+	$scope.acceptApplication = function() {
+		socket.emit('acceptApplication', $scope.cur_app);
+	}
+
+	$scope.declineApplication = function() {
+		
+	}
+
+	$scope.cancelApplication = function() {
+		
 	}
 
 	//////////////////////////////////////////////////////
 	//										MESSAGE
 	//////////////////////////////////////////////////////
 	$scope.showMessages = function(application) {
-		$scope.cur_app = application;
-		socket.emit('subscribe', application.id);		
-		
+		$scope.cur_app = application;		
 		messagesFactory.show(application.id, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not load conversation. "
@@ -70,8 +142,6 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 				}
 			}
 			else {
-				console.log(data)
-				$scope.new_message = {application_id: application.id};
 				$scope.messages = data;
 				$timeout(function() {
 					var _ = document.getElementById("chat");
@@ -83,14 +153,15 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 
 	$scope.createMessage = function() {
 		var data = {
-			application_id: $scope.new_message.application_id,
-			message: $scope.new_message.message,
+			name: $scope.name,
+			application_id: $scope.cur_app.id,
+			message: $scope.new_message,
 			created_at: new Date()
 		}
 		$scope.user_type == "trucker" ? data.trucker_id = $scope.id : data.user_id = $scope.id;
 		socket.emit('send', data);
 
-		messagesFactory.create($scope.new_message, function(data) {
+		messagesFactory.create(data, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not send message. "
 				for (key in data.errors) {
@@ -99,7 +170,7 @@ app.controller("messagesController", function ($scope, $location, $cookies, $tim
 				}							
 			}
 			else
-				$scope.new_message.message = "";				
+				$scope.new_message = "";				
 		});
 	}
 
