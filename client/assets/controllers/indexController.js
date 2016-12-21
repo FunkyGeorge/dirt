@@ -55,11 +55,22 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 
 					//CHECK HERE TO MAKE SURE I DIDN'T MESS UP FLAG
 					if ($scope.jobs && $scope.jobs.length == data.length)
-					$scope.state[1] = false;
+						$scope.state[1] = false;
+					transportDistance(data);
 					$scope.jobs = data;
 					$scope.state[0]++;
 				}
 			});
+		}
+	}
+
+	function transportDistance(jobs){
+		for(var i = 0; i < jobs.length; i++){
+			if (jobs[i].job_type == 2 && !$scope.distances[jobs[i].id]){
+				geoFactory.distBetween(jobs[i],function(job, res){
+					$scope.distances[job.id] = $scope.distances[job.p_zip] + res;
+				});
+			}
 		}
 	}
 
@@ -70,20 +81,12 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 	};
 
 	$scope.getDistance = function(job){
-
 		if(job.job_type == 0 && $scope.distances[job.p_zip])
 			return $scope.distances[job.p_zip];
 		else if (job.job_type == 1 && $scope.distances[job.d_zip])
 			return $scope.distances[job.d_zip];
 		else if (job.job_type == 2)
-			if (!$scope.distances[job.id])//distance not exist
-				geoFactory.distBetween(job, function(distance){
-					$scope.distances[job.id] = $scope.distances[job.p_zip] + distance;
-					return $scope.distances[job.id];
-				});
-			else {
-				return $scope.distances[job.id];
-			}
+			return $scope.distances[job.id];
 		else
 			return '?'
 	};
