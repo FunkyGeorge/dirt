@@ -26,8 +26,9 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 			geoFactory.getCurrentZip(position.coords.latitude, position.coords.longitude, zipList);
 		}
 		function zipList (data){
+			$scope.zipcodes = [data]
 			geoFactory.getNearbyZips(data, function(zips, distances){
-				$scope.zipcodes = zips;
+				$scope.zipcodes[1] = zips;
 				$scope.distances = distances
 				$scope.state[3] = true;
 				appendJobs();
@@ -45,7 +46,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 
 	function appendJobs(){
 		if ($scope.state[3]){ //isLoaded?
-			jobsFactory.index($scope.state, $scope.zipcodes, function(data) {
+			jobsFactory.index($scope.state, $scope.zipcodes[1], function(data) {
 				if (data.errors)
 					$scope.error = "Something went wrong, please wait a while and try reloading."
 				else {
@@ -54,11 +55,22 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 
 					//CHECK HERE TO MAKE SURE I DIDN'T MESS UP FLAG
 					if ($scope.jobs && $scope.jobs.length == data.length)
-					$scope.state[1] = false;
+						$scope.state[1] = false;
+					transportDistance(data);
 					$scope.jobs = data;
 					$scope.state[0]++;
 				}
 			});
+		}
+	}
+
+	function transportDistance(jobs){
+		for(var i = 0; i < jobs.length; i++){
+			if (jobs[i].job_type == 2 && !$scope.distances[jobs[i].id]){
+				geoFactory.distBetween(jobs[i],function(job, res){
+					$scope.distances[job.id] = $scope.distances[job.p_zip] + res;
+				});
+			}
 		}
 	}
 
@@ -68,9 +80,13 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 		}
 	};
 
-	$scope.getDistance = function(zip){
-		if ($scope.distances[zip])
-			return $scope.distances[zip];
+	$scope.getDistance = function(job){
+		if(job.job_type == 0 && $scope.distances[job.p_zip])
+			return $scope.distances[job.p_zip];
+		else if (job.job_type == 1 && $scope.distances[job.d_zip])
+			return $scope.distances[job.d_zip];
+		else if (job.job_type == 2)
+			return $scope.distances[job.id];
 		else
 			return '?'
 	};
