@@ -40,7 +40,7 @@
 			<hr>
 			<p ng-if="job.job_type==0">This job requires a trucker that can pick-up/remove {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} from a location.</p>
 			<p ng-if="job.job_type==1">This job requires a trucker that has {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} and can drop-off at a location.</p>
-			<p ng-if="job.job_type==2">This job requires a trucker that can pick-up {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} from one location and drop-off at another location.</p>			
+			<p ng-if="job.job_type==2">This job requires a trucker that can pick-up {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} from one location and drop-off at another location.</p>
 		</div>
 		<div class="col-sm-6 center-content">
 			<table class="table table-bordered">
@@ -52,7 +52,7 @@
 				<tr>
 					<th>Dirt Type:</th>
 					<td ng-bind="job.dirt_type"></td>
-				</tr>				
+				</tr>
 				<tr>
 					<th>Volume:</th>
 					<td>{{job.volume | number:2}} yds<sup>3</sup></td>
@@ -104,9 +104,9 @@
 			<br>
 			<button class="form-control btn btn-info" ng-if="!job.applied && id!=job.user_id" ng-click="createApplication()" ng-disabled="user_type=='user'">Apply to Job</button>
 			<p class="text-center dodgerblue" ng-if="job.applied">You've applied for this job!</p>
-			<button class="form-control btn btn-danger" ng-if="job.applied" ng-click="deleteApplication()">Remove Application</button>			
+			<button class="form-control btn btn-danger" ng-if="job.applied" ng-click="deleteApplication()">Remove Application</button>
 			<small ng-if="id!=job.user_id && user_type=='user'" class="text-muted">Only truckers can apply to jobs. <a href="#/register">Register as trucker.</a><br><br></small>
-			<button class="form-control btn btn-danger" ng-if="id==job.user_id" ng-click="deleteJob()">Remove Job</button>	
+			<button class="form-control btn btn-danger" ng-if="id==job.user_id" ng-click="deleteJob()">Remove Job</button>
 			<small style="color: darkorange" class="text-muted" ng-if="job.job_type!=1 && !job.p_loader">*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small><br>
 			<small style="color: darkorange" class="text-muted" ng-if="job.job_type!=0 && !job.d_loader">*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
 		</div>

@@ -48,13 +48,13 @@
 				</div>
 				<div class="col-sm-9">
 					<div class="row">
-						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : '10 miles away'}}</h4>
+						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
 						<div class="col-sm-6 hidden-xs">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-info pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>	
+							<a href="#/jobs/{{job.id}}"><button class="btn btn-info pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
 						</div>
 						<div class="col-sm-6 visible-xs-block">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-info">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>	
-						</div>						
+							<a href="#/jobs/{{job.id}}"><button class="btn btn-info">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
+						</div>
 					</div>
 				</div>
 				<div class="col-sm-9 col-xs-12 pull-right">

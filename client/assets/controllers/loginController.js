@@ -8,7 +8,7 @@ app.controller('loginController', function ($scope, $location, $window, usersFac
 			truckersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
-						$scope.error = data.errors[key].message;
+						$scope.login_error = data.errors[key].message;
 						break;
 					}
 				else {
@@ -19,7 +19,8 @@ app.controller('loginController', function ($scope, $location, $window, usersFac
 			usersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
-						$scope.error = data.errors[key].message;
+						console.log("err");
+						$scope.login_error = data.errors[key].message;
 						break;
 					}
 				else
