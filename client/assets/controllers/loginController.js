@@ -1,5 +1,5 @@
-app.controller('loginController', function ($scope, $location, $cookies, usersFactory, truckersFactory) {
-	if ($cookies.get('token'))
+app.controller('loginController', function ($scope, $location, $window, usersFactory, truckersFactory) {
+	if (payload)
 		$location.url('/');
 
 	$scope.login = function() {
@@ -12,7 +12,7 @@ app.controller('loginController', function ($scope, $location, $cookies, usersFa
 						break;
 					}
 				else {
-					$location.url('/');
+					$window.location.href = ('/');
 				}
 			});
 		else if ($scope.user_type == 'user')
@@ -23,9 +23,7 @@ app.controller('loginController', function ($scope, $location, $cookies, usersFa
 						break;
 					}
 				else
-					$location.url('/');
+					$window.location.href = ('/');
 			});
-		else
-			$location.url('/welcome');
 	}
 });

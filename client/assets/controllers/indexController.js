@@ -1,10 +1,9 @@
-app.controller('indexController', function ($scope, $location, $routeParams, $cookies, jobsFactory, geoFactory) {
+app.controller('indexController', function ($scope, $location, $routeParams, jobsFactory, geoFactory) {
 
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
-	if ($cookies.get('token')) {
-		var payload = getPayload($cookies.get('token'));
+	if (payload) {
 		var position;
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
@@ -46,12 +45,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 	//////////////////////////////////////////////////////
 	//										HELPER FUNCTIONS
 	//////////////////////////////////////////////////////
-	function getPayload(token) {
-		var base64Url = token.split('.')[1];
-		var base64 = base64Url.replace('-', '+').replace('_', '/');
-		return JSON.parse(window.atob(base64));
-	}
-
 	function appendJobs(){
 		if ($scope.state[3]){ //isLoaded?
 			jobsFactory.index($scope.state, $scope.zipcodes, function(data) {
@@ -93,11 +86,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, $co
 			appendJobs();
 		}
 	};
-
-	$scope.logout = function() {
-		$cookies.remove('token');
-		$location.url('/welcome');
-	}
 
 	//////////////////////////////////////////////////////
 	//										SOCKET

@@ -1,5 +1,5 @@
 app.controller('registerController', function ($scope, $location, $cookies, truckersFactory, usersFactory) {
-	if ($cookies.get('token'))
+	if (payload)
 		$location.url('/');
 
 	$scope._ = false;

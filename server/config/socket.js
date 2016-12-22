@@ -2,8 +2,8 @@ module.exports = function(server) {
 	var io = require("socket.io").listen(server);
 
 	io.sockets.on("connection", function(socket) {
-		socket.on('subscribe', function(application_id) {
-			socket.join(application_id);
+		socket.on('subscribe', function(id) {
+			socket.join(id);
 		});
 
 		socket.on('send', function(data) {
@@ -11,7 +11,6 @@ module.exports = function(server) {
 		});
 
 		socket.on('acceptApplication', function(data) {
-			console.log("here")
 			socket.broadcast.to(data.id).emit('accepted', data);
 		});
 		

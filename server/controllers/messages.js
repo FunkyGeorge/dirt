@@ -5,7 +5,7 @@ module.exports = {
 	// 	message.index(req, function(err, data) {
 	// 		if (err)
 	// 			if (err.errors.jwt)
-	// 				res.clearCookie('token').json(err);
+	// 				res.clearCookie('ronin_token').json(err);
 	// 			else
 	// 				res.json(err);
 	// 		else
@@ -24,7 +24,7 @@ module.exports = {
 		message.create(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
@@ -35,7 +35,7 @@ module.exports = {
 		message.update(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
@@ -46,7 +46,7 @@ module.exports = {
 		message.delete(req, function(err) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else

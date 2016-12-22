@@ -21,22 +21,22 @@ module.exports = {
 		trucker.update(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
-				res.clearCookie('token').cookie('token', data).end();
+				res.clearCookie('ronin_token').cookie('ronin_token', data).end();
 		});	
 	},
 	delete: function(req, res) {
 		trucker.delete(req, function(err) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
-				res.clearCookie('token').end();
+				res.clearCookie('ronin_token').end();
 		});	
 	},
 	register: function(req, res) {
@@ -44,7 +44,7 @@ module.exports = {
 			if (err)
 				res.json(err);
 			else
-				res.cookie('token', data).end();
+				res.cookie('ronin_token', data).end();
 		});
 	},
 	login: function(req, res) {
@@ -52,7 +52,7 @@ module.exports = {
 			if (err)
 				res.json(err);
 			else
-				res.cookie('token', data).end();
+				res.cookie('ronin_token', data).end();
 		});	
 	}	
 }

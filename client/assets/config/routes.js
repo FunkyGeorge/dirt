@@ -1,4 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'ngCookies', 'infinite-scroll', 'angularMoment']);
+
 app.config(function ($routeProvider, $locationProvider) {
 	$routeProvider
 	.when('/',{
@@ -41,4 +42,13 @@ app.config(function ($routeProvider, $locationProvider) {
 	});
 	// $locationProvider
 	// .html5Mode(true);
+});
+
+app.run(function($rootScope) {
+	$rootScope.logout = function() {
+		document.cookie = "ronin_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+		payload = null;
+		ronin_token = null;
+		location.href = ("/#/welcome");
+	};
 });

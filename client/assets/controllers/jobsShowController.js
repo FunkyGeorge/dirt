@@ -4,8 +4,8 @@ jobsFactory, applicationsFactory) {
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
-	if ($cookies.get('token')) {
-		var payload = getPayload($cookies.get('token'));
+	if ($cookies.get('ronin_token')) {
+		var payload = getPayload($cookies.get('ronin_token'));
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
 		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
@@ -39,14 +39,14 @@ jobsFactory, applicationsFactory) {
 	//////////////////////////////////////////////////////
 	//										HELPER FUNCTIONS
 	//////////////////////////////////////////////////////
-	function getPayload(token) {
-		var base64Url = token.split('.')[1];
+	function getPayload(ronin_token) {
+		var base64Url = ronin_token.split('.')[1];
 		var base64 = base64Url.replace('-', '+').replace('_', '/');
 		return JSON.parse(window.atob(base64));
 	}
 
 	$scope.logout = function() {
-		$cookies.remove('token');
+		$cookies.remove('ronin_token');
 		$location.url('/welcome');
 	}
 	

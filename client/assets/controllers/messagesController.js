@@ -1,11 +1,10 @@
-app.controller("messagesController", function ($scope, $location, $cookies, $routeParams, 
-$timeout, moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
+app.controller("messagesController", function ($scope, $location, $cookies, $routeParams, $timeout, 
+moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
-	if ($cookies.get("token")) {
-		var payload = getPayload($cookies.get("token"));
+	if (payload) {
 		$scope.id = payload.id;
 		$scope.name = payload.first_name + " " + payload.last_name;
 		$scope.user_type = "truck_type" in payload ? "trucker" : "user";
@@ -47,12 +46,6 @@ $timeout, moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFac
 	//////////////////////////////////////////////////////
 	//										HELPER FUNCTIONS
 	//////////////////////////////////////////////////////
-	function getPayload(token) {
-		var base64Url = token.split(".")[1];
-		var base64 = base64Url.replace("-", "+").replace("_", "/");
-		return JSON.parse(window.atob(base64));
-	}
-
 	$scope.filterByStatus = function(value) {
 		if ($scope.status == 0 && value[0].status == 0)
 			return true;
@@ -60,11 +53,6 @@ $timeout, moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFac
 			return true;
 		else
 			return false;
-	}
-
-	$scope.logout = function() {
-		$cookies.remove("token");
-		$location.url("/welcome");
 	}
 	
 	//////////////////////////////////////////////////////

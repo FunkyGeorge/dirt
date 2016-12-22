@@ -5,7 +5,7 @@ module.exports = {
 		invoice.index(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
@@ -16,7 +16,7 @@ module.exports = {
 		invoice.show(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
@@ -27,7 +27,7 @@ module.exports = {
 		invoice.create(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
@@ -38,7 +38,7 @@ module.exports = {
 		invoice.update(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
@@ -49,7 +49,7 @@ module.exports = {
 		invoice.delete(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
-					res.clearCookie('token').json(err);
+					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else

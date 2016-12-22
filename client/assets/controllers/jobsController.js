@@ -1,9 +1,8 @@
-app.controller('jobsController', function ($scope, $location, $cookies, jobsFactory) {
+app.controller('jobsController', function ($scope, $location, jobsFactory) {
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
-	if ($cookies.get('token')) {
-		var payload = getPayload($cookies.get('token'));
+	if (payload) {
 		$scope.name = payload.first_name + " " + payload.last_name;
 		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
 		if ($scope.user_type != 'user')
@@ -28,12 +27,6 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	//////////////////////////////////////////////////////
 	//										HELPER FUNCTIONS
 	//////////////////////////////////////////////////////
-	function getPayload(token) {
-		var base64Url = token.split('.')[1];
-		var base64 = base64Url.replace('-', '+').replace('_', '/');
-		return JSON.parse(window.atob(base64));
-	}
-
 	$scope.change = function() {
 		switch($scope.job.dirt_type) {
 			case 'Sand':
@@ -149,7 +142,7 @@ app.controller('jobsController', function ($scope, $location, $cookies, jobsFact
 	}
 
 	$scope.logout = function() {
-		$cookies.remove('token');
+		$cookies.remove('ronin_token');
 		$location.url('/welcome');
 	}	
 

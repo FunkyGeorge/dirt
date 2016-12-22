@@ -17,7 +17,7 @@ module.exports = {
 	// 	var data = {};
 	// 	var username = req.params.username;
 	update: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
@@ -32,13 +32,13 @@ module.exports = {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}})
 							else {
-								var token = jwt.sign({
+								var ronin_token = jwt.sign({
 									id: data[0].id,
 									email: data[0].email,
 									first_name: data[0].first_name,
 									last_name: data[0].last_name
 								}, jwt_key);
-								callback(false, token);
+								callback(false, ronin_token);
 							}
 						});
 					}
@@ -47,7 +47,7 @@ module.exports = {
 		});
 	},
 	delete: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else
@@ -114,13 +114,13 @@ module.exports = {
 												if (err)
 													callback({errors: {database: {message: "Please contact an admin."}}})
 												else {
-													var token = jwt.sign({
+													var ronin_token = jwt.sign({
 														id: data[0].id,
 														email: data[0].email,
 														first_name: data[0].first_name,
 														last_name: data[0].last_name
 													}, jwt_key);
-													callback(false, token);
+													callback(false, ronin_token);
 												}
 											});
 										}
@@ -153,13 +153,13 @@ module.exports = {
 						else if (!isMatch)
 							callback({errors: {password: {message: "Email/password does not match."}}});
 						else {
-							var token = jwt.sign({
+							var ronin_token = jwt.sign({
 								id: data[0].id,
 								email: data[0].email,
 								first_name: data[0].first_name,
 								last_name: data[0].last_name
 							}, jwt_key);
-							callback(false, token);
+							callback(false, ronin_token);
 						}
 					});
 			});

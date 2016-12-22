@@ -7,21 +7,21 @@ app.factory('truckersFactory', function($http, $cookies) {
 		// },
 		// show: function(username, callback) {
 		// 	$http.get(`/api/truckers/${username}`, {
-		// 		headers: {'authorization': `Bearer ${$cookies.get('token')}`}
+		// 		headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 		// 	}).then(function(res) {
 		// 		callback(res.data);
 		// 	});
 		// },
 		update: function(data, callback) {
 			$http.put(`/api/truckers`, data, {
-				headers: {'authorization': `Bearer ${$cookies.get('token')}`}
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);
 			});
 		},
 		delete: function(callback) {
 			$http.delete('/api/truckers', {
-				headers: {'authorization': `Bearer ${$cookies.get('token')}`}
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);
 			});

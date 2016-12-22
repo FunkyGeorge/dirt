@@ -5,7 +5,7 @@ var jwt_key = fs.readFileSync('keys/jwt', 'utf8');
 
 module.exports = {
 	index: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
@@ -37,7 +37,7 @@ module.exports = {
 		});
 	},	
 	show: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
@@ -66,7 +66,7 @@ module.exports = {
 		});
 	},
 	create: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else if ('truck_type' in data)
@@ -147,7 +147,7 @@ module.exports = {
 		});
 	},
 	update: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
@@ -168,7 +168,7 @@ module.exports = {
 		});
 	},
 	delete: function(req, callback) {
-		jwt.verify(req.cookies.token, jwt_key, function(err, data) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else

@@ -1,4 +1,4 @@
-app.controller('welcomeController', function ($location, $cookies) {
-	if ($cookies.get('token'))
+app.controller('welcomeController', function ($location) {
+	if (payload)
 		$location.url('/');
 });
