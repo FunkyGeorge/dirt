@@ -3,8 +3,6 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
 	if (payload) {
-		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
 		if ($scope.user_type != 'user')
 			$location.url('/');
 		else if($scope.user_type == 'user') {
@@ -119,53 +117,28 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 	}
 
 	$scope.calculate = function(){
-				switch ($scope.shape) {
-					case '1':  //rectangle
-						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
-						break;
-					case '2':  //wedge
-						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 50)/100;
-						break;
-					case '3':  //cylinder
-						$scope.preview = Math.round(Math.PI * $scope.depth * Math.pow(($scope.width/2),2) * 100)/100;
-						break;
-					case '4':  //cone
-						$scope.preview = Math.round(Math.PI * ($scope.depth/3) * Math.pow(($scope.width/2),2) * 100)/100;
-						break;
-					case '5': //bowl
-						$scope.preview = Math.round((2 * Math.PI * $scope.length * $scope.depth * $scope.width)/3 * 100)/100;
-						break;
-					case '6':
-						$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
-						break;
-					default:
-				}
+		switch ($scope.shape) {
+			case '1':  //rectangle
+			$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
+			break;
+			case '2':  //wedge
+			$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 50)/100;
+			break;
+			case '3':  //cylinder
+			$scope.preview = Math.round(Math.PI * $scope.depth * Math.pow(($scope.width/2),2) * 100)/100;
+			break;
+			case '4':  //cone
+			$scope.preview = Math.round(Math.PI * ($scope.depth/3) * Math.pow(($scope.width/2),2) * 100)/100;
+			break;
+			case '5': //bowl
+			$scope.preview = Math.round((2 * Math.PI * $scope.length * $scope.depth * $scope.width)/3 * 100)/100;
+			break;
+			case '6':
+			$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
+			break;
+			default:
+		}
 	}
-
-	$scope.logout = function() {
-		$cookies.remove('ronin_token');
-		$location.url('/welcome');
-	}	
-
-	//////////////////////////////////////////////////////
-	//										SOCKET
-	//////////////////////////////////////////////////////
-	socket.on('message', function(data) {
-		$.notify({
-			icon: "glyphicon glyphicon-envelope",
-			message: `New message from ${data.name}.`,
-			url: `#/messages/${data.application_id}`
-		}, {
-			placement: {
-				from: "bottom"
-			},
-			delay: 4000,
-			animate: {
-				enter: 'animated fadeInUp',
-				exit: 'animated fadeOutDown',
-			}
-		});
-	});
 
 	//////////////////////////////////////////////////////
 	//										JOB

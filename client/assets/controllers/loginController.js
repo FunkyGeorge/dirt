@@ -1,4 +1,4 @@
-app.controller('loginController', function ($scope, $location, $window, usersFactory, truckersFactory) {
+app.controller('loginController', function ($scope, $location, usersFactory, truckersFactory) {
 	if (payload)
 		$location.url('/');
 
@@ -8,23 +8,29 @@ app.controller('loginController', function ($scope, $location, $window, usersFac
 			truckersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
-						$scope.login_error = data.errors[key].message;
+						$scope.error = data.errors[key].message;
 						break;
 					}
 				else {
-					$window.location.href = ('/');
+					setPayload();
+					setSocket();
+					$scope.setUser();
+					$location.url('/');
 				}
 			});
 		else if ($scope.user_type == 'user')
 			usersFactory.login($scope.user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
-						console.log("err");
-						$scope.login_error = data.errors[key].message;
+						$scope.error = data.errors[key].message;
 						break;
 					}
-				else
-					$window.location.href = ('/');
+				else {
+					setPayload();
+					setSocket();
+					$scope.setUser();
+					$location.url('/');
+				}
 			});
 	}
 });

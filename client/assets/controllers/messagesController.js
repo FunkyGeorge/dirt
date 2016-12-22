@@ -1,13 +1,10 @@
-app.controller("messagesController", function ($scope, $location, $cookies, $routeParams, $timeout, 
+app.controller("messagesController", function ($scope, $location, $routeParams, $timeout, 
 moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
 	if (payload) {
-		$scope.id = payload.id;
-		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = "truck_type" in payload ? "trucker" : "user";
 		$scope.error = null;
 		applicationsFactory.index(function(data) {
 			if (data.errors) {
@@ -54,52 +51,6 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		else
 			return false;
 	}
-	
-	//////////////////////////////////////////////////////
-	//										SOCKET
-	//////////////////////////////////////////////////////
-	// socket.on('message', function(data) {
-	// 	if ($scope.cur_app.id == data.application_id) {
-	// 		$scope.messages.push(data);
-	// 		$scope.$apply();
-	// 		$timeout(function() {
-	// 			var _ = document.getElementById("chat");
-	// 			_.scrollTop = _.scrollHeight;				
-	// 		}, 0, false);		
-	// 	}
-	// 	else
-	// 		$.notify({
-	// 			icon: "glyphicon glyphicon-envelope",
-	// 			message: `New message from ${data.name}.`,
-	// 			url: `#/messages/${data.application_id}`
-	// 		}, {
-	// 			placement: {
-	// 				from: "bottom"
-	// 			},
-	// 			delay: 4000,
-	// 			animate: {
-	// 				enter: 'animated fadeInUp',
-	// 				exit: 'animated fadeOutDown',
-	// 			}
-	// 		});
-	// });
-
-	// socket.on('accepted', function(data) {
-	// 	$.notify({
-	// 		icon: "glyphicon glyphicon-check",
-	// 		message: `${data.first_name} accepted your application!`,
-	// 		url: `#/messages/${data.id}`
-	// 	}, {
-	// 		placement: {
-	// 			from: "bottom"
-	// 		},
-	// 		delay: 4000,
-	// 		animate: {
-	// 			enter: 'animated fadeInUp',
-	// 			exit: 'animated fadeOutDown',
-	// 		}
-	// 	});
-	// });
 
 	//////////////////////////////////////////////////////
 	//										APPLICATION

@@ -1,13 +1,9 @@
 app.controller('indexController', function ($scope, $location, $routeParams, jobsFactory, geoFactory) {
-
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
 	if (payload) {
 		var position;
-		$scope.id = payload.id;
-		$scope.name = payload.first_name + " " + payload.last_name;
-		$scope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
 		$scope.error = null;
 
 		//state variable
@@ -100,42 +96,5 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 			appendJobs();
 		}
 	};
-
-	//////////////////////////////////////////////////////
-	//										SOCKET
-	//////////////////////////////////////////////////////
-	// socket.on('message', function(data) {
-	// 	$.notify({
-	// 		icon: "glyphicon glyphicon-envelope",
-	// 		message: `New message from ${data.name}.`,
-	// 		url: `#/messages/${data.application_id}`
-	// 	}, {
-	// 		placement: {
-	// 			from: "bottom"
-	// 		},
-	// 		delay: 4000,
-	// 		animate: {
-	// 			enter: 'animated fadeInUp',
-	// 			exit: 'animated fadeOutDown',
-	// 		}
-	// 	});
-	// });
-
-	// socket.on('accepted', function(data) {
-	// 	$.notify({
-	// 		icon: "glyphicon glyphicon-check",
-	// 		message: `${data.first_name} accepted your application!`,
-	// 		url: `#/messages/${data.id}`
-	// 	}, {
-	// 		placement: {
-	// 			from: "bottom"
-	// 		},
-	// 		delay: 4000,
-	// 		animate: {
-	// 			enter: 'animated fadeInUp',
-	// 			exit: 'animated fadeOutDown',
-	// 		}
-	// 	});
-	// });
 
 });

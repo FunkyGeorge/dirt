@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngRoute', 'ngCookies', 'infinite-scroll', 'angularMoment']);
 
-app.config(function ($routeProvider, $locationProvider) {
+app.config(function($routeProvider) {
 	$routeProvider
 	.when('/',{
 		templateUrl: 'partials/index.html',
@@ -40,15 +40,34 @@ app.config(function ($routeProvider, $locationProvider) {
 	.otherwise({
 		redirectTo: '/welcome'
 	});
-	// $locationProvider
-	// .html5Mode(true);
 });
 
 app.run(function($rootScope) {
+	$rootScope.setUser = function() {
+		if(payload) {
+			$rootScope.id = payload.id;
+			$rootScope.name = payload.first_name + " " + payload.last_name;
+			$rootScope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
+		}
+	};
+	$rootScope.setUser();
+
 	$rootScope.logout = function() {
+		// Disconnect from sockets:
+		socket.emit("logout");
+		
+		// Destroy cookie:
 		document.cookie = "ronin_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-		payload = null;
-		ronin_token = null;
+		
+		// Reset globals:
+		payload = undefined;
+		ronin_token = undefined;
+		socket = undefined;
+		$rootScope.id = undefined;
+		$rootScope.name = undefined;
+		$rootScope.user_type = undefined;
+		
+		// Relocate:
 		location.href = ("/#/welcome");
 	};
 });

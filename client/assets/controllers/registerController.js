@@ -1,8 +1,8 @@
-app.controller('registerController', function ($scope, $location, $cookies, truckersFactory, usersFactory) {
+app.controller('registerController', function ($scope, $rootScope, $location, truckersFactory, usersFactory) {
 	if (payload)
 		$location.url('/');
 
-	$scope._ = false;
+	$scope.extend = false;
 	$scope.user_type = 'trucker';
 	$scope.new_user = {truck_type: false};
 	$scope.year = new Date().getFullYear();
@@ -12,17 +12,21 @@ app.controller('registerController', function ($scope, $location, $cookies, truc
 		$scope.error = null;
 		if ($scope.new_user.password != $scope.new_user.confirm_password)
 			$scope.error = "Passwords do not match."
-		else if ($scope.user_type == 'trucker' && !$scope._)
-			$scope._ = true;
-		else if ($scope.user_type == 'trucker' && $scope._)
+		else if ($scope.user_type == 'trucker' && !$scope.extend)
+			$scope.extend = true;
+		else if ($scope.user_type == 'trucker' && $scope.extend)
 			truckersFactory.register($scope.new_user, function(data) {
 				if (data.errors)
 					for (key in data.errors) {
 						$scope.error = data.errors[key].message;
 						break;
 					}
-				else
+				else {
+					setPayload();
+					setSocket();
+					$scope.setUser();
 					$scope.step = 2;
+				}
 			});
 		else if ($scope.user_type == 'user')
 			usersFactory.register($scope.new_user, function(data) {
@@ -31,8 +35,12 @@ app.controller('registerController', function ($scope, $location, $cookies, truc
 						$scope.error = data.errors[key].message;
 						break;
 					}
-					else
-						$scope.step = 2;
+				else {
+					setPayload();
+					setSocket();
+					$scope.setUser();
+					$scope.step = 2;
+				}
 			});
 	}
 });
