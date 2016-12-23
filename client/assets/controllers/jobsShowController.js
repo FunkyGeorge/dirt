@@ -43,14 +43,16 @@ jobsFactory, applicationsFactory) {
 		$scope.error = null;
 		jobsFactory.update({id: $scope.job.id, job_status: 0}, function(data) {
 			if (data.errors) {
-				$scope.error = "Not able to save changes. ";
+				$scope.error = "Unable to re-list job. ";
 				for (key in data.errors) {
 					$scope.error += data.errors[key].message;
 					break;
 				}							
 			}
-			else
+			else {
+				$scope.job.job_status = 0;
 				$scope.mode = 'show';
+			}
 		});
 	}
 	
