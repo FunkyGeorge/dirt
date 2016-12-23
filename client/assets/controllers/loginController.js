@@ -12,8 +12,6 @@ app.controller('loginController', function ($scope, $location, usersFactory, tru
 						break;
 					}
 				else {
-					setPayload();
-					setSocket();
 					$scope.setUser();
 					$location.url('/');
 				}
@@ -26,8 +24,6 @@ app.controller('loginController', function ($scope, $location, usersFactory, tru
 						break;
 					}
 				else {
-					setPayload();
-					setSocket();
 					$scope.setUser();
 					$location.url('/');
 				}

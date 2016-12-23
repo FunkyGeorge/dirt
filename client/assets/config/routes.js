@@ -41,33 +41,3 @@ app.config(function($routeProvider) {
 		redirectTo: '/welcome'
 	});
 });
-
-app.run(function($rootScope) {
-	$rootScope.setUser = function() {
-		if(payload) {
-			$rootScope.id = payload.id;
-			$rootScope.name = payload.first_name + " " + payload.last_name;
-			$rootScope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
-		}
-	};
-	$rootScope.setUser();
-
-	$rootScope.logout = function() {
-		// Disconnect from sockets:
-		socket.emit("logout");
-		
-		// Destroy cookie:
-		document.cookie = "ronin_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-		
-		// Reset globals:
-		payload = undefined;
-		ronin_token = undefined;
-		socket = undefined;
-		$rootScope.id = undefined;
-		$rootScope.name = undefined;
-		$rootScope.user_type = undefined;
-		
-		// Relocate:
-		location.href = ("/#/welcome");
-	};
-});

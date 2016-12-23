@@ -56,7 +56,8 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//										APPLICATION
 	//////////////////////////////////////////////////////
 	$scope.acceptApplication = function() {
-		socket.emit('acceptApplication', $scope.cur_app);
+
+		socket.emit('accept', $scope.cur_app);
 	}
 
 	$scope.declineApplication = function() {

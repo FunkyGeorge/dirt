@@ -39,6 +39,21 @@ jobsFactory, applicationsFactory) {
 	//////////////////////////////////////////////////////
 	//										JOB
 	//////////////////////////////////////////////////////
+	$scope.updateJob = function() {
+		$scope.error = null;
+		jobsFactory.update({id: $scope.job.id, job_status: 0}, function(data) {
+			if (data.errors) {
+				$scope.error = "Not able to save changes. ";
+				for (key in data.errors) {
+					$scope.error += data.errors[key].message;
+					break;
+				}							
+			}
+			else
+				$scope.mode = 'show';
+		});
+	}
+	
 	$scope.deleteJob = function() {
 		$scope.error = null;
 		if (confirm("Are you sure you want to delete this job listing? Doing so will remove all pending applications and conversations for this listing.\n\nClick\"OK\" to continue removing job.") == true) {
@@ -60,20 +75,6 @@ jobsFactory, applicationsFactory) {
 		}
 	}
 
-	// $scope.updateJob = function() {
-	// 	$scope.error = null;
-	// 	jobsFactory.update($scope.job, function(data) {
-	// 		if (data.errors) {
-	// 			$scope.error = "Not able to save changes. ";
-	// 			for (key in data.errors) {
-	// 				$scope.error += data.errors[key].message;
-	// 				break;
-	// 			}							
-	// 		}
-	// 		else
-	// 			$scope.mode = 'show';
-	// 	});
-	// }
 
 	//////////////////////////////////////////////////////
 	//										APPLICATION
@@ -87,12 +88,13 @@ jobsFactory, applicationsFactory) {
 					break;
 				}			
 			}
-			else
+			else {				
 				$scope.mode = 'success';
+			}
 		});
 	}
 
-	$scope.removeApplication = function() {
+	$scope.deleteApplication = function() {
 		
 	}
 

@@ -22,8 +22,6 @@ app.controller('registerController', function ($scope, $rootScope, $location, tr
 						break;
 					}
 				else {
-					setPayload();
-					setSocket();
 					$scope.setUser();
 					$scope.step = 2;
 				}
@@ -36,8 +34,6 @@ app.controller('registerController', function ($scope, $rootScope, $location, tr
 						break;
 					}
 				else {
-					setPayload();
-					setSocket();
 					$scope.setUser();
 					$scope.step = 2;
 				}

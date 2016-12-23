@@ -26,7 +26,7 @@ module.exports = function(app) {
 	app.get('/api/jobs', jobs.index);
 	app.get('/api/jobs/:id', jobs.show);
 	app.post('/api/jobs', jobs.create);
-	app.put('/api/jobs/:id', jobs.update);
+	// app.put('/api/jobs/:id', jobs.update);
 	app.delete('/api/jobs/:id', jobs.delete);
 
 	// applications
