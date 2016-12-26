@@ -86,13 +86,13 @@
 			<!-- STATUS 0 -->
 			<div class="center-content" ng-if="cur_app.status==0">
 				<b class="text-center">You applied for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
-				<button class="btn btn-warning center-block" ng-click="">Cancel Application</button><br>
+				<button class="btn btn-warning center-block" ng-click="cancelApplication()">Cancel Application</button><br>
 				<small class="text-muted">Waiting for {{cur_app.first_name}} to accept your application.<br>You'll be connected after being accepted and paying our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
 			<!-- STATUS 1 -->
 			<div class="center-content" ng-if="cur_app.status==1">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> accepted you for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
-				<button class="btn btn-info" ng-click="">Pay Lead Fee</button> <button class="btn btn-warning" ng-click="">Cancel Application</button>
+				<button class="btn btn-info" ng-click="">Pay Lead Fee</button> <button class="btn btn-danger" ng-click="forfeitApplication()">Forfeit Job</button>
 				<small class="text-muted">You'll be connected after paying our <a href="#/about#lead_fee">lead fee</a></small>
 			</div>
 			<!-- STATUS > 1 -->
@@ -162,12 +162,11 @@
 	<button ng-click="createInvoice()">Send Invoice</button>
 </div>
 
-<!-- SUCCESS -->
-<div class="row" ng-show="!error && mode=='success'">
+<!-- INVOICED -->
+<div class="row center-content" ng-show="!error && mode=='invoiced'">
 	<h1>Success!</h1>
 	<p>Your invoice has been sent.</p>
-	<p>Your funds will be available to view in the top right menu under invoices.</p>
-	<p>Or just click below:</p>
+	<p>Your funds will be available to view in the top right menu under invoices, or just click below:</p>
 	<a href="#/invoices"><button>View Invoices</button></a>
 </div>
 

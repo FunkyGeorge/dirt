@@ -34,8 +34,8 @@ module.exports = {
 				res.json(data);
 		});
 	},
-	update: function(req, res) {
-		application.update(req, function(err, data) {
+	accept: function(req, res) {
+		application.accept(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('ronin_token').json(err);
@@ -45,15 +45,37 @@ module.exports = {
 				res.json(data);
 		});	
 	},
-	delete: function(req, res) {
-		application.delete(req, function(err) {
+	cancel: function(req, res) {
+		application.cancel(req, function(err, data) {
 			if (err)
 				if (err.errors.jwt)
 					res.clearCookie('ronin_token').json(err);
 				else
 					res.json(err);
 			else
-				res.end();
+				res.json(data);
+		});	
+	},
+	forfeit: function(req, res) {
+		application.forfeit(req, function(err, data) {
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('ronin_token').json(err);
+				else
+					res.json(err);
+			else
+				res.json(data);
 		});	
 	}
+	// delete: function(req, res) {
+	// 	application.delete(req, function(err) {
+	// 		if (err)
+	// 			if (err.errors.jwt)
+	// 				res.clearCookie('ronin_token').json(err);
+	// 			else
+	// 				res.json(err);
+	// 		else
+	// 			res.end();
+	// 	});	
+	// }
 }

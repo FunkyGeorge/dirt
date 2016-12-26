@@ -53,7 +53,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else if (!('truck_type' in data))
-				callback({errors: {user_type: {message: "Only truckers can create invoices."}}});
+				callback({errors: {user_type: {message: "Only truckers are allowed to create invoices."}}});
 			else if (!req.body.cost || !req.body.job_id)
 				callback({errors: {form: {message: "Invalid details."}}});
 			else {

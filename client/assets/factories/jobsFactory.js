@@ -26,8 +26,8 @@ app.factory('jobsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
-		update: function(data, callback) {
-			$http.put(`/api/jobs/${data.id}`, data, {
+		relist: function(id, callback) {
+			$http.put(`/api/jobs/relist/${id}`, null, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);

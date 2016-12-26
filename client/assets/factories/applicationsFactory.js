@@ -21,19 +21,33 @@ app.factory('applicationsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
-		update: function(data, callback) {
-			$http.put(`/api/applications/${data.id}`, data, {
+		accept: function(data, callback) {
+			$http.put(`/api/applications/accept`, data, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);
 			});
 		},
-		delete: function(id, callback) {
-			$http.delete(`/api/applications/${id}`, {
+		cancel: function(id, callback) {
+			$http.put(`/api/applications/cancel/${id}`, null, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);
 			});
-		}
+		},		
+		forfeit: function(id, callback) {
+			$http.put(`/api/applications/forfeit/${id}`, null, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
+		// delete: function(id, callback) {
+		// 	$http.delete(`/api/applications/${id}`, {
+		// 		headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+		// 	}).then(function(res) {
+		// 		callback(res.data);
+		// 	});
+		// }
 	}
 })

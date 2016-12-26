@@ -46,20 +46,23 @@ module.exports = {
 				if ('truck_type' in data) {
 					_data = [data.id, req.params.id];
 					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
-					AS user_id, HEX(applications.id) as application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
+					AS user_id, HEX(applications.id) AS application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
 					LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
 					AND UNHEX(?) = applications.trucker_id WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				else {
 					_data = req.params.id;
-					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) \
-					AS user_id, HEX(applications.id) as application_id FROM jobs LEFT JOIN pickup \
-					ON jobs.id = pickup.job_id LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications \
-					ON jobs.id = applications.job_id AND applications.status > 0 WHERE HEX(jobs.id) = ? LIMIT 1";
+					query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
+					HEX(applications.id) AS application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
+					LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
+					AND job_status = status WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				connection.query(query, _data, function(err, data) {
+					console.log(err)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
+					else if (data.length == 0)
+						callback({errors: {job: {message: "Could not find job."}}});
 					else
 						callback(false, data[0]);
 				});
@@ -148,27 +151,24 @@ module.exports = {
 				});
 		});
 	},
-	// update: function(req, callback) {
-	// 	jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
-	// 		if (err)
-	// 			callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-	// 		else {
-	// 			var _data = {
-	// 				job_type: req.body.job_type,
-	// 				dirt_type: req.body.dirt_type,
-	// 				volume: req.body.volume,
-	// 				completion_date: req.body.completion_date,
-	// 			};
-	// 			var query = "UPDATE jobs SET ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
-	// 			connection.query(query, [_data, req.params.id, data.id], function(err, data) {
-	// 				if (err)
-	// 					callback({errors: {database: {message: "Please contact an admin."}}});
-	// 				else
-	// 					callback(false);
-	// 			});
-	// 		}
-	// 	});
-	// },
+	update: function(req, callback) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else {
+				var query;
+				if (req.params.action == "relist")
+					query = "UPDATE jobs SET status = ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
+
+				connection.query(query, [req.body.status, req.params.id, data.id], function(err, data) {
+					if (err)
+						callback({errors: {database: {message: "Please contact an admin."}}});
+					else
+						callback(false);
+				});
+			}
+		});
+	},
 	delete: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)

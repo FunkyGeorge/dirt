@@ -34,17 +34,17 @@ module.exports = {
 				res.json(data);
 		});
 	},
-	// update: function(req, res) {
-	// 	job.update(req, function(err, data) {
-	// 		if (err)
-	// 			if (err.errors.jwt)
-	// 				res.clearCookie('ronin_token').json(err);
-	// 			else
-	// 				res.json(err);
-	// 		else
-	// 			res.json(data);
-	// 	});
-	// },
+	update: function(req, res) {
+		job.update(req, function(err, data) {
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('ronin_token').json(err);
+				else
+					res.json(err);
+			else
+				res.json(data);
+		});
+	},
 	delete: function(req, res) {
 		job.delete(req, function(err) {
 			if (err)

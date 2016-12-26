@@ -157,7 +157,6 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 				$scope.id = data.id;
 				$scope.step = 7;
 			}
-			console.log($scope.step)
 		});
 	}
 });

@@ -26,15 +26,17 @@ module.exports = function(app) {
 	app.get('/api/jobs', jobs.index);
 	app.get('/api/jobs/:id', jobs.show);
 	app.post('/api/jobs', jobs.create);
-	// app.put('/api/jobs/:id', jobs.update);
+	app.put('/api/jobs/:action/:id', jobs.update);
 	app.delete('/api/jobs/:id', jobs.delete);
 
-	// applications
+	// APPLICATIONS
 	app.get('/api/applications', applications.index);
 	// app.get('/api/applications/:id', applications.show);
 	app.post('/api/applications', applications.create);
-	app.put('/api/applications/:id', applications.update);
-	app.delete('/api/applications/:id', applications.delete);
+	app.put('/api/applications/accept', applications.accept);
+	app.put('/api/applications/cancel/:id', applications.cancel);
+	app.put('/api/applications/forfeit/:id', applications.forfeit);
+	// app.delete('/api/applications/:id', applications.delete);
 
 	// // MESSAGES
 	// app.get('/api/messages', messages.index);

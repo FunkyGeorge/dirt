@@ -56,16 +56,65 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//										APPLICATION
 	//////////////////////////////////////////////////////
 	$scope.acceptApplication = function() {
-
-		socket.emit('accept', $scope.cur_app);
-	}
-
-	$scope.declineApplication = function() {
-		
+		applicationsFactory.accept($scope.cur_app, function(data) {
+			if (data.errors) {
+				$scope.error = "Not able to accept this application. ";
+				for (key in data.errors) {
+					$scope.error += data.errors[key].message;
+					break;
+				}			
+			}
+			else {
+				socket.emit("accept", {
+					application_id: $scope.cur_app.id,
+					name: $scope.name
+				});
+				$location.url('/messages');
+			}
+		});
 	}
 
 	$scope.cancelApplication = function() {
-		
+		if (confirm("You will not be able to see this job again if you cancel your application.\n\nClick\"OK\" to continue removing application.") == true) {
+			applicationsFactory.cancel($scope.cur_app.id, function(data) {
+				if (data.errors) {
+					$scope.error = "Not able to cancel your job application. ";
+					for (key in data.errors) {
+						$scope.error += data.errors[key].message;
+						break;
+					}			
+				}
+				else {
+					socket.emit("cancel", {
+						application_id: $scope.cur_app.id,
+						name: $scope.name
+					});
+					$location.url('/messages');
+				}
+			});
+		}
+	}
+
+	$scope.forfeitApplication = function() {
+		if (confirm("You will not be able to see this job again if you forfeit this job. Note that a refund will not be issued for the lead fee.\n\nClick\"OK\" to continue forfeitting job.") == true) {
+			applicationsFactory.forfeit($scope.cur_app.id, function(data) {
+				if (data.errors) {
+					$scope.error = "Not able to forfeit this job. ";
+					for (key in data.errors) {
+						$scope.error += data.errors[key].message;
+						break;
+					}			
+				}
+				else {
+					socket.emit("forfeit", {
+						job_id: $scope.cur_app.job_id,
+						application_id: $scope.cur_app.id,
+						name: $scope.name
+					});
+					$location.url('/messages');
+				}
+			});
+		}
 	}
 
 	//////////////////////////////////////////////////////
@@ -118,7 +167,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//										JOB
 	//////////////////////////////////////////////////////
 	$scope.showJob = function() {
-		jobsFactory.show($scope.curr_app.job_id, function(data) {
+		jobsFactory.show($scope.cur_app.job_id, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not load job. "
 				for (key in data.errors) {
@@ -138,7 +187,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//////////////////////////////////////////////////////
 	$scope.createInvoice = function() {
 		$scope.new_invoice.cost = 300;
-		$scope.new_invoice.job_id = $scope.curr_app.job_id;
+		$scope.new_invoice.job_id = $scope.cur_app.job_id;
 		invoicesFactory.create($scope.new_invoice, function(data) {
 			if (data.errors) {
 				$scope.error = "Could not create invoice. "
@@ -148,7 +197,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 				}
 			}
 			else
-				$scope.mode = "success";
+				$scope.mode = "invoiced";
 		});
 	}		
 });

@@ -85,13 +85,44 @@ app.run(function($rootScope) {
 					});
 			});
 
+			//////////////////////////////////////////////////////
+			//										SENT FROM TRUCKERS
+			//////////////////////////////////////////////////////			
 			socket.on('applied', function(data) {
+				console.log("new app", data)
+				if (data.user_id == $rootScope.id) {
+					socket.emit("subscribe", data.application_id);
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `${data.name} applied for your job!`,
+						url: `#/messages/${data.application_id}`
+					}, {
+						type: "info",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						},					
+						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+						'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+						'<span data-notify="icon"></span> ' +
+						'<span data-notify="message">{2}</span>' +
+						'<a href="{3}" data-notify="url"></a>' +
+						'</div>' 
+					});
+				}
+			});
+
+			socket.on('cancelled', function(data) {
+				console.log("here")
 				$.notify({
 					icon: "glyphicon glyphicon-check",
-					message: `${data.name} applied for your job!`,
-					url: `#/messages/${data.id}`
+					message: `${data.name} has cancelled their application for your job.`,
 				}, {
-					type: "info",
+					type: "warning",
 					placement: {
 						from: "bottom"
 					},
@@ -109,6 +140,33 @@ app.run(function($rootScope) {
 				});
 			});
 
+			socket.on('forfeitted', function(data) {
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `${data.name} forfeitted the job. Click here to view/re-list the job.`,
+					url: `#/jobs/${data.job_id}`
+				}, {
+					type: "warning",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					},					
+					template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+					'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+					'<span data-notify="icon"></span> ' +
+					'<span data-notify="message">{2}</span>' +
+					'<a href="{3}" data-notify="url"></a>' +
+					'</div>' 
+				});
+			});
+
+			//////////////////////////////////////////////////////
+			//										SENT FROM USERS
+			//////////////////////////////////////////////////////	
 			socket.on('accepted', function(data) {
 				$.notify({
 					icon: "glyphicon glyphicon-check",
@@ -154,31 +212,8 @@ app.run(function($rootScope) {
 					'<a href="{3}" data-notify="url"></a>' +
 					'</div>' 
 				});
-			});
+			});			
 
-			socket.on('cancelled', function(data) {
-				$.notify({
-					icon: "glyphicon glyphicon-check",
-					message: `${data.first_name} ${data.last_name} cancelled the application. Your job will now be re-listed.`,
-					url: `#/messages/${data.id}`
-				}, {
-					type: "warning",
-					placement: {
-						from: "bottom"
-					},
-					delay: 4000,
-					animate: {
-						enter: 'animated fadeInUp',
-						exit: 'animated fadeOutDown',
-					},					
-					template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-					'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-					'<span data-notify="icon"></span> ' +
-					'<span data-notify="message">{2}</span>' +
-					'<a href="{3}" data-notify="url"></a>' +
-					'</div>' 
-				});
-			});						
 		}
 	})();
 

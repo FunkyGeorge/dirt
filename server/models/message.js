@@ -40,8 +40,8 @@ module.exports = {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-			else if (!req.body.message || !req.body.application_id)
-				callback({errors: {message: {message: "Invalid message."}}});
+			else if (!req.body.message)
+				callback({errors: {message: {message: "A message cannot be empty."}}});
 			else {
 				var query;
 				if ('truck_type' in data)
@@ -64,7 +64,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else if (!req.body.message)
-				callback({errors: {message: {message: "Invalid message."}}});
+				callback({errors: {message: {message: "A message cannot be empty."}}});
 			else {
 				var query;
 				if ('truck_type' in data)
@@ -84,8 +84,6 @@ module.exports = {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-			else if (!req.body.message)
-				callback({errors: {message: {message: "Invalid message."}}});
 			else {
 				var query;
 				if ('truck_type' in data)

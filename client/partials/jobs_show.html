@@ -38,9 +38,9 @@
 		<div class="col-sm-3">
 			<img class="img-rounded img-responsive center-block" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
 			<hr>
-			<p ng-if="job.job_type==0">This job requires a trucker that can pick-up/remove {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} from a location.</p>
-			<p ng-if="job.job_type==1">This job requires a trucker that has {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} and can drop-off at a location.</p>
-			<p ng-if="job.job_type==2">This job requires a trucker that can pick-up {{job.volume | number:2}} yds<sup>3</sup> of {{job.dirt_type}} from one location and drop-off at another location.</p>
+			<p ng-if="job.job_type==0">This job requires a trucker that can pick-up/remove {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> from a location.</p>
+			<p ng-if="job.job_type==1">This job requires a trucker that has {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> and can drop-off at a location.</p>
+			<p ng-if="job.job_type==2">This job requires a trucker that can pick-up {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> from one location and drop-off at another location.</p>
 		</div>
 		<div class="col-sm-6 center-content">
 			<table class="table table-bordered">
@@ -65,15 +65,18 @@
 					<th>Complete By:</th>
 					<td ng-bind="job.completion_date | date:'shortDate'"></td>
 				</tr>
-				<tr>
+				<tr ng-if="job.job_type!=1">
 					<th>Pick-Up Location:</th>
-					<td>To be shared upon job acceptance</td>
+					<td ng-if="job.status>0 || id==job.user_id">{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}} {{job.p_zip}}</td>
+					<td ng-if="job.status<=0 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
 				</tr>
-				<tr ng-if="!job.pickup_only">
+				<tr ng-if="job.job_type!=0">
 					<th>Drop-Off Location:</th>
-					<td>To be shared upon job acceptance</td>
+					<td ng-if="job.status>0 || id==job.user_id">{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}} {{job.d_zip}}</td>
+					<td ng-if="job.status<=0 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
 				</tr>
 			</table>
+			<p class="text-center"><small class="text-muted">Full location details will be provided upon job acceptance.</small><br>
 		</div>
 		<div class="col-sm-3">
 			<span ng-if="job.job_type!=1">
@@ -106,49 +109,70 @@
 			<!-- TRUCKER -->
 			<div class="row" ng-if="user_type=='trucker'">
 				<!-- STATUS UNDEFINED -->
-				<button class="form-control btn btn-info" ng-if="job.status===undefined && job.job_status===0" ng-click="createApplication()">Apply to Job</button>
-				<!-- STATUS 0 -->
-				<p class="text-center dodgerblue" ng-if="job.status===0">You've applied for this job!</p>
-				<button class="form-control btn btn-danger" ng-if="job.status===0" ng-click="deleteApplication()">Remove Application</button>
+				<button class="form-control btn btn-info" ng-if="job.status===null && job.job_status===0" ng-click="createApplication()">Apply to Job</button>
 				<!-- STATUS < 0 -->
-				<p class="text-center" ng-if="job.status<0 || job.job_status<0"><b>No longer available.</b></p>
-				<!-- STATUS > 0 -->
-				<p class="text-center dodgerblue" ng-if="job.status>0">In progress.</p>
-				<a href="#/messages/{{job.application_id}}" ng-if="job.status>0"><button class="form-control btn btn-info">View in Messages</button></a>
+				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
+				<!-- STATUS 0 -->
+				<div ng-if="job.status===0">
+					<a href="#/messages/{{job.application_id}}"><p class="text-center"><b>You've applied for this job!</b></p></a>
+					<button class="form-control btn btn-warning" ng-click="cancelApplication()">Cancel Application</button>
+				</div>
+				<!-- STATUS 1 -->
+				<div ng-if="job.status==1">
+					<a href="#/messages/{{job.application_id}}"><p class="text-center"><b>You've been accepted for this job!</b></p></a>
+					<button class="form-control btn btn-danger" ng-click="forfeitApplication()">Forfeit Job</button>
+				</div>
+				<!-- STATUS 2, 3 -->
+				<a href="#/messages/{{job.application_id}}" ng-if="job.status==2 || job.status==3"><p class="text-center"><b>In progress</b></p></a>
+				<!-- STATUS = 4 -->
+				<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><button class="form-control btn btn-info">Job completed!</button></a>				
 			</div>
 
 			<!-- USER -->
 			<div class="row" ng-if="user_type=='user'">
-				<!-- JOB_STATUS 0 -->
-				<button class="form-control btn btn-info" ng-if="id!=job.user_id && job.job_status===0" disabled>Apply to Job</button>
-				<small ng-if="id!=job.user_id && job.job_status===0" class="text-muted">Only truckers can apply to jobs.</small>
-				<button class="form-control btn btn-danger" ng-if="id==job.user_id && job.job_status===0" ng-click="deleteJob()">Remove Job</button>
-				<!-- JOB_STATUS < 0 -->
-				<p class="text-center" ng-if="job.job_status<0"><b>No longer available.</b></p>
-				<button class="form-control btn btn-primary" ng-if="id==job.user_id && job.job_status<0" ng-click="updateJob()">Re-list Job</button>
-				<!-- JOB_STATUS > 0 -->
-				<p class="text-center dodgerblue" ng-if="job.job_status>0">In progress.</p>
-				<a href="#/messages/{{job.application_id}}" ng-if="id==job.user_id && job.job_status>0"><button class="form-control btn btn-info">View in Messages</button></a>
+				<!-- NOT JOB OWNER -->
+				<div ng-if="id!=job.user_id">
+					<button class="form-control btn btn-info" ng-if="id!=job.user_id" disabled>Apply to Job</button>
+					<p class="text-center"><small class="text-muted" ng-if="id!=job.user_id">Only truckers can apply to jobs.<br>Have a truck? Apply to be a trucker!</small></p>
+				</div>
+
+				<!-- JOB OWNER -->
+				<div ng-if="id==job.user_id">
+					<!-- JOB_STATUS < 0 -->
+					<div ng-if="job.job_status<0">
+						<p class="text-center error"><b>Job was taken down.</b></p>
+						<button class="form-control btn btn-primary" ng-click="relistJob()">Re-list Job</button>
+					</div>
+					<!-- JOB_STATUS 0 -->
+					<button class="form-control btn btn-danger" ng-if="job.job_status===0" ng-click="deleteJob()">Remove Job</button>
+					<!-- JOB_STATUS > 0 -->
+					<div ng-if="job.job_status>0">
+						<p class="text-center dodgerblue" ng-if="job.status<4">In progress</p>
+						<p class="text-center dodgerblue" ng-if="job.status==4">Job completed!</p>
+						<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
+					</div>
+				</div>
 			</div>
 
-			<small style="color: darkorange" class="text-muted" ng-if="job.job_type!=1 && !job.p_loader">*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small><br>
-			<small style="color: darkorange" class="text-muted" ng-if="job.job_type!=0 && !job.d_loader">*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
+			<div class="row text-center">
+				<small class="darkorange" ng-if="job.job_type!=1 && !job.p_loader"><br>*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small>
+				<small class="darkorange" ng-if="job.job_type!=0 && !job.d_loader"><br>*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
+			</div>
 		</div>
 	</div>
 
-		<!-- DELETE MODE -->
-	<div class="row" ng-show="mode=='delete'">
+		<!-- DELETED MODE -->
+	<div class="row center-content" ng-show="mode=='deleted'">
 		<h1>Job listing has succesfully been removed.</h1>
 		<p>You will now be redirected.</p>
 	</div>
 </div>
 
-	<!-- SUCCESS MODE -->
-	<div class="row" ng-show="mode=='success'">
+	<!-- APPLIED MODE -->
+	<div class="row center-content" ng-show="mode=='applied'">
 		<h1>Successfully Applied to Job!</h1>
-		<p>The user has been notified.<br>Go to your inbox and say hello!</p>
-		<p>If they have not responded in 30 minutes, the job will become live again.<br>
-		Check your inbox for updates.</p>
-		<a href="#/messages"><button>My Inbox</button></a>
+		<p>The user has been notified.<br>You can chat with the user once they've accepted your application.</p>
+		<p>Check your messages to view you application status.</p>
+		<a href="#/messages/{{application_id}}"><button class="btn btn-info">Go to Messages</button></a>
 	</div>
 </div>
