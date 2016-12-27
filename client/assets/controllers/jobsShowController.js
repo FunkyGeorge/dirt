@@ -4,18 +4,11 @@ jobsFactory, applicationsFactory) {
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
 	if (payload) {
-		$scope.error = null;
 		jobsFactory.show($routeParams.id, function(data) {
 			if (data.errors) {
-				$scope.error = "Could not load job. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}
-				$scope.error += " You will now be redirected."
-				$timeout(function() {
-					$location.url('/');
-				}, 3000);				
+				displayErrorNotification("Could not load this job.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);			
 			}
 			else {
 				$scope.job = data;
@@ -34,14 +27,11 @@ jobsFactory, applicationsFactory) {
 	//										JOB
 	//////////////////////////////////////////////////////
 	$scope.relistJob = function() {
-		$scope.error = null;
 		jobsFactory.relist({id: $scope.job.id, job_status: 0}, function(data) {
 			if (data.errors) {
-				$scope.error = "Unable to re-list job. ";
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}							
+				displayErrorNotification("Unable to re-list this job.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);							
 			}
 			else {
 				$scope.job.job_status = 0;
@@ -50,15 +40,12 @@ jobsFactory, applicationsFactory) {
 	}
 	
 	$scope.deleteJob = function() {
-		$scope.error = null;
 		if (confirm("Are you sure you want to delete this job listing? Doing so will remove all pending applications and conversations for this listing.\n\nClick\"OK\" to continue removing job.") == true) {
 			jobsFactory.delete($scope.job.id, function(data) {
 				if (data.errors) {
-					$scope.error = "Unable to remove the job listing. ";
-					for (key in data.errors) {
-						$scope.error += data.errors[key].message;
-						break;
-					}			
+					displayErrorNotification("Unable to remove this job listing.");
+					for (key in data.errors)
+						displayErrorNotification(data.errors[key].message);			
 				}
 				else {
 					$scope.mode = 'deleted';
@@ -77,14 +64,11 @@ jobsFactory, applicationsFactory) {
 	$scope.createApplication = function() {
 		applicationsFactory.create({job_id: $scope.job.id}, function(data) {
 			if (data.errors) {
-				$scope.error = "You were not able to apply for the job. ";
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}			
+				displayErrorNotification("Could not apply for this job.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);			
 			}
 			else {
-				console.log("data is", data)
 				$scope.application_id = data.id;
 				socket.emit("apply", {
 					application_id: data.id, 
@@ -100,11 +84,9 @@ jobsFactory, applicationsFactory) {
 		if (confirm("You will not be able to see this job again if you cancel your application.\n\nClick\"OK\" to continue removing application.") == true) {
 			applicationsFactory.cancel($scope.job.application_id, function(data) {
 				if (data.errors) {
-					$scope.error = "Not able to cancel your job application. ";
-					for (key in data.errors) {
-						$scope.error += data.errors[key].message;
-						break;
-					}			
+					displayErrorNotification("Not able to cancel your job application. ");
+					for (key in data.errors)
+						displayErrorNotification(data.errors[key].message);		
 				}
 				else {
 					socket.emit("cancel", {
@@ -121,11 +103,9 @@ jobsFactory, applicationsFactory) {
 		if (confirm("You will not be able to see this job again if you forfeit this job. Note that a refund will not be issued for the lead fee.\n\nClick\"OK\" to continue forfeitting job.") == true) {
 			applicationsFactory.forfeit($scope.job.application_id, function(data) {
 				if (data.errors) {
-					$scope.error = "Not able to forfeit this job. ";
-					for (key in data.errors) {
-						$scope.error += data.errors[key].message;
-						break;
-					}			
+					displayErrorNotification("Not able to forfeit this job. ");
+					for (key in data.errors)
+						displayErrorNotification(data.errors[key].message);		
 				}
 				else {
 					socket.emit("forfeit", {

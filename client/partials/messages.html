@@ -24,16 +24,13 @@
 </nav>
 
 <!-- MAIN -->
-<div class="row error" ng-bind="error"></div>
-
 <!-- MESSAGE -->
 <div class="row" ng-show="mode=='message'">
-
 	<h1 class="col-xs-12">Messages</h1>
 	<div class="col-sm-4">
 		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="" ng-click="status=0">Pending</a></li>
-			<li><a data-toggle="tab" href="" ng-click="status=1">Accepted</a></li>
+			<li ng-class="{active: status==0}"><a href="" ng-click="status=0">Pending</a></li>
+			<li ng-class="{active: status==1}"><a href="" ng-click="status=1">Accepted</a></li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane fade in active" >
@@ -41,11 +38,11 @@
 				<div ng-repeat="app in apps | filter:filterByStatus">
 					<div class="text-center">
 						<b><a href="#/jobs/{{app[0].job_id}}">{{app[0].dirt_type}} | {{app[0].volume | number:0}} yds<sup>3</sup></a></b><br>
-						<small ng-if="user_type=='user'">{{app.length}} applicants</small>
+						<small ng-if="user_type=='user' && status==0">{{app.length}} applicants</small>
 					</div>
 					<div ng-repeat="application in app">
-						<li ng-if="user_type=='user'"><a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id == application.id}">{{application.first_name}} {{application.last_name}}</a></li>
-						<div class="text-center" ng-if="user_type=='trucker'">
+						<li ng-if="user_type=='user' && status==0"><a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id == application.id}">{{application.first_name}} {{application.last_name}}</a></li>
+						<div class="text-center" ng-if="user_type=='trucker' || status==1">
 							<a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id==application.id}">{{application.first_name}} {{application.last_name}}</a>
 						</div>
 					</div>
@@ -55,9 +52,11 @@
 		</div>
 	</div>
 	<div class="col-sm-8">
-		<small class="text-muted" ng-show="!messages">You can view your conversations here. Click on a name on the left to view the conversation.</small>
-		<small class="text-muted" ng-show="!messages && user_type=='user'"><br>Note that accepting an application will cause all other pending applications for that same job to be declined.</small>
-		<small class="text-muted" ng-show="!messages && user_type=='trucker'"><br>Note that you will not be able to re-apply to jobs that you've cancelled.</small>
+		<div ng-show="!cur_app">
+			<small class="text-muted">You can view your conversations here. Click on a name on the left to view the conversation.</small>
+			<small class="text-muted" ng-if="user_type=='user'"><br>Note that accepting an application will cause all other pending applications for that same job to be declined.</small>
+			<small class="text-muted" ng-if="user_type=='trucker'"><br>Note that you will not be able to re-apply to jobs that you've cancelled.</small>
+		</div>
 		
 		<!-- USER -->
 		<div ng-if="cur_app && user_type=='user'">
@@ -92,8 +91,8 @@
 			<!-- STATUS 1 -->
 			<div class="center-content" ng-if="cur_app.status==1">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> accepted you for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
-				<button class="btn btn-info" ng-click="">Pay Lead Fee</button> <button class="btn btn-danger" ng-click="forfeitApplication()">Forfeit Job</button>
-				<small class="text-muted">You'll be connected after paying our <a href="#/about#lead_fee">lead fee</a></small>
+				<button class="btn btn-info" ng-click="">Pay Lead Fee</button> <button class="btn btn-danger" ng-click="forfeitApplication()">Forfeit Job</button><br><br>
+				<small class="text-muted">You can now view the location in the job description.<br>You'll be connected with {{cur_app.first_name}} after paying our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
 			<!-- STATUS > 1 -->
 			<div class="center-content" ng-if="cur_app.status>1">
@@ -127,7 +126,7 @@
 </div>
 
 <!-- INVOICE -->
-<div class="row" ng-show="!error && mode=='invoice'">
+<div class="row" ng-show="mode=='invoice'">
 	<h1>Create Invoice</h1>
 	<button ng-click="mode='message'">Back</button>
 	<p>Review the details before it's sent:</p>
@@ -163,7 +162,7 @@
 </div>
 
 <!-- INVOICED -->
-<div class="row center-content" ng-show="!error && mode=='invoiced'">
+<div class="row center-content" ng-show="mode=='invoiced'">
 	<h1>Success!</h1>
 	<p>Your invoice has been sent.</p>
 	<p>Your funds will be available to view in the top right menu under invoices, or just click below:</p>

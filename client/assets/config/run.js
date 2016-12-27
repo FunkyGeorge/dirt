@@ -36,6 +36,26 @@ function setSocket() {
 	}
 }
 
+// Display error:
+function displayErrorNotification(error) {
+	$.notify({
+		icon: "glyphicon glyphicon-warning-sign",
+		message: `${error}`,
+	}, {
+		type: "danger",
+		newest_on_top: true,
+		placement: {
+			from: "top",
+			align: "center"
+		},
+		delay: 0,
+		animate: {
+			enter: 'animated fadeInDown',
+			exit: 'animated fadeOutDown',
+		}
+	});	
+}
+
 //////////////////////////////////////////////////////
 //										APP.RUN
 //////////////////////////////////////////////////////
@@ -55,11 +75,12 @@ app.run(function($rootScope) {
 		if (socket) {
 			// Define socket event handlers:
 			socket.on('sent', function(data) {
-				if (allow_notify)
+				if (allow_notify && !window.location.hash.includes($rootScope.cur_app.id))
 					$.notify({
 						icon: "glyphicon glyphicon-envelope",
 						message: `New message from ${data.name}.`,
-						url: `#/messages/${data.application_id}`
+						url: `#/messages/${data.application_id}#${Date.now()}`,
+						target: "_self"
 					}, {
 						type: "info",
 						placement: {
@@ -75,13 +96,7 @@ app.run(function($rootScope) {
 						},
 						onClose: function() {
 							allow_notify = true;
-						},
-						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-						'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-						'<span data-notify="icon"></span> ' +
-						'<span data-notify="message">{2}</span>' +
-						'<a href="{3}" data-notify="url"></a>' +
-						'</div>'				
+						}				
 					});
 			});
 
@@ -95,7 +110,8 @@ app.run(function($rootScope) {
 					$.notify({
 						icon: "glyphicon glyphicon-check",
 						message: `${data.name} applied for your job!`,
-						url: `#/messages/${data.application_id}`
+						url: `#/messages/${data.application_id}`,
+						target: "_self"
 					}, {
 						type: "info",
 						placement: {
@@ -105,13 +121,7 @@ app.run(function($rootScope) {
 						animate: {
 							enter: 'animated fadeInUp',
 							exit: 'animated fadeOutDown',
-						},					
-						template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-						'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-						'<span data-notify="icon"></span> ' +
-						'<span data-notify="message">{2}</span>' +
-						'<a href="{3}" data-notify="url"></a>' +
-						'</div>' 
+						} 
 					});
 				}
 			});
@@ -119,7 +129,7 @@ app.run(function($rootScope) {
 			socket.on('cancelled', function(data) {
 				console.log("here")
 				$.notify({
-					icon: "glyphicon glyphicon-check",
+					icon: "glyphicon glyphicon-info-sign",
 					message: `${data.name} has cancelled their application for your job.`,
 				}, {
 					type: "warning",
@@ -130,23 +140,18 @@ app.run(function($rootScope) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					},					
-					template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-					'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-					'<span data-notify="icon"></span> ' +
-					'<span data-notify="message">{2}</span>' +
-					'<a href="{3}" data-notify="url"></a>' +
-					'</div>' 
+					}
 				});
 			});
 
 			socket.on('forfeitted', function(data) {
 				$.notify({
-					icon: "glyphicon glyphicon-check",
+					icon: "glyphicon glyphicon-warning-sign",
 					message: `${data.name} forfeitted the job. Click here to view/re-list the job.`,
-					url: `#/jobs/${data.job_id}`
+					url: `#/jobs/${data.job_id}#${Date.now()}`,
+					target: "_self"
 				}, {
-					type: "warning",
+					type: "danger",
 					placement: {
 						from: "bottom"
 					},
@@ -154,13 +159,7 @@ app.run(function($rootScope) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					},					
-					template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-					'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-					'<span data-notify="icon"></span> ' +
-					'<span data-notify="message">{2}</span>' +
-					'<a href="{3}" data-notify="url"></a>' +
-					'</div>' 
+					}
 				});
 			});
 
@@ -170,8 +169,9 @@ app.run(function($rootScope) {
 			socket.on('accepted', function(data) {
 				$.notify({
 					icon: "glyphicon glyphicon-check",
-					message: `${data.first_name} ${data.last_name} accepted your application!`,
-					url: `#/messages/${data.id}`
+					message: `${data.name} accepted your application!`,
+					url: `#/messages/${data.application_id}#${Date.now()}`,
+					target: "_self"
 				}, {
 					type: "success",
 					placement: {
@@ -181,19 +181,13 @@ app.run(function($rootScope) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					},					
-					template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-					'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-					'<span data-notify="icon"></span> ' +
-					'<span data-notify="message">{2}</span>' +
-					'<a href="{3}" data-notify="url"></a>' +
-					'</div>' 
+					} 
 				});
 			});
 
 			socket.on('declined', function(data) {
 				$.notify({
-					icon: "glyphicon glyphicon-check",
+					icon: "glyphicon glyphicon-info-sign",
 					message: `${data.first_name} ${data.last_name} declined your application. Better luck next time!`,
 				}, {
 					type: "warning",
@@ -204,16 +198,9 @@ app.run(function($rootScope) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					},					
-					template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-					'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-					'<span data-notify="icon"></span> ' +
-					'<span data-notify="message">{2}</span>' +
-					'<a href="{3}" data-notify="url"></a>' +
-					'</div>' 
+					} 
 				});
 			});			
-
 		}
 	})();
 

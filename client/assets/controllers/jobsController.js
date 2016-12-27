@@ -144,14 +144,11 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 	//										JOB
 	//////////////////////////////////////////////////////	
 	$scope.create = function() {
-		$scope.error = null;
 		jobsFactory.create($scope.job, function(data) {
 			if (data.errors) {
-				$scope.error = 'Could not create new job. '
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}
+				displayErrorNotification("Could not create new job.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);
 			}
 			else {
 				$scope.id = data.id;

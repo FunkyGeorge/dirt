@@ -4,7 +4,6 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 	//////////////////////////////////////////////////////
 	if (payload) {
 		var position;
-		$scope.error = null;
 
 		//state variable
 		$scope.state = [
@@ -44,7 +43,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 		if ($scope.state[3]){ //isLoaded?
 			jobsFactory.index($scope.state, $scope.zipcodes[1], function(data) {
 				if (data.errors)
-					$scope.error = "Something went wrong, please wait a while and try reloading."
+					displayErrorNotification("Could not load jobs. Please wait a while and try reloading. Contact an admin if the problem persists.");
 				else {
 					for (var i = 0; i < data.length; i++)
 						data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");

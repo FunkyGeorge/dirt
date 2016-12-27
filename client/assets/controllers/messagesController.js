@@ -1,18 +1,15 @@
-app.controller("messagesController", function ($scope, $location, $routeParams, $timeout, 
+app.controller("messagesController", function ($scope, $rootScope, $location, $route, $routeParams, $timeout, 
 moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
 	if (payload) {
-		$scope.error = null;
 		applicationsFactory.index(function(data) {
 			if (data.errors) {
-				$scope.error = "Could not load job applications. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}
+				displayErrorNotification("Could not load job applications and messages.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);
 			}
 			else {
 				$scope.apps = [];
@@ -31,6 +28,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 				if ($routeParams.id)
 					for (var i = 0; i < data.length; i++)
 						if ($routeParams.id == data[i].id) {
+							$scope.status = data[i].status > 0 ? 1 : 0;
 							$scope.showMessages(data[i]);
 							break;
 						}
@@ -58,18 +56,16 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	$scope.acceptApplication = function() {
 		applicationsFactory.accept($scope.cur_app, function(data) {
 			if (data.errors) {
-				$scope.error = "Not able to accept this application. ";
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}			
+				displayErrorNotification("Unable to accept this application.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);	
 			}
 			else {
 				socket.emit("accept", {
 					application_id: $scope.cur_app.id,
 					name: $scope.name
 				});
-				$location.url('/messages');
+				$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
 			}
 		});
 	}
@@ -78,11 +74,9 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		if (confirm("You will not be able to see this job again if you cancel your application.\n\nClick\"OK\" to continue removing application.") == true) {
 			applicationsFactory.cancel($scope.cur_app.id, function(data) {
 				if (data.errors) {
-					$scope.error = "Not able to cancel your job application. ";
-					for (key in data.errors) {
-						$scope.error += data.errors[key].message;
-						break;
-					}			
+					displayErrorNotification("Could not cancel this job application.");
+					for (key in data.errors)
+						displayErrorNotification(data.errors[key].message);
 				}
 				else {
 					socket.emit("cancel", {
@@ -99,11 +93,9 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		if (confirm("You will not be able to see this job again if you forfeit this job. Note that a refund will not be issued for the lead fee.\n\nClick\"OK\" to continue forfeitting job.") == true) {
 			applicationsFactory.forfeit($scope.cur_app.id, function(data) {
 				if (data.errors) {
-					$scope.error = "Not able to forfeit this job. ";
-					for (key in data.errors) {
-						$scope.error += data.errors[key].message;
-						break;
-					}			
+					displayErrorNotification("Could not forfeit this job.");
+					for (key in data.errors)
+						displayErrorNotification(data.errors[key].message);
 				}
 				else {
 					socket.emit("forfeit", {
@@ -121,23 +113,22 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//										MESSAGE
 	//////////////////////////////////////////////////////
 	$scope.showMessages = function(application) {
-		$scope.cur_app = application;		
-		messagesFactory.show(application.id, function(data) {
-			if (data.errors) {
-				$scope.error = "Could not load conversation. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
+		$rootScope.cur_app = application;
+		if (application.status > 1)
+			messagesFactory.show(application.id, function(data) {
+				if (data.errors) {
+					displayErrorNotification("Could not load conversation.");
+					for (key in data.errors)
+						displayErrorNotification(data.errors[key].message);
 				}
-			}
-			else {
-				$scope.messages = data;
-				$timeout(function() {
-					var _ = document.getElementById("chat");
-					_.scrollTop = _.scrollHeight;				
-				}, 0, false);
-			}
-		});
+				else {
+					$scope.messages = data;
+					$timeout(function() {
+						var _ = document.getElementById("chat");
+						_.scrollTop = _.scrollHeight;				
+					}, 0, false);
+				}
+			});
 	}
 
 	$scope.createMessage = function() {
@@ -152,11 +143,9 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 
 		messagesFactory.create(data, function(data) {
 			if (data.errors) {
-				$scope.error = "Could not send message. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}							
+				displayErrorNotification("Message not sent.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);						
 			}
 			else
 				$scope.new_message = "";				
@@ -169,11 +158,9 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	$scope.showJob = function() {
 		jobsFactory.show($scope.cur_app.job_id, function(data) {
 			if (data.errors) {
-				$scope.error = "Could not load job. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}
+				displayErrorNotification("Could not load job.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);
 			}
 			else {
 				$scope.job = data;
@@ -190,11 +177,9 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		$scope.new_invoice.job_id = $scope.cur_app.job_id;
 		invoicesFactory.create($scope.new_invoice, function(data) {
 			if (data.errors) {
-				$scope.error = "Could not create invoice. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}
+				displayErrorNotification("Invoice not sent.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);
 			}
 			else
 				$scope.mode = "invoiced";

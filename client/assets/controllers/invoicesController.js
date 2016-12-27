@@ -3,14 +3,11 @@ app.controller("invoicesController", function ($scope, $location, invoicesFactor
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
 	if (payload) {
-		$scope.error = null;
 		invoicesFactory.index(function(data) {
 			if (data.errors) {
-				$scope.error = "Could not load invoices. "
-				for (key in data.errors) {
-					$scope.error += data.errors[key].message;
-					break;
-				}
+				displayErrorNotification("Could not load invoices.");
+				for (key in data.errors)
+					displayErrorNotification(data.errors[key].message);
 			}
 			else {
 				$scope.invoices = data;

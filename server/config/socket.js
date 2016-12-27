@@ -30,11 +30,12 @@ module.exports = function(server) {
 		//										SENT FROM USERS
 		//////////////////////////////////////////////////////			
 		socket.on('accept', function(data) {
-			socket.broadcast.to(data.id).emit('accepted', data);
+			console.log("accept data:", data)
+			socket.broadcast.to(data.application_id).emit('accepted', data);
 		});		
 		
 		socket.on('decline', function(data) {
-			socket.broadcast.to(data.id).emit('declined', data);
+			socket.broadcast.to(data.application_id).emit('declined', data);
 		});
 		
 		socket.on("logout", function() {

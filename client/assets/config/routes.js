@@ -37,9 +37,6 @@ app.config(function($routeProvider) {
 		templateUrl: 'partials/invoices.html',
 		controller: 'invoicesController'
 	})
-	.when('/error',{
-		templateUrl: 'partials/error.html'
-	})	
 	.otherwise({
 		redirectTo: '/welcome'
 	});
