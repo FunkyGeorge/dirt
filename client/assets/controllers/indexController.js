@@ -42,18 +42,19 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 	function appendJobs(){
 		if ($scope.state[3]){ //isLoaded?
 			jobsFactory.index($scope.state, $scope.zipcodes[1], function(data) {
-				if (data.errors)
-					displayErrorNotification("Could not load jobs. Please wait a while and try reloading. Contact an admin if the problem persists.");
-				else {
-					for (var i = 0; i < data.length; i++)
-						data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+				if ($scope.jobs && $scope.jobs.length == data.length){
+					$scope.state[1] = false;
+				} else {
+					if (data.errors)
+						displayErrorNotification("Could not load jobs. Please wait a while and try reloading. Contact an admin if the problem persists.");
+					else {
+						for (var i = 0; i < data.length; i++)
+							data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
 
-					//CHECK HERE TO MAKE SURE I DIDN'T MESS UP FLAG
-					if ($scope.jobs && $scope.jobs.length == data.length)
-						$scope.state[1] = false;
-					transportDistance(data);
-					$scope.jobs = data;
-					$scope.state[0]++;
+						transportDistance(data);
+						$scope.jobs = data;
+						$scope.state[0]++;
+					}
 				}
 			});
 		}
