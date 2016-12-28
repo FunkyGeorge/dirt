@@ -28,6 +28,13 @@ app.factory('applicationsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
+		decline: function(id, callback) {
+			$http.put(`/api/applications/decline/${id}`, null, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},		
 		cancel: function(id, callback) {
 			$http.put(`/api/applications/cancel/${id}`, null, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}

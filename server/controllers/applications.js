@@ -45,6 +45,17 @@ module.exports = {
 				res.json(data);
 		});	
 	},
+	decline: function(req, res) {
+		application.decline(req, function(err, data) {
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('ronin_token').json(err);
+				else
+					res.json(err);
+			else
+				res.json(data);
+		});	
+	},	
 	cancel: function(req, res) {
 		application.cancel(req, function(err, data) {
 			if (err)

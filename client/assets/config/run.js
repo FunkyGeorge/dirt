@@ -75,7 +75,7 @@ app.run(function($rootScope) {
 		if (socket) {
 			// Define socket event handlers:
 			socket.on('sent', function(data) {
-				if (allow_notify && !window.location.hash.includes($rootScope.cur_app.id))
+				if (allow_notify && !window.location.hash.includes($rootScope._app.id))
 					$.notify({
 						icon: "glyphicon glyphicon-envelope",
 						message: `New message from ${data.name}.`,
@@ -104,7 +104,6 @@ app.run(function($rootScope) {
 			//										SENT FROM TRUCKERS
 			//////////////////////////////////////////////////////			
 			socket.on('applied', function(data) {
-				console.log("new app", data)
 				if (data.user_id == $rootScope.id) {
 					socket.emit("subscribe", data.application_id);
 					$.notify({
@@ -127,7 +126,6 @@ app.run(function($rootScope) {
 			});
 
 			socket.on('cancelled', function(data) {
-				console.log("here")
 				$.notify({
 					icon: "glyphicon glyphicon-info-sign",
 					message: `${data.name} has cancelled their application for your job.`,
@@ -147,7 +145,7 @@ app.run(function($rootScope) {
 			socket.on('forfeitted', function(data) {
 				$.notify({
 					icon: "glyphicon glyphicon-warning-sign",
-					message: `${data.name} forfeitted the job. Click here to view/re-list the job.`,
+					message: `${data.name} forfeitted the job. Click here to view/relist the job.`,
 					url: `#/jobs/${data.job_id}#${Date.now()}`,
 					target: "_self"
 				}, {
