@@ -18,12 +18,22 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
+				var response = {};
 				var query = "SELECT * FROM users where HEX(id) = ? LIMIT 1";
-				connection.query(query, req.params, function(err){
+				connection.query(query, req.params.id, function(err){
 					if (err)
 						callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 					else {
-						callback(false, data);
+						response["user"] = data;
+						var query = "SELECT * FROM jobs where HEX(user_id) = ?"
+						connection.query(query, req.params.id, function(err, data){
+							if (err)
+								callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+							else {
+								response["jobs"] = data;
+								callback(false, response);	
+							}
+						});
 					}
 				});
 			}

@@ -25,14 +25,14 @@ module.exports = {
 						callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 					else {
 						response["user"] = data;
-						var query1 = "SELECT * FROM applications A \
+						var query = "SELECT * FROM applications A \
 						JOIN jobs J ON HEX(J.id) = HEX(A.job_id) \
 						WHERE HEX(A.trucker_id) = ?";
-						connection.query(query1, req.params.id, function(err, data){
+						connection.query(query, req.params.id, function(err, data){
 							if (err)
 								callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 							else {
-								response["applications"] = data;
+								response["jobs"] = data;
 								callback(false, response);
 							}
 						});
