@@ -13,11 +13,11 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li><a href="#/profile">Profile</a></li>
 				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
 				<li><a href="#/messages">Messages</a></li>
 				<li><a href="#/invoices">Invoices</a></li>
 				<li><a href="#/about">About</a></li>
+				<li><a href="#/settings">Settings</a></li>
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>

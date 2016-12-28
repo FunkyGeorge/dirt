@@ -1,4 +1,4 @@
-app.controller('profileController',function ($scope, $location, $routeParams, usersFactory, truckersFactory){
+app.controller('settingsController',function ($scope, $location, $routeParams, usersFactory, truckersFactory){
   //////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////

@@ -20,20 +20,19 @@ module.exports = {
 			else {
 				var response = {};
 				var query = "SELECT * FROM truckers where HEX(id) = ? LIMIT 1";
-				connection.query(query, req.params, function(err){
+				connection.query(query, req.params.id, function(err){
 					if (err)
 						callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 					else {
 						response["user"] = data;
-						var query = "SELECT * FROM applications A \
+						var query1 = "SELECT * FROM applications A \
 						JOIN jobs J ON HEX(J.id) = HEX(A.job_id) \
 						WHERE HEX(A.trucker_id) = ?";
-						connection.query(query, req.params, function(err){
+						connection.query(query1, req.params.id, function(err, data){
 							if (err)
 								callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 							else {
 								response["applications"] = data;
-								console.log(response);
 								callback(false, response);
 							}
 						});
