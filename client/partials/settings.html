@@ -23,9 +23,25 @@
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
-
-<h1>Profile Page</h1>
+<h1>Settings</h1>
 <hr>
-<h3>{{ first_name }} {{ last_name }}</h3> <button class="btn btn-primary" type="button" name="button">Edit</button>
-<br>
-<button class="btn btn-warning" type="button" name="button">Change Password</button>
+<div class="row">
+	<div class="col-md-3">
+		<ul class="nav nav-pills nav-stacked">
+		  <li role="presentation"><a href="" ng-click="tab = profile">Profile</a></li>
+		  <li role="presentation"><a href="" ng-click="tab = jobs">Jobs</a></li>
+		  <li role="presentation"><a href="" ng-click="tab = password">Password</a></li>
+		</ul>
+	</div>
+	<div class="col-md-9">
+		<div ng-show="tab == profile">
+			<h2>profile</h2>
+		</div>
+		<div ng-show="tab == jobs">
+			<h2>jobs</h2>
+		</div>
+		<div ng-show="tab == password">
+			<h2>password</h2>
+		</div>
+	</div>
+</div>
