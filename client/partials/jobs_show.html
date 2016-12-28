@@ -13,6 +13,7 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li><a href="#/profile">Profile</a></li>
 				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
 				<li><a href="#/messages">Messages</a></li>
 				<li><a href="#/invoices">Invoices</a></li>
@@ -124,7 +125,7 @@
 				<!-- STATUS 2, 3 -->
 				<a href="#/messages/{{job.application_id}}" ng-if="job.status==2 || job.status==3"><p class="text-center"><b>In progress</b></p></a>
 				<!-- STATUS = 4 -->
-				<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><button class="form-control btn btn-info">Job completed!</button></a>				
+				<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><button class="form-control btn btn-info">Job completed!</button></a>
 			</div>
 
 			<!-- USER -->

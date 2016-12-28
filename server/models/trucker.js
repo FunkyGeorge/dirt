@@ -13,9 +13,35 @@ module.exports = {
 	// 			callback(false, data)
 	// 	});
 	// },
-	// show: function(req, callback) {
-	// 	var data = {};
-	// 	var username = req.params.username;
+	show: function(req, callback) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else {
+				var response = {};
+				var query = "SELECT * FROM truckers where HEX(id) = ? LIMIT 1";
+				connection.query(query, req.params, function(err){
+					if (err)
+						callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+					else {
+						response["user"] = data;
+						var query = "SELECT * FROM applications A \
+						JOIN jobs J ON HEX(J.id) = HEX(A.job_id) \
+						WHERE HEX(A.trucker_id) = ?";
+						connection.query(query, req.params, function(err){
+							if (err)
+								callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+							else {
+								response["applications"] = data;
+								console.log(response);
+								callback(false, response);
+							}
+						});
+					}
+				});
+			}
+		});
+	},
 	update: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
@@ -37,11 +63,11 @@ module.exports = {
 									email: data[0].email,
 									first_name: data[0].first_name,
 									last_name: data[0].last_name,
-									truck_type: data[0].truck_type									
+									truck_type: data[0].truck_type
 								}, jwt_key);
-								callback(false, ronin_token);												
+								callback(false, ronin_token);
 							}
-						});						
+						});
 					}
 				});
 			}
@@ -61,9 +87,9 @@ module.exports = {
 		});
 	},
 	register: function(req, callback) {
-		if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password 
-		|| !req.body.confirm_password || req.body.truck_type === undefined || !req.body.make 
-		|| !req.body.model || !req.body.year) 
+		if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password
+		|| !req.body.confirm_password || req.body.truck_type === undefined || !req.body.make
+		|| !req.body.model || !req.body.year)
 			callback({errors: {form : {message: "All form fields are required."}}});
 		else {
 			// Check for unique email:
@@ -72,13 +98,13 @@ module.exports = {
 				if (err)
 					callback({errors: {database: {message: "Please contact an admin."}}})
 				// If email already exists:
-				else if (data.length > 0) 
+				else if (data.length > 0)
 					callback({errors: {email: {message: "Email already in use, please log in."}}});
 				// Validate first_name:
-				else if (!/^[a-z]{2,32}$/i.test(req.body.first_name)) 
+				else if (!/^[a-z]{2,32}$/i.test(req.body.first_name))
 					callback({errors: {first_name : {message: "First name must contain only letters."}}});
 				// Validate last_name:
-				else if (!/^[a-z]{2,32}$/i.test(req.body.last_name)) 
+				else if (!/^[a-z]{2,32}$/i.test(req.body.last_name))
 					callback({errors: {last_name : {message: "Last name must contain only letters."}}});
 				// Validate email:
 				else if (!/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(req.body.email))
@@ -129,23 +155,23 @@ module.exports = {
 														last_name: data[0].last_name,
 														truck_type: data[0].truck_type
 													}, jwt_key);
-													callback(false, ronin_token);												
+													callback(false, ronin_token);
 												}
 											});
 										}
 									});
 								}
 							});
-					});						
+					});
 			});
 		}
-	},	
+	},
 	login: function(req, callback) {
 		// Validate login data:
 		if (!req.body.email || !req.body.password)
 			callback({errors: {login: {message: "All form fields are required."}}});
 		else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&](?=.{7,})/.test(req.body.password))
-			callback({errors: {password: {message: "Invalid password."}}});		
+			callback({errors: {password: {message: "Invalid password."}}});
 		else {
 			// Get trucker by email:
 			var query = "SELECT *, HEX(id) AS id FROM truckers WHERE email = ? LIMIT 1";
@@ -169,9 +195,9 @@ module.exports = {
 								last_name: data[0].last_name,
 								truck_type: data[0].truck_type
 							}, jwt_key);
-							callback(false, ronin_token);								
+							callback(false, ronin_token);
 						}
-					});					
+					});
 			});
 		}
 	}
