@@ -35,7 +35,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 	}
 	else
 		$location.url('/welcome');
-	
+
 	//////////////////////////////////////////////////////
 	//										HELPER FUNCTIONS
 	//////////////////////////////////////////////////////
