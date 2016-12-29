@@ -21,4 +21,19 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 	}
 	else
 		$location.url('/welcome');
+
+	$scope.updateUser = function(){
+		data = {
+			first_name:	$scope.user.first_name,
+			last_name:	$scope.user.last_name,
+		};
+		if($scope.user_type == 'trucker'){
+			data['make'] = $scope.user.make;
+			data['model'] = $scope.user.model;
+			data['year'] = $scope.user.year;
+		}
+		factory.update(data, function(data){
+			console.log(data);
+		});
+	}
 });
