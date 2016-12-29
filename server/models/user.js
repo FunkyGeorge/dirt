@@ -31,7 +31,7 @@ module.exports = {
 								callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 							else {
 								response["jobs"] = data;
-								callback(false, response);	
+								callback(false, response);
 							}
 						});
 					}

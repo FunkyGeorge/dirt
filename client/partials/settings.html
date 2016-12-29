@@ -109,18 +109,19 @@
 		<div ng-show="tab == 'password'">
 			<div class="form-group col-md-7">
 		    <label for="current">Current Password</label>
-		    <input type="password" class="form-control" id="current">
+		    <input type="password" class="form-control" ng-model="user.password" id="current">
 		  </div>
 			<div class="form-group col-md-7">
 		    <label for="pword">New Password</label>
-		    <input type="password" class="form-control" id="pword">
+		    <input type="password" class="form-control" ng-model="user.new" id="pword">
 		  </div>
 			<div class="form-group col-md-7">
 		    <label for="cword">Confirm Password</label>
-		    <input type="password" class="form-control" id="cword">
+		    <input type="password" class="form-control" ng-model="user.confirm" id="cword">
 		  </div>
 			<div class="clearfix"></div>
-			<button class="btn btn-primary" type="button" name="button">Change Password</button>
+			<button class="btn btn-primary" type="button" name="button" ng-click="updatePassword();">Change Password</button>
 		</div>
 	</div>
 </div>
+<p class="error" ng-bind="error"></p>

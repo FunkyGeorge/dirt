@@ -21,7 +21,7 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 	}
 	else
 		$location.url('/welcome');
-
+	$scope.errors = null;
 	$scope.updateUser = function(){
 		data = {
 			first_name:	$scope.user.first_name,
@@ -35,5 +35,23 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 		factory.update(data, function(data){
 			console.log(data);
 		});
-	}
+	};
+
+	$scope.updatePassword = function(){
+		factory.login($scope.user, function(data) {
+			if (data.errors)
+				for (key in data.errors) {
+					$scope.error = data.errors[key].message;
+					break;
+				}
+			else {
+				// update password
+				if ($scope.user.new == $scope.user.confirm)
+					console.log("success");
+				else {
+					$scope.error = "Passwords are not matching"
+				}
+			}
+		});
+	};
 });
