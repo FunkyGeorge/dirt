@@ -6,9 +6,10 @@ jobsFactory, applicationsFactory) {
 	if (payload) {
 		jobsFactory.show($routeParams.id, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Could not load this job.");
+				var error = "Could not load this job.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);			
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);
 			}
 			else {
 				$scope.job = data;
@@ -29,12 +30,29 @@ jobsFactory, applicationsFactory) {
 	$scope.relistJob = function() {
 		jobsFactory.relist({id: $scope.job.id, job_status: 0}, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Unable to re-list this job.");
+				var error = "Unable to re-list this job.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);							
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);
 			}
 			else {
-				$scope.job.job_status = 0;
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully relisted job.`,
+					url: `#/jobs/${$scope.job.id}#${Date.now()}`,
+					target: "_self"
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});
+				$location.url(`/jobs/${$scope.job.id}#${Date.now()}`)
 			}
 		});
 	}
@@ -43,15 +61,27 @@ jobsFactory, applicationsFactory) {
 		if (confirm("Are you sure you want to delete this job listing? Doing so will remove all pending applications and conversations for this listing.\n\nClick\"OK\" to continue removing job.") == true) {
 			jobsFactory.delete($scope.job.id, function(data) {
 				if (data.errors) {
-					displayErrorNotification("Unable to remove this job listing.");
+					var error = "Unable to remove this job listing.";
 					for (key in data.errors)
-						displayErrorNotification(data.errors[key].message);			
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error);	
 				}
 				else {
-					$scope.mode = 'deleted';
-					$timeout(function() {
-						$location.url('/');
-					}, 3000);	
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `Successfully removed job listing.`
+					}, {
+						type: "success",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						} 
+					});
+					$location.url('/');
 				}
 			});
 		}
@@ -64,9 +94,10 @@ jobsFactory, applicationsFactory) {
 	$scope.createApplication = function() {
 		applicationsFactory.create({job_id: $scope.job.id}, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Could not apply for this job.");
+				var error = "Could not apply for this job.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);			
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);	
 			}
 			else {
 				$scope.application_id = data.id;
@@ -75,6 +106,22 @@ jobsFactory, applicationsFactory) {
 					user_id: $scope.job.user_id,
 					name: $scope.name
 				});
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully applied for job!`,
+					url: `#/messages/${data.id}`,
+					target: "_self"
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});				
 				$scope.mode = 'applied';
 			}
 		});
@@ -84,16 +131,31 @@ jobsFactory, applicationsFactory) {
 		if (confirm("You will not be able to see this job again if you cancel your application.\n\nClick\"OK\" to continue removing application.") == true) {
 			applicationsFactory.cancel($scope.job.application_id, function(data) {
 				if (data.errors) {
-					displayErrorNotification("Not able to cancel your job application. ");
+					var error = "Not able to cancel your job application.";
 					for (key in data.errors)
-						displayErrorNotification(data.errors[key].message);		
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error);	
 				}
 				else {
 					socket.emit("cancel", {
 						application_id: $scope.job.application_id,
 						name: $scope.name
 					});
-						$location.url('/');
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `Successfully removed application.`
+					}, {
+						type: "success",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						} 
+					});					
+					$location.url('/');
 				}
 			});
 		}
@@ -103,9 +165,10 @@ jobsFactory, applicationsFactory) {
 		if (confirm("You will not be able to see this job again if you forfeit this job. Note that a refund will not be issued for the lead fee.\n\nClick\"OK\" to continue forfeitting job.") == true) {
 			applicationsFactory.forfeit($scope.job.application_id, function(data) {
 				if (data.errors) {
-					displayErrorNotification("Not able to forfeit this job. ");
+					var error = "Not able to forfeit this job.";
 					for (key in data.errors)
-						displayErrorNotification(data.errors[key].message);		
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error);	
 				}
 				else {
 					socket.emit("forfeit", {
@@ -113,6 +176,20 @@ jobsFactory, applicationsFactory) {
 						application_id: $scope.job.application_id,
 						name: $scope.name
 					});
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `Successfully forfeited the job.`
+					}, {
+						type: "success",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						} 
+					});					
 					$location.url('/');
 				}
 			});

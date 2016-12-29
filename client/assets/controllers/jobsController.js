@@ -144,14 +144,31 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 	//										JOB
 	//////////////////////////////////////////////////////	
 	$scope.create = function() {
+		$scope.error = null;
 		jobsFactory.create($scope.job, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Could not create new job.");
+				var error = "Could not create new job. "
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error + " Fix the error before re-submitting.");
 			}
 			else {
 				$scope.id = data.id;
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully listed new job!`,
+					url: `#/jobs/${data.id}`
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});					
 				$scope.step = 7;
 			}
 		});

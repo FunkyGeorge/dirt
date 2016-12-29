@@ -7,9 +7,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	if (payload) {
 		applicationsFactory.index(function(data) {
 			if (data.errors) {
-				displayErrorNotification("Could not load job applications and messages.");
+				var error = "Could not load job applications and messages.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);					
 			}
 			else {
 				$scope.apps = [];
@@ -56,17 +57,48 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	$scope.acceptApplication = function() {
 		applicationsFactory.accept($scope.cur_app, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Unable to accept this application.");
+				var error = "Unable to accept this application.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);	
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error + " Try reloading the page.");
 			}
 			else {
 				socket.emit("accept", {
 					application_id: $scope.cur_app.id,
 					name: $scope.name
 				});
+
+				// Notify all other users that they've been declined:
+				for (var i = 0; i < $scope.apps.length; i++) {
+					if ($scope.apps[i][0].job_id == $scope.cur_app.job_id)
+						for (var j = 0; j < $scope.apps[i].length; j++)
+							if ($scope.apps[i][j].id != $scope.cur_app.id)
+								socket.emit("decline", {
+									application_id: $scope.apps[i][j].id,
+									name: $scope.name
+								});
+				}
+
 				$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
 			}
+		});
+	}
+
+	$scope.declineApplication = function() {
+		applicationsFactory.decline($scope.cur_app.id, function(data) {
+			if (data.errors) {
+				var error = "Unable to accept this application.";
+				for (key in data.errors)
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error + " Try reloading the page.");
+			}
+			else {
+				socket.emit("decline", {
+					application_id: $scope.apps[i][j].id,
+					name: $scope.name
+				});	
+			}
+			$location.url(`/messages#${Date.now()}`);
 		});
 	}
 
@@ -74,16 +106,17 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		if (confirm("You will not be able to see this job again if you cancel your application.\n\nClick\"OK\" to continue removing application.") == true) {
 			applicationsFactory.cancel($scope.cur_app.id, function(data) {
 				if (data.errors) {
-					displayErrorNotification("Could not cancel this job application.");
+					var error = "Could not cancel this job application.";
 					for (key in data.errors)
-						displayErrorNotification(data.errors[key].message);
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error + " Try reloading the page.");
 				}
 				else {
 					socket.emit("cancel", {
 						application_id: $scope.cur_app.id,
 						name: $scope.name
 					});
-					$location.url('/messages');
+					$location.url(`/messages`);
 				}
 			});
 		}
@@ -93,9 +126,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		if (confirm("You will not be able to see this job again if you forfeit this job. Note that a refund will not be issued for the lead fee.\n\nClick\"OK\" to continue forfeitting job.") == true) {
 			applicationsFactory.forfeit($scope.cur_app.id, function(data) {
 				if (data.errors) {
-					displayErrorNotification("Could not forfeit this job.");
+					var error = "Could not forfeit this job.";
 					for (key in data.errors)
-						displayErrorNotification(data.errors[key].message);
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error + " Try reloading the page.");
 				}
 				else {
 					socket.emit("forfeit", {
@@ -103,7 +137,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 						application_id: $scope.cur_app.id,
 						name: $scope.name
 					});
-					$location.url('/messages');
+					$location.url(`/messages`);
 				}
 			});
 		}
@@ -113,13 +147,15 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//										MESSAGE
 	//////////////////////////////////////////////////////
 	$scope.showMessages = function(application) {
-		$rootScope.cur_app = application;
+		$rootScope._app = application;
+		$scope.cur_app = application;
 		if (application.status > 1)
 			messagesFactory.show(application.id, function(data) {
 				if (data.errors) {
-					displayErrorNotification("Could not load conversation.");
+					var error = "Could not load conversation.";
 					for (key in data.errors)
-						displayErrorNotification(data.errors[key].message);
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error + " Try reloading the page.");					
 				}
 				else {
 					$scope.messages = data;
@@ -143,9 +179,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 
 		messagesFactory.create(data, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Message not sent.");
+				var error = "Message not sent.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);						
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);					
 			}
 			else
 				$scope.new_message = "";				
@@ -158,9 +195,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	$scope.showJob = function() {
 		jobsFactory.show($scope.cur_app.job_id, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Could not load job.");
+				var error = "Could not load job.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error + " Try reloading the page.");					
 			}
 			else {
 				$scope.job = data;
@@ -177,9 +215,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		$scope.new_invoice.job_id = $scope.cur_app.job_id;
 		invoicesFactory.create($scope.new_invoice, function(data) {
 			if (data.errors) {
-				displayErrorNotification("Invoice not sent.");
+				var error = "Invoice not sent.";
 				for (key in data.errors)
-					displayErrorNotification(data.errors[key].message);
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);
 			}
 			else
 				$scope.mode = "invoiced";

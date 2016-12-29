@@ -34,6 +34,7 @@ module.exports = function(app) {
 	// app.get('/api/applications/:id', applications.show);
 	app.post('/api/applications', applications.create);
 	app.put('/api/applications/accept', applications.accept);
+	app.put('/api/applications/decline/:id', applications.decline);
 	app.put('/api/applications/cancel/:id', applications.cancel);
 	app.put('/api/applications/forfeit/:id', applications.forfeit);
 	// app.delete('/api/applications/:id', applications.delete);

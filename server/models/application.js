@@ -100,29 +100,30 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				// Set job status to 1:
-				var query = "UPDATE jobs SET job_status = 1, updated_at = NOW() WHERE HEX(id) = ? \
-				AND HEX(user_id) = ? AND job_status = 0 LIMIT 1";
-				connection.query(query, [req.body.job_id, data.id], function(err, result) {
+				// Set this application status to 1:
+				var query = "UPDATE applications SET status = 1, updated_at = NOW() WHERE id = (SELECT applications.id \
+				FROM applications LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(user_id) = ? AND HEX(job_id) = ? \
+				AND HEX(applications.id) = ? AND status = 0 LIMIT 1) LIMIT 1";
+				connection.query(query, [data.id, req.body.job_id, req.body.id], function(err, result) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else if (result.changedRows != 1)
-						callback({errors: {update: {message: "Could not find valid job to update."}}});
+						callback({errors: {update: {message: "Could not find valid application to update."}}});
 					else {
 						// Set all other application statuses to -1:
-						var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(job_id) = ? \
-						AND status != -1";
-						connection.query(query, req.body.job_id, function(err, result) {
+						var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(job_id) = ? AND status = 0";
+						connection.query(query, [req.body.job_id, req.body.id], function(err, result) {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
 							else {
-								// Set this application status to 1:
-								var query = "UPDATE applications SET status = 1, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
-								connection.query(query, req.body.id, function(err, result) {
+								// Set job status to 1:
+								var query = "UPDATE jobs SET job_status = 1, updated_at = NOW() WHERE HEX(user_id) = ? \
+								AND HEX(id) = ? AND job_status = 0 LIMIT 1";
+								connection.query(query, [data.id, req.body.job_id], function(err, result) {
 									if (err)
 										callback({errors: {database: {message: "Please contact an admin."}}});
 									else if (result.changedRows != 1)
-										callback({errors: {update: {message: "Could not find valid application to update."}}});
+										callback({errors: {update: {message: "Could not find valid job to update."}}});
 									else
 										callback(false);
 								});
@@ -133,6 +134,25 @@ module.exports = {
 			}
 		});
 	},
+	decline: function(req, callback) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else {
+				var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE ? = (SELECT HEX(user_id) \
+				FROM applications LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(applications.id) = ? AND status = 0 \
+				LIMIT 1) LIMIT 1";
+				connection.query(query, [data.id, req.params.id], function(err, result) {
+					if (err)
+						callback({errors: {database: {message: "Please contact an admin."}}});
+					else if (result.changedRows != 1)
+						callback({errors: {update: {message: "Could not find valid application to update."}}});
+					else
+						callback(false);
+				});
+			}
+		});
+	},	
 	cancel: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
