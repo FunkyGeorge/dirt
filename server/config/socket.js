@@ -35,6 +35,7 @@ module.exports = function(server) {
 		});		
 		
 		socket.on('decline', function(data) {
+			console.log("decline")
 			socket.broadcast.to(data.application_id).emit('declined', data);
 		});
 		

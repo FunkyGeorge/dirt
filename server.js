@@ -6,7 +6,7 @@ expressJwt = require('express-jwt'),
 cookieParser = require('cookie-parser'),
 fs = require('fs'),
 root = __dirname,
-port = process.env.PORT || 8080,
+port = process.env.PORT || 8000,
 app = express();
 
 app.use(express.static(path.join(root, 'client')));

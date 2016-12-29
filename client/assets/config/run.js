@@ -186,7 +186,7 @@ app.run(function($rootScope) {
 			socket.on('declined', function(data) {
 				$.notify({
 					icon: "glyphicon glyphicon-info-sign",
-					message: `${data.first_name} ${data.last_name} declined your application. Better luck next time!`,
+					message: `${data.name} declined your application. Better luck next time!`,
 				}, {
 					type: "warning",
 					placement: {

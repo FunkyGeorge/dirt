@@ -63,7 +63,7 @@
 			<!-- STATUS 0 -->		
 			<div class="center-content" ng-if="cur_app.status==0">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
-				<button class="btn btn-success" ng-click="acceptApplication()">Accept</button> <button class="btn btn-danger" ng-click="declineApplication()">Decline</button><br><br>
+				<button class="btn btn-success" data-toggle="modal" data-target="#confirm_accept">Accept</button> <button class="btn btn-danger" ng-click="declineApplication()">Decline</button><br><br>
 				<small class="text-muted">Accept {{cur_app.first_name}}'s application to start connecting.<br>You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
 			<!-- STATUS 1 -->
@@ -167,5 +167,25 @@
 	<p>Your invoice has been sent.</p>
 	<p>Your funds will be available to view in the top right menu under invoices, or just click below:</p>
 	<a href="#/invoices"><button>View Invoices</button></a>
+</div>
+
+<!-- MODALS -->
+<div id="confirm_accept" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Accept <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this job?</h4>
+			</div>
+			<div class="modal-body">
+				<p>Accepting {{cur_app.first_name}} for this job will make cause all other applications for this job to be declined.</p>
+				<p>Click 'Confirm' if you wish to contine.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="acceptApplication()">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 

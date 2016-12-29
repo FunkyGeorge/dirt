@@ -110,10 +110,10 @@
 				<!-- STATUS UNDEFINED -->
 				<div ng-if="job.status===null">
 					<p class="text-center error" ng-if="job.job_status>0"><b>Not longer available</b></p>
-					<button class="form-control btn btn-info" ng-click="createApplication()" ng-disabled="job.job_status>0">Apply to Job</button>
+					<button class="form-control btn btn-info" ng-click="createApplication()" ng-if="job.job_status==0">Apply to Job</button>
 				</div>
 				<!-- STATUS < 0 -->
-				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available to you</b></p>
+				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
 				<!-- STATUS 0 -->
 				<div ng-if="job.status===0">
 					<a href="#/messages/{{job.application_id}}"><p class="text-center"><b>You've applied for this job!</b></p></a>
@@ -142,7 +142,7 @@
 				<div ng-if="id==job.user_id">
 					<!-- JOB_STATUS < 0 -->
 					<div ng-if="job.job_status<0">
-						<p class="text-center error"><b>Job was taken down.</b></p>
+						<p class="text-center error"><b>Job was taken down</b></p>
 						<button class="form-control btn btn-primary" ng-click="relistJob()">Relist Job</button>
 					</div>
 					<!-- JOB_STATUS 0 -->
@@ -162,13 +162,6 @@
 			</div>
 		</div>
 	</div>
-
-		<!-- DELETED MODE -->
-	<div class="row center-content" ng-show="mode=='deleted'">
-		<h1>Job listing has succesfully been removed.</h1>
-		<p>You will now be redirected.</p>
-	</div>
-</div>
 
 	<!-- APPLIED MODE -->
 	<div class="row center-content" ng-show="mode=='applied'">
