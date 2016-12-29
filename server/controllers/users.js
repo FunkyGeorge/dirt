@@ -9,14 +9,14 @@ module.exports = {
 	// 			res.json(data);
 	// 	});
 	// },
-	// show: function(req, res) {
-	// 	user.show(req, function(err, data) {
-	// 		if (err)
-	// 			res.json(err);
-	// 		else
-	// 			res.json(data);
-	// 	});
-	// },
+	show: function(req, res) {
+		user.show(req, function(err, data) {
+			if (err)
+				res.json(err);
+			else
+				res.json(data);
+		});
+	},
 	update: function(req, res) {
 		user.update(req, function(err, data) {
 			if (err)
@@ -26,7 +26,7 @@ module.exports = {
 					res.json(err);
 			else
 				res.clearCookie('ronin_token').cookie('ronin_token', data).end();
-		});	
+		});
 	},
 	delete: function(req, res) {
 		user.delete(req, function(err) {
@@ -37,7 +37,7 @@ module.exports = {
 					res.json(err);
 			else
 				res.clearCookie('ronin_token').end();
-		});	
+		});
 	},
 	register: function(req, res) {
 		user.register(req, function(err, data) {
@@ -53,6 +53,6 @@ module.exports = {
 				res.json(err);
 			else
 				res.cookie('ronin_token', data).end();
-		});	
+		});
 	}
 }

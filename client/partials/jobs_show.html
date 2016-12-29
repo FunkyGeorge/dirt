@@ -17,6 +17,7 @@
 				<li><a href="#/messages">Messages</a></li>
 				<li><a href="#/invoices">Invoices</a></li>
 				<li><a href="#/about">About</a></li>
+				<li><a href="#/settings">Settings</a></li>
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -127,7 +128,7 @@
 				<!-- STATUS 2, 3 -->
 				<a href="#/messages/{{job.application_id}}" ng-if="job.status==2 || job.status==3"><p class="text-center"><b>In progress</b></p></a>
 				<!-- STATUS = 4 -->
-				<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><button class="form-control btn btn-info">Job completed!</button></a>				
+				<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><button class="form-control btn btn-info">Job completed!</button></a>
 			</div>
 
 			<!-- USER -->

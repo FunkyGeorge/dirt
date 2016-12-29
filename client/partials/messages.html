@@ -17,6 +17,7 @@
 				<li><a href="#/messages">Messages</a></li>
 				<li><a href="#/invoices">Invoices</a></li>
 				<li><a href="#/about">About</a></li>
+				<li><a href="#/settings">Settings</a></li>
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
@@ -57,10 +58,10 @@
 			<small class="text-muted" ng-if="user_type=='user'"><br>Note that accepting an application will cause all other pending applications for that same job to be declined.</small>
 			<small class="text-muted" ng-if="user_type=='trucker'"><br>Note that you will not be able to re-apply to jobs that you've cancelled.</small>
 		</div>
-		
+
 		<!-- USER -->
 		<div ng-if="cur_app && user_type=='user'">
-			<!-- STATUS 0 -->		
+			<!-- STATUS 0 -->
 			<div class="center-content" ng-if="cur_app.status==0">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
 				<button class="btn btn-success" ng-click="acceptApplication()">Accept</button> <button class="btn btn-danger" ng-click="declineApplication()">Decline</button><br><br>
@@ -168,4 +169,3 @@
 	<p>Your funds will be available to view in the top right menu under invoices, or just click below:</p>
 	<a href="#/invoices"><button>View Invoices</button></a>
 </div>
-
