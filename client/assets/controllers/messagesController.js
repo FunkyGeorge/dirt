@@ -79,6 +79,20 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 								});
 				}
 
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully accepted ${$scope.cur_app.first_name}'s' application!`
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});	
 				$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
 			}
 		});
@@ -87,17 +101,31 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	$scope.declineApplication = function() {
 		applicationsFactory.decline($scope.cur_app.id, function(data) {
 			if (data.errors) {
-				var error = "Unable to accept this application.";
+				var error = "Unable to decline this application.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
 				displayErrorNotification(error + " Try reloading the page.");
 			}
 			else {
 				socket.emit("decline", {
-					application_id: $scope.apps[i][j].id,
+					application_id: $scope.cur_app.id,
 					name: $scope.name
 				});	
 			}
+			$.notify({
+				icon: "glyphicon glyphicon-check",
+				message: `Successfully declined the application.`
+			}, {
+				type: "success",
+				placement: {
+					from: "bottom"
+				},
+				delay: 4000,
+				animate: {
+					enter: 'animated fadeInUp',
+					exit: 'animated fadeOutDown',
+				} 
+			});
 			$location.url(`/messages#${Date.now()}`);
 		});
 	}
@@ -116,6 +144,20 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 						application_id: $scope.cur_app.id,
 						name: $scope.name
 					});
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `Successfully removed application.`
+					}, {
+						type: "success",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						} 
+					});					
 					$location.url(`/messages`);
 				}
 			});
@@ -137,10 +179,28 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 						application_id: $scope.cur_app.id,
 						name: $scope.name
 					});
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `Successfully forfeited the job.`
+					}, {
+						type: "success",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						} 
+					});						
 					$location.url(`/messages`);
 				}
 			});
 		}
+	}
+
+	$scope.payLeadFee = function(token) {
+		console.log(token)
 	}
 
 	//////////////////////////////////////////////////////

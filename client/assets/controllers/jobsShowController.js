@@ -28,9 +28,9 @@ jobsFactory, applicationsFactory) {
 	//										JOB
 	//////////////////////////////////////////////////////
 	$scope.relistJob = function() {
-		jobsFactory.relist({id: $scope.job.id, job_status: 0}, function(data) {
+		jobsFactory.relist($scope.job.id, function(data) {
 			if (data.errors) {
-				var error = "Unable to re-list this job.";
+				var error = "Unable to relist this job.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
 				displayErrorNotification(error);

@@ -1,25 +1,25 @@
-var app = angular.module('app', ['ngRoute', 'ngCookies', 'infinite-scroll', 'angularMoment']);
+var app = angular.module("app", ["ngRoute", "ngCookies", "infinite-scroll", "angularMoment", "stripe.checkout"]);
 
 app.config(function($routeProvider) {
 	$routeProvider
-	.when('/',{
-		templateUrl: 'partials/index.html',
-		controller: 'indexController'
+	.when("/",{
+		templateUrl: "partials/index.html",
+		controller: "indexController"
 	})
-	.when('/welcome',{
-		templateUrl: 'partials/welcome.html',
-		controller: 'welcomeController'
+	.when("/welcome",{
+		templateUrl: "partials/welcome.html",
+		controller: "welcomeController"
 	})
-	.when('/about',{
-		templateUrl: 'partials/about.html'
+	.when("/about",{
+		templateUrl: "partials/about.html"
 	})
-	.when('/register',{
-		templateUrl: 'partials/register.html',
-		controller: 'registerController'
+	.when("/register",{
+		templateUrl: "partials/register.html",
+		controller: "registerController"
 	})
-	.when('/login',{
-		templateUrl: 'partials/login.html',
-		controller: 'loginController'
+	.when("/login",{
+		templateUrl: "partials/login.html",
+		controller: "loginController"
 	})
 	.when('/settings',{
 		templateUrl: 'partials/settings.html',
@@ -29,19 +29,19 @@ app.config(function($routeProvider) {
 		templateUrl: 'partials/jobs.html',
 		controller: 'jobsController'
 	})
-	.when('/jobs/:id',{
-		templateUrl: 'partials/jobs_show.html',
-		controller: 'jobsShowController'
+	.when("/jobs/:id",{
+		templateUrl: "partials/jobs_show.html",
+		controller: "jobsShowController"
 	})
-	.when('/messages/:id?',{
-		templateUrl: 'partials/messages.html',
-		controller: 'messagesController'
+	.when("/messages/:id?",{
+		templateUrl: "partials/messages.html",
+		controller: "messagesController"
 	})
-	.when('/invoices/:id?',{
-		templateUrl: 'partials/invoices.html',
-		controller: 'invoicesController'
+	.when("/invoices/:id?",{
+		templateUrl: "partials/invoices.html",
+		controller: "invoicesController"
 	})
 	.otherwise({
-		redirectTo: '/welcome'
+		redirectTo: "/welcome"
 	});
 });

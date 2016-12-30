@@ -157,7 +157,8 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 				$.notify({
 					icon: "glyphicon glyphicon-check",
 					message: `Successfully listed new job!`,
-					url: `#/jobs/${data.id}`
+					url: `#/jobs/${data.id}`,
+					target: "_self"
 				}, {
 					type: "success",
 					placement: {

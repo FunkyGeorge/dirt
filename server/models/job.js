@@ -58,7 +58,6 @@ module.exports = {
 					AND job_status = status WHERE HEX(jobs.id) = ? LIMIT 1";
 				}
 				connection.query(query, _data, function(err, data) {
-					console.log(err)
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else if (data.length == 0)
@@ -158,13 +157,21 @@ module.exports = {
 			else {
 				var query;
 				if (req.params.action == "relist")
-					query = "UPDATE jobs SET status = ?, updated_at = NOW() WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
-
-				connection.query(query, [req.body.status, req.params.id, data.id], function(err, data) {
+					query = "UPDATE jobs SET job_status = 0, updated_at = NOW() WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
+				connection.query(query, [req.params.id, data.id], function(err, result) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else
-						callback(false);
+					else if (result.changedRows != 1)
+						callback({errors: {update: {message: "Could not update job status."}}});										
+					else {
+						var query = "UPDATE applications SET status = 0, updated_at = NOW() WHERE HEX(id) = ? AND status = -1";
+						connection.query(query, [req.params.id, data.id], function(err, result) {
+							if (err)
+								callback({errors: {database: {message: "Please contact an admin."}}});										
+							else 
+								callback(false);
+						});
+					}
 				});
 			}
 		});

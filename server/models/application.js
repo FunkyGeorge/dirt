@@ -100,37 +100,45 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				// Set this application status to 1:
-				var query = "UPDATE applications SET status = 1, updated_at = NOW() WHERE id = (SELECT applications.id \
-				FROM applications LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(user_id) = ? AND HEX(job_id) = ? \
-				AND HEX(applications.id) = ? AND status = 0 LIMIT 1) LIMIT 1";
-				connection.query(query, [data.id, req.body.job_id, req.body.id], function(err, result) {
+				// First find valid application:
+				var query = "SELECT 1 FROM applications LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(applications.id) = ?\
+				AND HEX(user_id) = ? AND HEX(job_id) = ? AND status = 0 LIMIT 1";
+				connection.query(query, [req.body.id, data.id, req.body.job_id], function (err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else if (result.changedRows != 1)
-						callback({errors: {update: {message: "Could not find valid application to update."}}});
+					else if (!data)
+						callback({errors: {application: {message: "Invalid application provided."}}});
 					else {
-						// Set all other application statuses to -1:
-						var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(job_id) = ? AND status = 0";
-						connection.query(query, [req.body.job_id, req.body.id], function(err, result) {
+						// Set this application status to 1:
+						var query = "UPDATE applications SET status = 1, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
+						connection.query(query, req.body.id, function(err, result) {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
+							else if (result.changedRows != 1)
+								callback({errors: {update: {message: "Could not find valid application to update."}}});
 							else {
-								// Set job status to 1:
-								var query = "UPDATE jobs SET job_status = 1, updated_at = NOW() WHERE HEX(user_id) = ? \
-								AND HEX(id) = ? AND job_status = 0 LIMIT 1";
-								connection.query(query, [data.id, req.body.job_id], function(err, result) {
+								// Set all other application statuses to -1:
+								var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(job_id) = ? AND status = 0";
+								connection.query(query, req.body.job_id, function(err, result) {
 									if (err)
 										callback({errors: {database: {message: "Please contact an admin."}}});
-									else if (result.changedRows != 1)
-										callback({errors: {update: {message: "Could not find valid job to update."}}});
-									else
-										callback(false);
+									else {
+										// Set job status to 1:
+										var query = "UPDATE jobs SET job_status = 1, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
+										connection.query(query, req.body.job_id, function(err, result) {
+											if (err)
+												callback({errors: {database: {message: "Please contact an admin."}}});
+											else if (result.changedRows != 1)
+												callback({errors: {update: {message: "Could not find valid job to update."}}});
+											else
+												callback(false);
+										});
+									}
 								});
 							}
 						});
 					}
-				});
+				})
 			}
 		});
 	},
@@ -139,16 +147,24 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE ? = (SELECT HEX(user_id) \
-				FROM applications LEFT JOIN jobs ON job_id = jobs.id WHERE HEX(applications.id) = ? AND status = 0 \
-				LIMIT 1) LIMIT 1";
-				connection.query(query, [data.id, req.params.id], function(err, result) {
+				var query = "SELECT 1 FROM applications LEFT JOIN jobs ON job_id = jobs.id WHERE \
+				HEX(user_id) = ? AND HEX(applications.id) = ? AND status = 0 LIMIT 1";
+				connection.query(query, [data.id, req.params.id], function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else if (result.changedRows != 1)
-						callback({errors: {update: {message: "Could not find valid application to update."}}});
-					else
-						callback(false);
+					else if (!data)
+						callback({errors: {application: {message: "Could not find valid application to update."}}});
+					else {
+						var query = "UPDATE applications SET status = -2, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
+						connection.query(query, req.params.id, function(err, result) {
+							if (err)
+								callback({errors: {database: {message: "Please contact an admin."}}});
+							else if (result.changedRows != 1)
+								callback({errors: {update: {message: "Could not update application."}}});
+							else
+								callback(false);
+						});
+					}
 				});
 			}
 		});
@@ -158,7 +174,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(id) = ? \
+				var query = "UPDATE applications SET status = -2, updated_at = NOW() WHERE HEX(id) = ? \
 				AND HEX(trucker_id) = ? AND status = 0 LIMIT 1";
 				connection.query(query, [req.params.id, data.id], function(err, result) {
 					if (err)
@@ -177,7 +193,7 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
 				// Update application:
-				var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(id) = ? \
+				var query = "UPDATE applications SET status = -2, updated_at = NOW() WHERE HEX(id) = ? \
 				AND HEX(trucker_id) = ? AND status > 0 LIMIT 1";
 				connection.query(query, [req.params.id, data.id], function(err, result) {
 					if (err)
@@ -185,17 +201,27 @@ module.exports = {
 					else if (result.changedRows != 1)
 						callback({errors: {update: {message: "Could not find valid application to update."}}});					
 					else {
-						// Update job:
-						var query = "UPDATE jobs SET job_status = -1, updated_at = NOW() WHERE id = (SELECT job_id \
-						FROM applications WHERE HEX(id) = ? AND HEX(trucker_id) = ? LIMIT 1) AND job_status = 0 LIMIT 1";
-						connection.query(query, [req.params.id, data.id], function(err, result) {
+						var query = "SELECT job_id FROM applications WHERE HEX(id) = ? AND HEX(trucker_id) = ?  \
+						AND status = -1 LIMIT 1";
+						connection.query(query, [req.params.id, data.id], function(err, data) {
+
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
-							else if (result.changedRows != 1)
-								callback({errors: {update: {message: "Could not find valid application to update."}}});					
-							else
-								callback(false);
-						});						
+							else if (!data)
+								callback({errors: {update: {message: "Could not find valid job to update."}}});					
+							else {
+								// Update job:
+								var query = "UPDATE jobs SET job_status = -1, updated_at = NOW() WHERE id = ? LIMIT 1";
+								connection.query(query, data[0].job_id, function(err, result) {
+									if (err)
+										callback({errors: {database: {message: "Please contact an admin."}}});
+									else if (result.changedRows != 1)
+										callback({errors: {update: {message: "Could not update job status."}}});
+									else
+										callback(false);
+								});		
+							}
+						});					
 					}
 				});
 			}
