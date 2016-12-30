@@ -86,6 +86,55 @@ module.exports = {
 				});
 		});
 	},
+	changePassword: function(req, callback){
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else {
+				if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&](?=.{7,})/.test(req.body.new))
+					callback({errors: {password : {message: "Password must be at least 8 characters long and have a lowercase letter, an uppercase letter, and a number."}}});
+				else {
+					bcrypt.genSalt(10, function(err, salt) {
+						if (err)
+							callback({errors: {salt: {message: "Salt error."}}})
+						else
+							bcrypt.hash(req.body.new, salt, function(err, hash) {
+								if (err)
+									callback({errors: {hash: {message: "Hash error."}}})
+								else {
+									var newPassword = {
+										password: hash
+									};
+									var query = "UPDATE truckers SET ? WHERE HEX(id) = ? LIMIT 1";
+									connection.query(query, [newPassword, data.id], function(err) {
+										if (err)
+											callback({errors: {database: {message: "Please contact an admin."}}});
+										else {
+											// Retrieve updated user:
+											var query = "SELECT *, HEX(id) AS id FROM truckers WHERE HEX(id) = ? LIMIT 1";
+											connection.query(query, data.id, function(err, data) {
+												if (err)
+													callback({errors: {database: {message: "Please contact an admin."}}})
+												else {
+													var ronin_token = jwt.sign({
+														id: data[0].id,
+														email: data[0].email,
+														first_name: data[0].first_name,
+														last_name: data[0].last_name,
+														truck_type: data[0].truck_type
+													}, jwt_key);
+													callback(false, ronin_token);
+												}
+											});
+										}
+									});
+								}
+							});
+					});
+				}
+			}
+		});
+	},
 	register: function(req, callback) {
 		if (!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password
 		|| !req.body.confirm_password || req.body.truck_type === undefined || !req.body.make

@@ -47,7 +47,19 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 			else {
 				// update password
 				if ($scope.user.new == $scope.user.confirm)
-					console.log("success");
+					factory.changePassword($scope.user, function(data){
+						if (data.errors)
+							for (key in data.errors) {
+								$scope.error = data.errors[key].message;
+								break;
+							}
+						else {
+							$scope.user.password = "";
+							$scope.user.new = "";
+							$scope.user.confirm = "";
+							alert("Password Changed");
+						}
+					});
 				else {
 					$scope.error = "Passwords are not matching"
 				}
