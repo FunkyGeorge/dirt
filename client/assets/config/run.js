@@ -1,8 +1,8 @@
+var payload, ronin_token, socket;
+
 //////////////////////////////////////////////////////
 //										HELPER FUNCTIONS
 //////////////////////////////////////////////////////
-var payload, ronin_token, socket;
-
 // Parse payload and ronin_token from cookies:
 function setPayload() {
 	var cookies = document.cookie.split(";");

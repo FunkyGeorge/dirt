@@ -163,8 +163,15 @@ module.exports = {
 						callback({errors: {database: {message: "Please contact an admin."}}});
 					else if (result.changedRows != 1)
 						callback({errors: {update: {message: "Could not update job status."}}});										
-					else
-						callback(false);
+					else {
+						var query = "UPDATE applications SET status = 0, updated_at = NOW() WHERE HEX(id) = ? AND status = -1";
+						connection.query(query, [req.params.id, data.id], function(err, result) {
+							if (err)
+								callback({errors: {database: {message: "Please contact an admin."}}});										
+							else 
+								callback(false);
+						});
+					}
 				});
 			}
 		});

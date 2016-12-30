@@ -63,7 +63,7 @@
 			<!-- STATUS 0 -->		
 			<div class="center-content" ng-if="cur_app.status==0">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
-				<button class="btn btn-success" data-toggle="modal" data-target="#confirm_accept">Accept</button> <button class="btn btn-danger" ng-click="declineApplication()">Decline</button><br><br>
+				<button class="btn btn-success" data-toggle="modal" data-target="#accept_modal">Accept</button> <button class="btn btn-danger" data-toggle="modal" data-target="#decline_modal">Decline</button><br><br>
 				<small class="text-muted">Accept {{cur_app.first_name}}'s application to start connecting.<br>You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
 			<!-- STATUS 1 -->
@@ -85,19 +85,19 @@
 			<!-- STATUS 0 -->
 			<div class="center-content" ng-if="cur_app.status==0">
 				<b class="text-center">You applied for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
-				<button class="btn btn-warning center-block" ng-click="cancelApplication()">Cancel Application</button><br>
+				<button class="btn btn-warning center-block" data-toggle="modal" data-target="#cancel_modal">Cancel Application</button><br>
 				<small class="text-muted">Waiting for {{cur_app.first_name}} to accept your application.<br>You'll be connected after being accepted and paying our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
 			<!-- STATUS 1 -->
 			<div class="center-content" ng-if="cur_app.status==1">
 				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> accepted you for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
-				<button class="btn btn-info" ng-click="">Pay Lead Fee</button> <button class="btn btn-danger" ng-click="forfeitApplication()">Forfeit Job</button><br><br>
-				<small class="text-muted">You can now view the location in the job description.<br>You'll be connected with {{cur_app.first_name}} after paying our <a href="#/about#lead_fee">lead fee</a>.</small>
+				<button class="btn btn-info" data-toggle="modal" data-target="#pay_modal">Pay Lead Fee</button> <button class="btn btn-danger" data-toggle="modal" data-target="#forfeit_modal">Forfeit Job</button><br><br>
+				<small class="text-muted">You'll be connected with {{cur_app.first_name}} after paying our <a href="#/about#lead_fee">lead fee</a>.</small>
 			</div>
 			<!-- STATUS > 1 -->
 			<div class="center-content" ng-if="cur_app.status>1">
 				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
-				<button ng-if="cur_app.status==2" ng-click="">Invoice Client</button>
+				<button ng-if="cur_app.status==2" data-toggle="modal" data-target="#invoice_modal">Invoice Client</button>
 				<small class="text-muted" ng-if="cur_app.status==2">Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
 				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices/{{cur_app.id}}">invoice</a>.</small>
 				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
@@ -170,15 +170,15 @@
 </div>
 
 <!-- MODALS -->
-<div id="confirm_accept" class="modal fade" role="dialog">
+<div id="accept_modal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Accept <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this job?</h4>
+				<h4 class="modal-title text-center">Accept <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this job?</h4>
 			</div>
 			<div class="modal-body">
-				<p>Accepting {{cur_app.first_name}} for this job will make cause all other applications for this job to be declined.</p>
+				<p>Accepting {{cur_app.first_name}} for this job will make cause all other applications for this job to be put on hold.</p>
 				<p>Click 'Confirm' if you wish to contine.</p>
 			</div>
 			<div class="modal-footer">
@@ -189,3 +189,107 @@
 	</div>
 </div>
 
+<div id="decline_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Decline <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> application?</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{cur_app.first_name}} will not be able to apply for this job again.</p>
+				<p>Click 'Confirm' if you wish to contine.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="declineApplication()">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="cancel_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Remove your application for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> job?</h4>
+			</div>
+			<div class="modal-body">
+				<p>You will not be able to apply for this job again.</p>
+				<p>Click 'Confirm' if you wish to contine.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancelApplication()">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="forfeit_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Forfeit <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> job?</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{cur_app.first_name}} has accepted you for this job. Are you sure you want to forfeit this job? You will not be able to apply for this job again.</p>
+				<p>Click 'Confirm' if you wish to contine.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="forfeitApplication()">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="pay_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Pay lead fee</h4>
+			</div>
+			<div class="modal-body">
+				<p>We charge a lead fee of $25. This fee helps us by <b>some reason here...</b></p>
+				<p>You can view the location details and chat with the user after making this payment.</p>
+				<p>Your credit card information will not be stored which follows PCI compliance blah blah blah. We use <a href="https://stripe.com/">Stripe</a> for making secure payments... Continue checking out with Stripe below.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-info" data-dismiss="modal"
+					stripe-checkout="payLeadFee"
+					data-key="pk_test_ZkxMVXmOpx6nBGu2MnwNm0sb"
+					data-amount="2500"
+					data-name="Lead Fee"
+					data-description="$25.00 lead fee"
+					data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+					data-locale="auto"
+					data-zip-code="true">
+					Pay with Stripe
+				</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="invoice_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Send Invoice to <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span></h4>
+			</div>
+			<div class="modal-body">
+				<p>Please check the invoice details before sending:</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

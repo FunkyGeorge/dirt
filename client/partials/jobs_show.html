@@ -66,16 +66,16 @@
 				</tr>
 				<tr ng-if="job.job_type!=1">
 					<th>Pick-Up Location:</th>
-					<td ng-if="job.status>0 || id==job.user_id">{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}} {{job.p_zip}}</td>
-					<td ng-if="job.status<=0 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
+					<td ng-if="job.status>1 || id==job.user_id">{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}} {{job.p_zip}}</td>
+					<td ng-if="job.status<=1 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
 				</tr>
 				<tr ng-if="job.job_type!=0">
 					<th>Drop-Off Location:</th>
-					<td ng-if="job.status>0 || id==job.user_id">{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}} {{job.d_zip}}</td>
-					<td ng-if="job.status<=0 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
+					<td ng-if="job.status>1 || id==job.user_id">{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}} {{job.d_zip}}</td>
+					<td ng-if="job.status<=1 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
 				</tr>
 			</table>
-			<p class="text-center"><small class="text-muted">Full location details will be provided upon job acceptance.</small><br>
+			<p class="text-center"><small class="text-muted">Location details will be provided upon payment of our <a href="#/about#lead_fee">lead fee</a>.</small><br>
 		</div>
 		<div class="col-sm-3">
 			<span ng-if="job.job_type!=1">
@@ -109,25 +109,20 @@
 			<div class="row" ng-if="user_type=='trucker'">
 				<!-- STATUS UNDEFINED -->
 				<div ng-if="job.status===null">
-					<p class="text-center error" ng-if="job.job_status>0"><b>Not longer available</b></p>
+					<p class="text-center error" ng-if="job.job_status>0"><b>No longer available</b></p>
 					<button class="form-control btn btn-info" ng-click="createApplication()" ng-if="job.job_status==0">Apply to Job</button>
 				</div>
 				<!-- STATUS < 0 -->
 				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
-				<!-- STATUS 0 -->
-				<div ng-if="job.status===0">
-					<a href="#/messages/{{job.application_id}}"><p class="text-center"><b>You've applied for this job!</b></p></a>
-					<button class="form-control btn btn-warning" ng-click="cancelApplication()">Cancel Application</button>
-				</div>
-				<!-- STATUS 1 -->
-				<div ng-if="job.status==1">
-					<a href="#/messages/{{job.application_id}}"><p class="text-center"><b>You've been accepted for this job!</b></p></a>
-					<button class="form-control btn btn-danger" ng-click="forfeitApplication()">Forfeit Job</button>
-				</div>
-				<!-- STATUS 2, 3 -->
-				<a href="#/messages/{{job.application_id}}" ng-if="job.status==2 || job.status==3"><p class="text-center"><b>In progress</b></p></a>
-				<!-- STATUS = 4 -->
-				<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><button class="form-control btn btn-info">Job completed!</button></a>				
+				<!-- STATUS >= 0 -->
+				<div ng-if="job.status>=0">
+					<p class="text-center" ng-if="job.status===0"><b>You've applied for this job!</b></p>
+					<p class="text-center" ng-if="job.status===1"><b>You've been accepted for this job!</b></p>
+					<p class="text-center" ng-if="job.status==2"><b>In progress</b></p>
+					<p class="text-center" ng-if="job.status==3"><b>Invoice sent</b></p>
+					<p class="text-center" ng-if="job.status==4"><b>Job completed!</b></p>
+					<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
+				</div>			
 			</div>
 
 			<!-- USER -->
@@ -149,8 +144,10 @@
 					<button class="form-control btn btn-danger" ng-if="job.job_status===0" ng-click="deleteJob()">Remove Job</button>
 					<!-- JOB_STATUS > 0 -->
 					<div ng-if="job.job_status>0">
-						<a href="#/messages/{{job.application_id}}" ng-if="job.status<4"><p class="text-center dodgerblue"><b>In progress</b></p></a>
-						<a href="#/messages/{{job.application_id}}" ng-if="job.status==4"><p class="text-center dodgerblue"><b>Job completed!</b></p></a>
+					<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
+						<p class="text-center" ng-if="job.job_status==2"><b>In progress</b></p>
+						<a href="#/invoices/{{job.application_jd}}"><p class="text-center" ng-if="job.job_status==3"><b>Check Invoices</b></p></a>
+						<p class="text-center" ng-if="job.job_status==4"><b>Job completed!</b></p>
 						<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
 					</div>
 				</div>

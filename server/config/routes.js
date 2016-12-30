@@ -4,6 +4,7 @@ var jobs = require('../controllers/jobs.js');
 var applications = require('../controllers/applications.js');
 var messages = require('../controllers/messages.js');
 var invoices = require('../controllers/invoices.js');
+var charges = require('../controllers/charges.js');
 
 module.exports = function(app) {
 	// users
@@ -39,17 +40,20 @@ module.exports = function(app) {
 	app.put('/api/applications/forfeit/:id', applications.forfeit);
 	// app.delete('/api/applications/:id', applications.delete);
 
-	// // MESSAGES
+	// MESSAGES
 	// app.get('/api/messages', messages.index);
 	app.get('/api/messages/:id', messages.show);
 	app.post('/api/messages', messages.create);
 	app.put('/api/messages/:id', messages.update);
 	app.delete('/api/messages/:id', messages.delete);		
 
-	// // INVOICES
+	// INVOICES
 	app.get('/api/invoices', invoices.index);
 	app.get('/api/invoices/:id', invoices.show);
 	app.post('/api/invoices', invoices.create);
 	app.put('/api/invoices/:id', invoices.update);
-	app.delete('/api/invoices/:id', invoices.delete);		
+	app.delete('/api/invoices/:id', invoices.delete);	
+
+	// STRIPE
+	app.post('/charges/lead', charges.lead);
 }

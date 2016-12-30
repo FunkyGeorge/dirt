@@ -199,6 +199,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 		}
 	}
 
+	$scope.payLeadFee = function(token) {
+		console.log(token)
+	}
+
 	//////////////////////////////////////////////////////
 	//										MESSAGE
 	//////////////////////////////////////////////////////

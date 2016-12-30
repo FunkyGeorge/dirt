@@ -155,7 +155,7 @@ module.exports = {
 					else if (!data)
 						callback({errors: {application: {message: "Could not find valid application to update."}}});
 					else {
-						var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
+						var query = "UPDATE applications SET status = -2, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
 						connection.query(query, req.params.id, function(err, result) {
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
@@ -174,7 +174,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(id) = ? \
+				var query = "UPDATE applications SET status = -2, updated_at = NOW() WHERE HEX(id) = ? \
 				AND HEX(trucker_id) = ? AND status = 0 LIMIT 1";
 				connection.query(query, [req.params.id, data.id], function(err, result) {
 					if (err)
@@ -193,7 +193,7 @@ module.exports = {
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
 				// Update application:
-				var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE HEX(id) = ? \
+				var query = "UPDATE applications SET status = -2, updated_at = NOW() WHERE HEX(id) = ? \
 				AND HEX(trucker_id) = ? AND status > 0 LIMIT 1";
 				connection.query(query, [req.params.id, data.id], function(err, result) {
 					if (err)
