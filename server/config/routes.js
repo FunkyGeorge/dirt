@@ -9,7 +9,7 @@ var charges = require('../controllers/charges.js');
 module.exports = function(app) {
 	// users
 	// app.get('/users', users.index);
-	// app.get('/api/users/:username', users.show);
+	app.get('/api/users/:id', users.show);
 	app.put('/api/users', users.update);
 	app.delete('/api/users', users.delete);
 	app.post('/users/register', users.register);
@@ -17,7 +17,7 @@ module.exports = function(app) {
 
 	// TRUCKERS
 	// app.get('/truckers', truckers.index);
-	// app.get('/api/truckers/:username', truckers.show);
+	app.get('/api/truckers/:id', truckers.show);
 	app.put('/api/truckers', truckers.update);
 	app.delete('/api/truckers', truckers.delete);
 	app.post('/truckers/register', truckers.register);
@@ -45,7 +45,7 @@ module.exports = function(app) {
 	app.get('/api/messages/:id', messages.show);
 	app.post('/api/messages', messages.create);
 	app.put('/api/messages/:id', messages.update);
-	app.delete('/api/messages/:id', messages.delete);		
+	app.delete('/api/messages/:id', messages.delete);
 
 	// INVOICES
 	app.get('/api/invoices', invoices.index);

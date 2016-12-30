@@ -5,13 +5,13 @@ app.factory('usersFactory', function($http, $cookies) {
 		// 		callback(res.data);
 		// 	});
 		// },
-		// show: function(username, callback) {
-		// 	$http.get(`/api/users/${username}`, {
-		// 		headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
-		// 	}).then(function(res) {
-		// 		callback(res.data);
-		// 	});
-		// },
+		show: function(id, callback) {
+			$http.get(`/api/users/${id}`, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
 		update: function(data, callback) {
 			$http.put(`/api/users`, data, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
@@ -35,6 +35,6 @@ app.factory('usersFactory', function($http, $cookies) {
 			$http.post('/users/login', data).then(function(res) {
 				callback(res.data);
 			});
-		}	
+		}
 	}
 })

@@ -21,9 +21,13 @@ app.config(function($routeProvider) {
 		templateUrl: "partials/login.html",
 		controller: "loginController"
 	})
-	.when("/jobs",{
-		templateUrl: "partials/jobs.html",
-		controller: "jobsController"
+	.when('/settings',{
+		templateUrl: 'partials/settings.html',
+		controller: 'settingsController'
+	})
+	.when('/jobs',{
+		templateUrl: 'partials/jobs.html',
+		controller: 'jobsController'
 	})
 	.when("/jobs/:id",{
 		templateUrl: "partials/jobs_show.html",

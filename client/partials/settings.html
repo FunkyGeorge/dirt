@@ -23,31 +23,55 @@
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
-
-<!-- MAIN -->
+<h1>Settings</h1>
+<hr>
 <div class="row">
-	<div class="col-sm-3">
-		<h1 class="text-center">Dirt Feed</h1>
-		<h4 class="text-center">Sort By:</h4>
-		<form>
-			<div class="radio">
-				<label><input type="radio" ng-click="toggle(true);" name="sorting-option" checked>Latest</label>
-			</div>
-	    <div class="radio">
-	      <label><input type="radio" ng-click="toggle(false);" name="sorting-option">Distance</label>
-	    </div>
-	  </form>
+	<div class="col-md-2">
+		<ul class="nav nav-pills nav-stacked">
+		  <li role="presentation"><a href="" ng-click="tab='profile'">Profile</a></li>
+		  <li role="presentation"><a href="" ng-click="tab='jobs'">Jobs</a></li>
+		  <li role="presentation"><a href="" ng-click="tab='password'">Password</a></li>
+		</ul>
 	</div>
-	<div class="col-sm-9" ng-if="jobs.length > 0">
-		<!-- nfinite scroll zone ########################################################### -->
-		<div infinite-scroll="append();" infinite-scroll-distance="0">
+	<div class="col-md-10">
+		<div ng-show="tab == 'profile'">
+			<h2>Profile</h2>
+			<form ng-submit="updateUser();">
+			  <div class="form-group col-md-6">
+			    <label for="first_name">First Name:</label>
+			    <input type="text" class="form-control" ng-model="user.first_name" id="first_name" value="{{user.first_name}}">
+			  </div>
+			  <div class="form-group col-md-6">
+			    <label for="last_name">Last Name:</label>
+			    <input type="text" class="form-control" ng-model="user.last_name" id="last_name" ng-value="user.last_name">
+			  </div>
+				<div ng-show="user_type != 'user'">
+					<h4>Truck</h4>
+					<div class="form-group col-md-4">
+				    <label for="make">Make:</label>
+				    <input type="text" class="form-control" ng-model="user.make" id="make" ng-value="user.make">
+				  </div>
+					<div class="form-group col-md-4">
+				    <label for="model">Model:</label>
+				    <input type="text" class="form-control" ng-model="user.model" id="model" ng-value="user.model">
+				  </div>
+					<div class="form-group col-md-4">
+				    <label for="year">Year:</label>
+				    <input type="text" class="form-control" ng-model="user.year" id="year" ng-value="user.year">
+				  </div>
+				</div>
+				<div class="clearfix"></div>
+				<button type="submit" class="btn btn-primary">Edit</button>
+			</form>
+		</div>
+		<div ng-show="tab == 'jobs'">
 			<div class="row" ng-repeat="job in jobs">
 				<div class="col-sm-3 col-xs-6" style="margin-bottom: 20px;">
 					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
 				</div>
 				<div class="col-sm-9">
 					<div class="row">
-						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
+						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">Listed by you</h4>
 						<div class="col-sm-6 hidden-xs">
 							<a href="#/jobs/{{job.id}}"><button class="btn btn-info pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
 						</div>
@@ -82,6 +106,21 @@
 				</div>
 			</div>
 		</div>
-		<!-- ############################################################################################## -->
+		<div ng-show="tab == 'password'">
+			<div class="form-group col-md-7">
+		    <label for="current">Current Password</label>
+		    <input type="password" class="form-control" id="current">
+		  </div>
+			<div class="form-group col-md-7">
+		    <label for="pword">New Password</label>
+		    <input type="password" class="form-control" id="pword">
+		  </div>
+			<div class="form-group col-md-7">
+		    <label for="cword">Confirm Password</label>
+		    <input type="password" class="form-control" id="cword">
+		  </div>
+			<div class="clearfix"></div>
+			<button class="btn btn-primary" type="button" name="button">Change Password</button>
+		</div>
 	</div>
 </div>

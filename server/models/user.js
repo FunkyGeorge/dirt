@@ -13,9 +13,32 @@ module.exports = {
 	// 			callback(false, data)
 	// 	});
 	// },
-	// show: function(req, callback) {
-	// 	var data = {};
-	// 	var username = req.params.username;
+	show: function(req, callback) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else {
+				var response = {};
+				var query = "SELECT * FROM users where HEX(id) = ? LIMIT 1";
+				connection.query(query, req.params.id, function(err){
+					if (err)
+						callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+					else {
+						response["user"] = data;
+						var query = "SELECT * FROM jobs where HEX(user_id) = ?"
+						connection.query(query, req.params.id, function(err, data){
+							if (err)
+								callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+							else {
+								response["jobs"] = data;
+								callback(false, response);	
+							}
+						});
+					}
+				});
+			}
+		});
+	},
 	update: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
