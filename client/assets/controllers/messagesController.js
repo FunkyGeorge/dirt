@@ -55,7 +55,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	//										APPLICATION
 	//////////////////////////////////////////////////////
 	$scope.acceptApplication = function() {
-		applicationsFactory.accept($scope.cur_app, function(data) {
+		applicationsFactory.accept($scope.cur_app.id, function(data) {
 			if (data.errors) {
 				var error = "Unable to accept this application.";
 				for (key in data.errors)
@@ -200,13 +200,45 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 	}
 
 	$scope.payLeadFee = function(token) {
-		console.log(token)
+		applicationsFactory.payLeadFee($scope.cur_app.id, token, function (data) {
+			if (data.errors) {
+				var error = "Error processing payment/updating application status.";
+				for (key in data.errors)
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);
+			}
+			else {
+				socket.emit("connect", {
+					application_id: $scope.cur_app.id,
+					name: $scope.name
+				});
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully made payment! You are now connected with ${$scope.cur_app.first_name} \
+					and the job location is now viewable.`,
+					url: `#/jobs/${$scope.cur_app.job_id}`,
+					target: "_self"
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});						
+				$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+			}
+		});
 	}
 
 	//////////////////////////////////////////////////////
 	//										MESSAGE
 	//////////////////////////////////////////////////////
 	$scope.showMessages = function(application) {
+		$rootScope.messages = [];
 		$rootScope._app = application;
 		$scope.cur_app = application;
 		if (application.status > 1)
@@ -218,7 +250,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 					displayErrorNotification(error + " Try reloading the page.");					
 				}
 				else {
-					$scope.messages = data;
+					$rootScope.messages = data;
 					$timeout(function() {
 						var _ = document.getElementById("chat");
 						_.scrollTop = _.scrollHeight;				

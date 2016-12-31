@@ -98,8 +98,8 @@
 			<!-- STATUS > 1 -->
 			<div class="center-content" ng-if="cur_app.status>1">
 				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
-				<button ng-if="cur_app.status==2" data-toggle="modal" data-target="#invoice_modal">Invoice Client</button>
-				<small class="text-muted" ng-if="cur_app.status==2">Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
+				<button class="btn btn-default" ng-if="cur_app.status==2" data-toggle="modal" data-target="#invoice_modal">Invoice Client</button>
+				<small class="text-muted" ng-if="cur_app.status==2"><br><br>Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
 				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices/{{cur_app.id}}">invoice</a>.</small>
 				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
 			</div>
@@ -109,9 +109,11 @@
 
 		<div id="chat" class="row">
 			<div class="col-xs-12" ng-repeat="message in messages">
-				<p class="pull-right chat_time"><b>{{message.created_at | date:'shortTime'}}</b></p>
-				<p class="pull-right chat_me" ng-if="id==message.trucker_id || id==message.user_id" ng-bind="message.message"></p>
-				<p class="chat_you" ng-if="id!=message.trucker_id && id!=message.user_id" ng-bind="message.message"></p>
+				<div ng-if="message.application_id==cur_app.id">
+					<p class="pull-right chat_time"><b>{{message.created_at | date:'shortTime'}}</b></p>
+					<p class="pull-right chat_me" ng-if="id==message.trucker_id || id==message.user_id" ng-bind="message.message"></p>
+					<p class="chat_you" ng-if="id!=message.trucker_id && id!=message.user_id" ng-bind="message.message"></p>
+				</div>
 			</div>
 		</div>
 		<form ng-show="cur_app" ng-submit="createMessage()">
