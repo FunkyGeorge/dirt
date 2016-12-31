@@ -1,4 +1,4 @@
-app.controller('jobsShowController', function ($scope, $location, $timeout, $routeParams, 
+app.controller('jobsShowController', function ($scope, $location, $timeout, $routeParams,
 jobsFactory, applicationsFactory) {
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
@@ -23,7 +23,7 @@ jobsFactory, applicationsFactory) {
 	}
 	else
 		$location.url('/welcome');
-	
+
 	//////////////////////////////////////////////////////
 	//										JOB
 	//////////////////////////////////////////////////////
@@ -50,13 +50,13 @@ jobsFactory, applicationsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
+					}
 				});
 				$location.url(`/jobs/${$scope.job.id}#${Date.now()}`)
 			}
 		});
 	}
-	
+
 	$scope.deleteJob = function() {
 		if (confirm("Are you sure you want to delete this job listing? Doing so will remove all pending applications and conversations for this listing.\n\nClick\"OK\" to continue removing job.") == true) {
 			jobsFactory.delete($scope.job.id, function(data) {
@@ -64,7 +64,7 @@ jobsFactory, applicationsFactory) {
 					var error = "Unable to remove this job listing.";
 					for (key in data.errors)
 						error += " " + data.errors[key].message;
-					displayErrorNotification(error);	
+					displayErrorNotification(error);
 				}
 				else {
 					$.notify({
@@ -79,12 +79,16 @@ jobsFactory, applicationsFactory) {
 						animate: {
 							enter: 'animated fadeInUp',
 							exit: 'animated fadeOutDown',
-						} 
+						}
 					});
 					$location.url('/');
 				}
 			});
 		}
+	}
+
+	$scope.edit = function(){
+		$location.url('/jobs/edit/' + $scope.job.id);
 	}
 
 
@@ -97,12 +101,12 @@ jobsFactory, applicationsFactory) {
 				var error = "Could not apply for this job.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
-				displayErrorNotification(error);	
+				displayErrorNotification(error);
 			}
 			else {
 				$scope.application_id = data.id;
 				socket.emit("apply", {
-					application_id: data.id, 
+					application_id: data.id,
 					user_id: $scope.job.user_id,
 					name: $scope.name
 				});
@@ -120,8 +124,8 @@ jobsFactory, applicationsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
-				});				
+					}
+				});
 				$scope.mode = 'applied';
 			}
 		});
@@ -134,7 +138,7 @@ jobsFactory, applicationsFactory) {
 					var error = "Not able to cancel your job application.";
 					for (key in data.errors)
 						error += " " + data.errors[key].message;
-					displayErrorNotification(error);	
+					displayErrorNotification(error);
 				}
 				else {
 					socket.emit("cancel", {
@@ -153,8 +157,8 @@ jobsFactory, applicationsFactory) {
 						animate: {
 							enter: 'animated fadeInUp',
 							exit: 'animated fadeOutDown',
-						} 
-					});					
+						}
+					});
 					$location.url('/');
 				}
 			});
@@ -168,7 +172,7 @@ jobsFactory, applicationsFactory) {
 					var error = "Not able to forfeit this job.";
 					for (key in data.errors)
 						error += " " + data.errors[key].message;
-					displayErrorNotification(error);	
+					displayErrorNotification(error);
 				}
 				else {
 					socket.emit("forfeit", {
@@ -188,8 +192,8 @@ jobsFactory, applicationsFactory) {
 						animate: {
 							enter: 'animated fadeInUp',
 							exit: 'animated fadeOutDown',
-						} 
-					});					
+						}
+					});
 					$location.url('/');
 				}
 			});
