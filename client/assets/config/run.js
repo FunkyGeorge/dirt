@@ -59,7 +59,7 @@ function displayErrorNotification(error) {
 //////////////////////////////////////////////////////
 //										APP.RUN
 //////////////////////////////////////////////////////
-app.run(function($rootScope) {
+app.run(function($rootScope, $timeout) {
 	var allow_notify = true;
 
 	// Define and invoke function to set user:
@@ -69,13 +69,17 @@ app.run(function($rootScope) {
 			$rootScope.id = payload.id;
 			$rootScope.name = payload.first_name + " " + payload.last_name;
 			$rootScope.user_type = 'truck_type' in payload ? 'trucker' : 'user';
+			// $rootScope.messages = [];
 		}
 		
 		setSocket();
 		if (socket) {
 			// Define socket event handlers:
 			socket.on('sent', function(data) {
-				if (allow_notify && !window.location.hash.includes($rootScope._app.id))
+				// Only notify on new messages when you're not the sender 
+				// and you're not currently viewing that conversation:
+				if (allow_notify && data.name != $rootScope.name && 
+				(data.application_id != $rootScope._app.id || !window.location.hash.includes("messages")))
 					$.notify({
 						icon: "glyphicon glyphicon-envelope",
 						message: `New message from ${data.name}.`,
@@ -98,6 +102,14 @@ app.run(function($rootScope) {
 							allow_notify = true;
 						}				
 					});
+				else if (data.application_id == $rootScope._app.id && window.location.hash.includes("messages")) {
+					$rootScope.messages.push(data);
+					$rootScope.$apply();
+					$timeout(function() {
+						var _ = document.getElementById("chat");
+						_.scrollTop = _.scrollHeight;				
+					}, 0, false);
+				}
 			});
 
 			//////////////////////////////////////////////////////
@@ -160,6 +172,25 @@ app.run(function($rootScope) {
 					}
 				});
 			});
+
+			socket.on('connected', function(data) {
+				$.notify({
+					icon: "glyphicon glyphicon-info-sign",
+					message: `You're now connected with ${data.name}, say hi!`,
+					url: `#/messages/${data.application_id}#${Date.now()}`,
+					target: "_self"
+				}, {
+					type: "info",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					}
+				});
+			});			
 
 			//////////////////////////////////////////////////////
 			//										SENT FROM USERS

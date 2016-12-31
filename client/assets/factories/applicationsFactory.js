@@ -21,8 +21,8 @@ app.factory('applicationsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
-		accept: function(data, callback) {
-			$http.put(`/api/applications/accept`, data, {
+		accept: function(id, callback) {
+			$http.put(`/api/applications/accept/${id}`, null, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);
@@ -44,6 +44,13 @@ app.factory('applicationsFactory', function($http, $cookies) {
 		},		
 		forfeit: function(id, callback) {
 			$http.put(`/api/applications/forfeit/${id}`, null, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
+		payLeadFee: function(id, data, callback) {
+			$http.put(`/api/applications/payLeadFee/${id}`, data, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);

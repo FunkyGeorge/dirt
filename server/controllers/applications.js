@@ -77,6 +77,17 @@ module.exports = {
 			else
 				res.json(data);
 		});	
+	},
+	payLeadFee: function(req, res) {
+		application.payLeadFee(req, function(err, data) {
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('ronin_token').json(err);
+				else
+					res.json(err);
+			else
+				res.json(data);
+		});	
 	}
 	// delete: function(req, res) {
 	// 	application.delete(req, function(err) {

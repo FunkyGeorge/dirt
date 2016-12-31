@@ -25,6 +25,10 @@ module.exports = function(server) {
 		socket.on('forfeit', function(data) {
 			socket.broadcast.to(data.application_id).emit('forfeitted', data);
 		});
+
+		socket.on('connect', function(data) {
+			socket.broadcast.to(data.application_id).emit('connected', data);
+		});
 		
 		//////////////////////////////////////////////////////
 		//										SENT FROM USERS

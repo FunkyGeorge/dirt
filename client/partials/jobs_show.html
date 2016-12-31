@@ -116,7 +116,7 @@
 				<!-- STATUS < 0 -->
 				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
 				<!-- STATUS >= 0 -->
-				<div ng-if="job.status>=0">
+				<div class="dodgerblue" ng-if="job.status>=0">
 					<p class="text-center" ng-if="job.status===0"><b>You've applied for this job!</b></p>
 					<p class="text-center" ng-if="job.status===1"><b>You've been accepted for this job!</b></p>
 					<p class="text-center" ng-if="job.status==2"><b>In progress</b></p>
@@ -143,13 +143,13 @@
 					</div>
 					<!-- JOB_STATUS 0 -->
 					<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="edit()">Edit Job</button>
-					<button class="form-control btn btn-danger" ng-if="job.job_status===0" ng-click="deleteJob()">Remove Job</button>
+					<button class="form-control btn btn-danger" ng-if="job.job_status<=0" ng-click="deleteJob()">Remove Job</button>
 					<!-- JOB_STATUS > 0 -->
-					<div ng-if="job.job_status>0">
-					<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
-						<p class="text-center" ng-if="job.job_status==2"><b>In progress</b></p>
+					<div class="dodgerblue" ng-if="job.job_status>0">
+						<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
+						<p class="text-center dodgerblue" ng-if="job.job_status==2"><b>In progress</b></p>
 						<a href="#/invoices/{{job.application_jd}}"><p class="text-center" ng-if="job.job_status==3"><b>Check Invoices</b></p></a>
-						<p class="text-center" ng-if="job.job_status==4"><b>Job completed!</b></p>
+						<p class="text-center dodgerblue" ng-if="job.job_status==4"><b>Job completed!</b></p>
 						<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
 					</div>
 				</div>

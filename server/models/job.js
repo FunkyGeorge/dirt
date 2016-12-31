@@ -246,7 +246,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else
-				var query = "DELETE FROM jobs WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
+				var query = "DELETE FROM jobs WHERE HEX(id) = ? AND HEX(user_id) = ? AND job_status < 1 LIMIT 1";
 				connection.query(query, [req.params.id, data.id], function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
