@@ -12,6 +12,7 @@ module.exports = function(app) {
 	app.get('/api/users/:id', users.show);
 	app.put('/api/users', users.update);
 	app.delete('/api/users', users.delete);
+	app.put('/users/changePassword', users.changePassword);
 	app.post('/users/register', users.register);
 	app.post('/users/login', users.login);
 
@@ -20,6 +21,7 @@ module.exports = function(app) {
 	app.get('/api/truckers/:id', truckers.show);
 	app.put('/api/truckers', truckers.update);
 	app.delete('/api/truckers', truckers.delete);
+	app.put('/truckers/changePassword', truckers.changePassword);
 	app.post('/truckers/register', truckers.register);
 	app.post('/truckers/login', truckers.login);
 

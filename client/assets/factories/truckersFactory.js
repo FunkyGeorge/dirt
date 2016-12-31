@@ -19,6 +19,13 @@ app.factory('truckersFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
+		changePassword: function(data, callback) {
+			$http.put(`/truckers/changePassword`, data, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
 		delete: function(callback) {
 			$http.delete('/api/truckers', {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
