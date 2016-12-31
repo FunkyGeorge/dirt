@@ -39,6 +39,17 @@ module.exports = {
 				res.clearCookie('ronin_token').end();
 		});
 	},
+	changePassword: function(req, res) {
+		trucker.changePassword(req, function(err, data){
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('ronin_token').json(err);
+				else
+					res.json(err);
+			else
+				res.clearCookie('ronin_token').cookie('ronin_token', data).end();
+		});
+	},
 	register: function(req, res) {
 		trucker.register(req, function(err, data) {
 			if (err)
