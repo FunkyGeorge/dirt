@@ -153,29 +153,94 @@ module.exports = {
 	update: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
-				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
 				var query;
-				if (req.params.action == "relist")
+				if (req.params.action == "relist"){
 					query = "UPDATE jobs SET job_status = 0, updated_at = NOW() WHERE HEX(id) = ? AND HEX(user_id) = ? LIMIT 1";
-				connection.query(query, [req.params.id, data.id], function(err, result) {
-					if (err)
+					connection.query(query, [req.params.id, data.id], function(err, result) {
+						if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
-					else if (result.changedRows != 1)
-						callback({errors: {update: {message: "Could not update job status."}}});										
-					else {
-						var query = "UPDATE applications SET status = 0, updated_at = NOW() WHERE HEX(id) = ? AND status = -1";
-						connection.query(query, [req.params.id, data.id], function(err, result) {
-							if (err)
-								callback({errors: {database: {message: "Please contact an admin."}}});										
-							else 
+						else if (result.changedRows != 1)
+						callback({errors: {update: {message: "Could not update job status."}}});
+						else {
+							var query = "UPDATE applications SET status = 0, updated_at = NOW() WHERE HEX(id) = ? AND status = -1";
+							connection.query(query, [req.params.id, data.id], function(err, result) {
+								if (err)
+								callback({errors: {database: {message: "Please contact an admin."}}});
+								else
 								callback(false);
-						});
-					}
-				});
+							});
+						}
+					});
+				}
+				else if (req.params.action == 'edit'){
+					var data = {
+						job_status: 0,
+						job_type: req.body.job_type,
+						dirt_type: req.body.dirt_type,
+						volume: req.body.volume,
+						completion_date: req.body.completion_date
+					};
+					query = "UPDATE jobs SET ?, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
+					console.log("case 1	");
+					console.log(req.body);
+					console.log(data, req.params.id);
+					connection.query(query, [data, req.params.id], function(err, result) {
+						if (err)
+							callback({errors: {database: {message: "Please contact an admin."}}});
+						else if (result.changedRows != 1)
+							callback({errors: {update: {message: "Could not update job status."}}});
+						else {
+							if (req.body.job_type == 0 || req.body.job_type == 2) {
+								var data = {
+									p_address: req.body.p_address,
+									p_city: req.body.p_city,
+									p_state: req.body.p_state,
+									p_zip: req.body.p_zip,
+									p_loader: req.body.p_loader
+								};
+								var query = "UPDATE pickup SET ?, updated_at = NOW() WHERE HEX(job_id) = ? LIMIT 1";
+								connection.query(query, [data, req.params.id], function(err, result){
+									console.log("case 1 1/2");
+									if (err)
+										callback({errors: {database: {message: "Please contact an admin."}}});
+								});
+							}
+							if (req.body.job_type == 1 || req.body.job_type == 2) {
+								var data = {
+									d_address: req.body.d_address,
+									d_city: req.body.d_city,
+									d_state: req.body.d_state,
+									d_zip: req.body.d_zip,
+									d_loader: req.body.d_loader
+								};
+								var query = "UPDATE dropoff SET ?, updated_at = NOW() WHERE HEX(job_id) = ? LIMIT 1";
+								console.loge("case 2");
+								connection.query(query, [data, req.params.id], function(err, result){
+									console.log("case 3");
+									if (err)
+										callback({errors: {database: {message: "Please contact an admin."}}});
+
+								});
+							}
+
+							var query = "UPDATE applications SET status = 0, updated_at = NOW() WHERE HEX(id) = ? AND status = -1";
+							console.log("case 4");
+							connection.query(query, [req.params.id], function(err, result) {
+								if (err)
+									callback({errors: {database: {message: "Please contact an admin."}}});
+								else
+									callback(false);
+							});
+						}
+					});
+
+
+				}
 			}
-		});
-	},
+	});
+},
 	delete: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)

@@ -142,7 +142,7 @@
 						<button class="form-control btn btn-primary" ng-click="relistJob()">Relist Job</button>
 					</div>
 					<!-- JOB_STATUS 0 -->
-					<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="">Edit Job</button>
+					<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="edit()">Edit Job</button>
 					<button class="form-control btn btn-danger" ng-if="job.job_status===0" ng-click="deleteJob()">Remove Job</button>
 					<!-- JOB_STATUS > 0 -->
 					<div ng-if="job.job_status>0">

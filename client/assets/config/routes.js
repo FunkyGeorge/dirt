@@ -33,6 +33,10 @@ app.config(function($routeProvider) {
 		templateUrl: "partials/jobs_show.html",
 		controller: "jobsShowController"
 	})
+	.when('/jobs/edit/:id',{
+		templateUrl: 'partials/jobs.html',
+		controller: 'jobsController'
+	})
 	.when("/messages/:id?",{
 		templateUrl: "partials/messages.html",
 		controller: "messagesController"
