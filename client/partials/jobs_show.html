@@ -141,6 +141,8 @@
 						<p class="text-center error"><b>Job was taken down</b></p>
 						<button class="form-control btn btn-primary" ng-click="relistJob()">Relist Job</button>
 					</div>
+					<!-- JOB_STATUS <= 0 -->
+					<button class="form-control btn btn-danger" ng-if="job.job_status<=0" ng-click="deleteJob()">Remove Job</button>
 					<!-- JOB_STATUS > 0 -->
 					<div class="dodgerblue" ng-if="job.job_status>0">
 						<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
