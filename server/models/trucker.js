@@ -26,7 +26,7 @@ module.exports = {
 						callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 					else {
 						response["user"] = data[0];
-						var query = "SELECT * FROM applications A \
+						var query = "SELECT *, HEX(J.id) AS id FROM applications A \
 						JOIN jobs J ON HEX(J.id) = HEX(A.job_id) \
 						WHERE HEX(A.trucker_id) = ?";
 						connection.query(query, req.params.id, function(err, data){
