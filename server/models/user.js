@@ -44,7 +44,7 @@ module.exports = {
 			if (err)
 				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
 			else {
-				var query = "UPDATE users SET ? WHERE HEX(id) = ? LIMIT 1";
+				var query = "UPDATE users SET ?, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
 				connection.query(query, [req.body, data.id], function(err) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
@@ -101,7 +101,7 @@ module.exports = {
 									var newPassword = {
 										password: hash
 									};
-									var query = "UPDATE users SET ? WHERE HEX(id) = ? LIMIT 1";
+									var query = "UPDATE users SET ?, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
 									connection.query(query, [newPassword, data.id], function(err) {
 										if (err)
 											callback({errors: {database: {message: "Please contact an admin."}}});
