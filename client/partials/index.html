@@ -42,19 +42,21 @@
 		<!-- nfinite scroll zone ########################################################### -->
 		<div infinite-scroll="append();" infinite-scroll-distance="0">
 			<div class="row" ng-repeat="job in jobs">
-				<div class="col-sm-3 col-xs-6" style="margin-bottom: 20px;">
-					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
+		<hr>
+				<div class="col-sm-3 col-xs-4" style="margin-bottom: 20px;">
+					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg">
 				</div>
 				<div class="col-sm-9">
-					<div class="row">
+					<div class="row hidden-xs">
 						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
-						<div class="col-sm-6 hidden-xs">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-info pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
-						</div>
-						<div class="col-sm-6 visible-xs-block">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-info">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
+						<div class="col-sm-6">
+							<a href="#/jobs/{{job.id}}"><button class="btn btn-info pull-right">View Job</button></a>
 						</div>
 					</div>
+					<div class="row visible-xs-block center-content">
+						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
+						<a href="#/jobs/{{job.id}}">View Job</a>
+					</div>					
 				</div>
 				<div class="col-sm-9 col-xs-12 pull-right">
 					<table class="table table-bordered">
@@ -67,18 +69,6 @@
 							<td><b>Complete by:</b> {{job.completion_date | date:'shortDate'}}</td>
 						</tr>
 					</table>
-					<div class="row">
-						<div class="col-xs-4">
-							<input type="checkbox" ng-checked="job.pickup_only" disabled/> Pickup Only
-						</div>
-						<div class="col-xs-4">
-							<input type="checkbox" ng-checked="job.p_loader" disabled/> Loader at Pick-Up
-						</div>
-						<div class="col-xs-4">
-							<span ng-class="{strike: job.pickup_only}"><input type="checkbox" ng-checked="job.d_loader" disabled/> Loader at Drop-Off</span>
-						</div>
-					</div>
-					<hr>
 				</div>
 			</div>
 		</div>

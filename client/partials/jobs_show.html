@@ -107,7 +107,7 @@
 			<br>
 
 			<!-- TRUCKER -->
-			<div class="row" ng-if="user_type=='trucker'">
+			<div ng-if="user_type=='trucker'">
 				<!-- STATUS UNDEFINED -->
 				<div ng-if="job.status===null">
 					<p class="text-center error" ng-if="job.job_status>0"><b>No longer available</b></p>
@@ -116,7 +116,7 @@
 				<!-- STATUS < 0 -->
 				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
 				<!-- STATUS >= 0 -->
-				<div class="dodgerblue" ng-if="job.status>=0">
+				<div class="dodgerblue" ng-if="job.status>=0 && job.status!=null">
 					<p class="text-center" ng-if="job.status===0"><b>You've applied for this job!</b></p>
 					<p class="text-center" ng-if="job.status===1"><b>You've been accepted for this job!</b></p>
 					<p class="text-center" ng-if="job.status==2"><b>In progress</b></p>
@@ -127,7 +127,7 @@
 			</div>
 
 			<!-- USER -->
-			<div class="row" ng-if="user_type=='user'">
+			<div ng-if="user_type=='user'">
 				<!-- NOT JOB OWNER -->
 				<div ng-if="id!=job.user_id">
 					<button class="form-control btn btn-info" ng-if="id!=job.user_id" disabled>Apply to Job</button>
