@@ -27,6 +27,7 @@ module.exports = function(app) {
 	// JOBS
 	app.get('/api/jobs', jobs.index);
 	app.get('/api/jobs/:id', jobs.show);
+	app.get('/api/jobs/user/:id', jobs.getJobs); //
 	app.post('/api/jobs', jobs.create);
 	app.put('/api/jobs/:action/:id', jobs.update);
 	app.delete('/api/jobs/:id', jobs.delete);
@@ -54,5 +55,5 @@ module.exports = function(app) {
 	app.get('/api/invoices/:id', invoices.show);
 	app.post('/api/invoices', invoices.create);
 	app.put('/api/invoices/:id', invoices.update);
-	app.delete('/api/invoices/:id', invoices.delete);	
+	app.delete('/api/invoices/:id', invoices.delete);
 }

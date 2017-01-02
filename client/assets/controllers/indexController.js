@@ -10,7 +10,8 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 			1, //scroll
 			true, //keepscrolling flag
 			true, //distance/latest flag
-			false //isLoadedflag
+			false,//isLoadedflag
+			0
 		];
 		//#####  Commented to save api calls  #####
 		navigator.geolocation.getCurrentPosition(showPosition);
@@ -95,6 +96,23 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 			$scope.state[0] = 1;
 			appendJobs();
 		}
+	};
+
+	$scope.getAllListings = function(){
+		$scope.state[1] = true;
+		appendJobs();
+	};
+
+	$scope.getYourListings = function(){
+		if ($scope.user_type == 'user')
+			jobsFactory.getJobs($scope.id, function(data){
+				for (var i = 0; i < data.length; i++)
+					data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+					
+				$scope.jobs = data;
+			});
+		else if ($scope.user_type = 'trucker')
+			console.log("get trucker's applied jobs");
 	};
 
 });
