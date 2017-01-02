@@ -3,7 +3,6 @@ var truckers = require('../controllers/truckers.js');
 var jobs = require('../controllers/jobs.js');
 var applications = require('../controllers/applications.js');
 var messages = require('../controllers/messages.js');
-var invoices = require('../controllers/invoices.js');
 
 module.exports = function(app) {
 	// users
@@ -39,7 +38,9 @@ module.exports = function(app) {
 	app.put('/api/applications/decline/:id', applications.decline);
 	app.put('/api/applications/cancel/:id', applications.cancel);
 	app.put('/api/applications/forfeit/:id', applications.forfeit);
+	app.put('/api/applications/invoice/:id', applications.invoice);
 	app.put('/api/applications/payLeadFee/:id', applications.payLeadFee);
+	app.put('/api/applications/payInvoice/:id', applications.payInvoice);
 	// app.delete('/api/applications/:id', applications.delete);
 
 	// MESSAGES
@@ -48,11 +49,4 @@ module.exports = function(app) {
 	app.post('/api/messages', messages.create);
 	app.put('/api/messages/:id', messages.update);
 	app.delete('/api/messages/:id', messages.delete);
-
-	// INVOICES
-	app.get('/api/invoices', invoices.index);
-	app.get('/api/invoices/:id', invoices.show);
-	app.post('/api/invoices', invoices.create);
-	app.put('/api/invoices/:id', invoices.update);
-	app.delete('/api/invoices/:id', invoices.delete);	
 }

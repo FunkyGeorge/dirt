@@ -1,5 +1,5 @@
 app.controller("messagesController", function ($scope, $rootScope, $location, $route, $routeParams, $timeout, 
-moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
+moment, applicationsFactory, messagesFactory, jobsFactory) {
 
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
@@ -93,7 +93,9 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 						exit: 'animated fadeOutDown',
 					} 
 				});	
-				$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+				$timeout(function() {
+					$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+				}, 1000, true);
 			}
 		});
 	}
@@ -126,77 +128,75 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 					exit: 'animated fadeOutDown',
 				} 
 			});
-			$location.url(`/messages#${Date.now()}`);
+			$timeout(function() {
+				$location.url(`/messages#${Date.now()}`);
+			}, 1000, true);
 		});
 	}
 
 	$scope.cancelApplication = function() {
-		if (confirm("You will not be able to see this job again if you cancel your application.\n\nClick\"OK\" to continue removing application.") == true) {
-			applicationsFactory.cancel($scope.cur_app.id, function(data) {
-				if (data.errors) {
-					var error = "Could not cancel this job application.";
-					for (key in data.errors)
-						error += " " + data.errors[key].message;
-					displayErrorNotification(error + " Try reloading the page.");
-				}
-				else {
-					socket.emit("cancel", {
-						application_id: $scope.cur_app.id,
-						name: $scope.name
-					});
-					$.notify({
-						icon: "glyphicon glyphicon-check",
-						message: `Successfully removed application.`
-					}, {
-						type: "success",
-						placement: {
-							from: "bottom"
-						},
-						delay: 4000,
-						animate: {
-							enter: 'animated fadeInUp',
-							exit: 'animated fadeOutDown',
-						} 
-					});					
-					$location.url(`/messages`);
-				}
-			});
-		}
+		applicationsFactory.cancel($scope.cur_app.id, function(data) {
+			if (data.errors) {
+				var error = "Could not cancel this job application.";
+				for (key in data.errors)
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error + " Try reloading the page.");
+			}
+			else {
+				socket.emit("cancel", {
+					application_id: $scope.cur_app.id,
+					name: $scope.name
+				});
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully removed application.`
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});					
+				$location.url(`/messages`);
+			}
+		});
 	}
 
 	$scope.forfeitApplication = function() {
-		if (confirm("You will not be able to see this job again if you forfeit this job. Note that a refund will not be issued for the lead fee.\n\nClick\"OK\" to continue forfeitting job.") == true) {
-			applicationsFactory.forfeit($scope.cur_app.id, function(data) {
-				if (data.errors) {
-					var error = "Could not forfeit this job.";
-					for (key in data.errors)
-						error += " " + data.errors[key].message;
-					displayErrorNotification(error + " Try reloading the page.");
-				}
-				else {
-					socket.emit("forfeit", {
-						job_id: $scope.cur_app.job_id,
-						application_id: $scope.cur_app.id,
-						name: $scope.name
-					});
-					$.notify({
-						icon: "glyphicon glyphicon-check",
-						message: `Successfully forfeited the job.`
-					}, {
-						type: "success",
-						placement: {
-							from: "bottom"
-						},
-						delay: 4000,
-						animate: {
-							enter: 'animated fadeInUp',
-							exit: 'animated fadeOutDown',
-						} 
-					});						
-					$location.url(`/messages`);
-				}
-			});
-		}
+		applicationsFactory.forfeit($scope.cur_app.id, function(data) {
+			if (data.errors) {
+				var error = "Could not forfeit this job.";
+				for (key in data.errors)
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error + " Try reloading the page.");
+			}
+			else {
+				socket.emit("forfeit", {
+					job_id: $scope.cur_app.job_id,
+					application_id: $scope.cur_app.id,
+					name: $scope.name
+				});
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully forfeited the job.`
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});						
+				$location.url(`/messages`);
+			}
+		});
 	}
 
 	$scope.payLeadFee = function(token) {
@@ -208,7 +208,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 				displayErrorNotification(error);
 			}
 			else {
-				socket.emit("connect", {
+				socket.emit("payLeadFee", {
 					application_id: $scope.cur_app.id,
 					name: $scope.name
 				});
@@ -228,11 +228,51 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
 					} 
-				});						
-				$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+				});
+				$timeout(function() {
+					$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+				}, 1000, true);
 			}
 		});
 	}
+
+	$scope.createInvoice = function() {
+		applicationsFactory.invoice($scope.cur_app.id, $scope.new_invoice, function(data) {
+			if (data.errors) {
+				var error = "Invoice not sent.";
+				for (key in data.errors)
+					error += " " + data.errors[key].message;
+				displayErrorNotification(error);
+			}
+			else {
+				socket.emit("invoice", {
+					application_id: $scope.cur_app.id,
+					job_id: $scope.cur_app.job_id,
+					name: $scope.name
+				});
+				$.notify({
+					icon: "glyphicon glyphicon-check",
+					message: `Successfully sent invoice!`,
+					url: `#/invoices`,
+					target: "_self"
+				}, {
+					type: "success",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});						
+				// $location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+				$timeout(function() {
+					$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
+				}, 1000, true);
+			}
+		});
+	}		
 
 	//////////////////////////////////////////////////////
 	//										MESSAGE
@@ -290,30 +330,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory, invoicesFactory) {
 				var error = "Could not load job.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
-				displayErrorNotification(error + " Try reloading the page.");					
-			}
-			else {
-				$scope.job = data;
-				$scope.mode = "invoice";
-			}
-		});
-	}
-
-	//////////////////////////////////////////////////////
-	//										INVOICE
-	//////////////////////////////////////////////////////
-	$scope.createInvoice = function() {
-		$scope.new_invoice.cost = 300;
-		$scope.new_invoice.job_id = $scope.cur_app.job_id;
-		invoicesFactory.create($scope.new_invoice, function(data) {
-			if (data.errors) {
-				var error = "Invoice not sent.";
-				for (key in data.errors)
-					error += " " + data.errors[key].message;
-				displayErrorNotification(error);
+				displayErrorNotification(error);					
 			}
 			else
-				$scope.mode = "invoiced";
+				$scope.job = data;
 		});
-	}		
+	}
 });

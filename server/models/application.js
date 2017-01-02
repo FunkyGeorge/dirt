@@ -12,17 +12,18 @@ module.exports = {
 			else {
 				var query;
 				if ('truck_type' in data)
-					query = "SELECT status, HEX(applications.id) AS id, HEX(job_id) AS job_id, applications.created_at \
-					AS created_at, applications.updated_at AS updated_at, first_name, last_name, dirt_type, volume, \
-					completion_date FROM applications LEFT JOIN jobs \
-					ON job_id = jobs.id LEFT JOIN users ON user_id = users.id WHERE HEX(applications.trucker_id) = ? \
-					AND status >= 0 ORDER BY applications.created_at DESC ";
+					query = "SELECT status, cost, notes, HEX(applications.id) AS id, HEX(job_id) AS job_id, \
+					applications.created_at AS created_at, applications.updated_at AS updated_at, first_name, \
+					last_name, dirt_type, volume, \
+					completion_date FROM applications LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN users ON user_id = \
+					users.id WHERE HEX(applications.trucker_id) = ? AND status >= 0 ORDER BY applications.created_at DESC ";
 				else
-					query = "SELECT status, HEX(applications.id) AS id, HEX(job_id) AS job_id, applications.created_at \
-					AS created_at, applications.updated_at AS updated_at, first_name, last_name, dirt_type, volume, \
-					completion_date FROM applications LEFT JOIN jobs \
-					ON job_id = jobs.id LEFT JOIN truckers ON applications.trucker_id = truckers.id WHERE HEX(user_id) = ? \
-					AND status >= 0 ORDER BY jobs.created_at DESC, applications.created_at DESC ";
+					query = "SELECT status, cost, notes, HEX(applications.id) AS id, HEX(job_id) AS job_id, \
+					applications.created_at AS created_at, applications.updated_at AS updated_at, first_name, \
+					last_name, dirt_type, volume, \
+					completion_date FROM applications LEFT JOIN jobs ON job_id = jobs.id LEFT JOIN truckers ON \
+					applications.trucker_id = truckers.id WHERE HEX(user_id) = ? AND status >= 0 ORDER BY jobs.created_at \
+					DESC, applications.created_at DESC ";
 					connection.query(query, data.id, function(err, data) {
 					if (err)
 						callback({errors: {database: {message: "Please contact an admin."}}});
@@ -113,6 +114,7 @@ module.exports = {
 						// Set this application status to 1:
 						var query = "UPDATE applications SET status = 1, updated_at = NOW() WHERE HEX(id) = ? LIMIT 1";
 						connection.query(query, req.params.id, function(err, result) {
+											console.log(err)
 							if (err)
 								callback({errors: {database: {message: "Please contact an admin."}}});
 							else if (result.changedRows != 1)
@@ -120,13 +122,17 @@ module.exports = {
 							else {
 								// Set all other application statuses to -1:
 								var query = "UPDATE applications SET status = -1, updated_at = NOW() WHERE job_id = ? AND status = 0";
-								connection.query(query, application.job_id, function(err, result) {
+								connection.query(query, application[0].job_id, function(err, result) {
+											console.log(err)
+											console.log(application.job_id)
+											console.log(this.sql)
 									if (err)
 										callback({errors: {database: {message: "Please contact an admin."}}});
 									else {
 										// Set job status to 1:
 										var query = "UPDATE jobs SET job_status = 1, updated_at = NOW() WHERE id = ? LIMIT 1";
-										connection.query(query, application.job_id, function(err, result) {
+										connection.query(query, application[0].job_id, function(err, result) {
+											console.log(err)
 											if (err)
 												callback({errors: {database: {message: "Please contact an admin."}}});
 											else if (result.changedRows != 1)
@@ -228,6 +234,54 @@ module.exports = {
 			}
 		});
 	},
+	invoice: function(req, callback) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else if (!('truck_type' in data))
+				callback({errors: {user_type: {message: "Only truckers are allowed to create invoices."}}});
+			else if (!req.body.cost)
+				callback({errors: {form: {message: "Cost cannot be blank."}}});
+			else {
+				var _data = {
+					status: 3,
+					cost: req.body.cost,
+					notes: req.body.notes
+				};
+				var query = "UPDATE applications SET ?, updated_at = NOW() WHERE HEX(id) = ? \
+				AND HEX(trucker_id) = ? AND status = 2 LIMIT 1";
+				connection.query(query, [_data,req.params.id, data.id], function(err, result) {
+					console.log(err)
+					if (err)
+						callback({errors: {database: {message: "Please contact an admin."}}});
+					else if (result.changedRows != 1)
+						callback({errors: {update: {message: "Could not find valid application to update."}}});
+					else {
+						var query = "SELECT job_id FROM applications WHERE HEX(id) = ? LIMIT 1"
+						connection.query(query, req.params.id, function(err, application) {
+							if (err)
+								callback({errors: {database: {message: "Please contact an admin."}}});
+							else if (!application)
+								callback({errors: {application: {message: "Could not find job id."}}});
+								else {
+									var query = "UPDATE jobs SET job_status = 3, updated_at = NOW() WHERE id = ? \
+									AND job_status = 2 LIMIT 1";
+									connection.query(query, application[0].job_id, function(err, result) {
+										if (err)
+											callback({errors: {database: {message: "Please contact an admin."}}});
+										else if (result.changedRows != 1)
+											callback({errors: {update: {message: "Could not find valid job to update."}}});
+										else {
+											callback(false);
+										}
+									});
+								}	
+						});
+					}
+				});
+			}
+		});
+	},
 	payLeadFee: function(req, callback) {
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
 			if (err)
@@ -260,6 +314,55 @@ module.exports = {
 										callback({errors: {update: {message: "Could not find valid application to update."}}});					
 									else {
 										var query = "UPDATE jobs SET job_status = 2, updated_at = NOW() WHERE id = ? LIMIT 1"
+										connection.query(query, application[0].job_id, function(err, result) {
+											if (err)
+												callback({errors: {database: {message: "Please contact an admin."}}});
+											else if (result.changedRows != 1)
+												callback({errors: {update: {message: "Could not find valid application to update."}}});					
+											else
+												callback(false);
+										});
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+	},
+	payInvoice: function(req, callback) {
+		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data) {
+			if (err)
+				callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+			else {
+				var query = "SELECT job_id, cost FROM applications LEFT JOIN jobs on applications.job_id = jobs.id \
+				WHERE HEX(applications.id) = ? AND HEX(user_id) = ? AND status = 3 LIMIT 1";
+				connection.query(query, [req.params.id, data.id], function(err, application) {
+					if (err)
+						callback({errors: {database: {message: "Please contact an admin."}}});
+					else if (!data)
+						callback({errors: {update: {message: "Invalid invoice provided."}}});					
+					else {
+						console.log(req.body.id)
+						stripe.charges.create({
+							amount: application[0].cost * 100,
+							currency: "usd",
+							source: req.body.id,
+							description: "Invoice"
+						}, function(err, charge) {
+							if (err)
+								callback({errors: {stripe: {message: err.message}}});
+							else {
+								var query = "UPDATE applications SET status = 4, updated_at = NOW() WHERE HEX(id) = ? \
+								AND status = 3 LIMIT 1"
+								connection.query(query, req.params.id, function(err, result) {
+									if (err)
+										callback({errors: {database: {message: "Please contact an admin."}}});
+									else if (result.changedRows != 1)
+										callback({errors: {update: {message: "Could not find valid application to update."}}});					
+									else {
+										var query = "UPDATE jobs SET job_status = 4, updated_at = NOW() WHERE id = ? LIMIT 1"
 										connection.query(query, application[0].job_id, function(err, result) {
 											if (err)
 												callback({errors: {database: {message: "Please contact an admin."}}});

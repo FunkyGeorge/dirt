@@ -49,8 +49,22 @@ app.factory('applicationsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
+		invoice: function(id, data, callback) {
+			$http.put(`/api/applications/invoice/${id}`, data, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
 		payLeadFee: function(id, data, callback) {
 			$http.put(`/api/applications/payLeadFee/${id}`, data, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
+		payInvoice: function(id, data, callback) {
+			$http.put(`/api/applications/payInvoice/${id}`, data, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);

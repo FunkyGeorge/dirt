@@ -26,7 +26,7 @@
 
 <!-- MAIN -->
 <!-- MESSAGE -->
-<div class="row" ng-show="mode=='message'">
+<div class="row">
 	<h1 class="col-xs-12">Messages</h1>
 	<div class="col-sm-4">
 		<ul class="nav nav-tabs">
@@ -76,7 +76,7 @@
 			<div class="center-content" ng-if="cur_app.status>1">
 				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
 				<small class="text-muted" ng-if="cur_app.status==2">{{cur_app.first_name}} will send you an invoice once the job has been completed.</small>
-				<small class="text-muted" ng-if="cur_app.status==3">{{cur_app.first_name}} has sent you an <a href="#/invoices/{{cur_app.id}}">invoice</a>.</small>
+				<small class="text-muted" ng-if="cur_app.status==3">{{cur_app.first_name}} has sent you an <a href="#/invoices">invoice</a>.</small>
 				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
 			</div>
 		</div>
@@ -98,9 +98,9 @@
 			<!-- STATUS > 1 -->
 			<div class="center-content" ng-if="cur_app.status>1">
 				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
-				<button class="btn btn-default" ng-if="cur_app.status==2" data-toggle="modal" data-target="#invoice_modal">Invoice Client</button>
+				<button class="btn btn-default" data-toggle="modal" data-target="#invoice_modal" ng-if="cur_app.status==2" ng-click="showJob()">Invoice Client</button>
 				<small class="text-muted" ng-if="cur_app.status==2"><br><br>Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
-				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices/{{cur_app.id}}">invoice</a>.</small>
+				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices">invoice</a>.</small>
 				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
 			</div>
 		</div>
@@ -118,58 +118,14 @@
 		</div>
 		<form ng-show="cur_app" ng-submit="createMessage()">
 			<div class="col-xs-8">
-				<input class="form-control" type="text" placeholder="Type a message here..." ng-model="new_message" required ng-disabled="cur_app.status<2">
+				<input class="form-control" type="text" placeholder="Type a message here..." ng-model="new_message" required ng-disabled="cur_app.status<2 || cur_app.status==4">
 			</div>
 			<div class="col-xs-4">
-				<input class="btn btn-info form-control pull-right" type="submit" value="Send" ng-disabled="cur_app.status<2">
+				<input class="btn btn-info form-control pull-right" type="submit" value="Send" ng-disabled="cur_app.status<2 || cur_app.status==4">
 			</div>
 			<a class="error col-xs-4 pull-right text-center" href="" ng-if="cur_app.status>1"><small>Report User</small></a>
 		</form>
 	</div>
-</div>
-
-<!-- INVOICE -->
-<div class="row" ng-show="mode=='invoice'">
-	<h1>Create Invoice</h1>
-	<button ng-click="mode='message'">Back</button>
-	<p>Review the details before it's sent:</p>
-	<table>
-		<tr>
-			<th>Completion Date:</th>
-			<td ng-bind="job.completion_date | date:'fullDate'"></td>
-		</tr>
-		<tr>
-			<th>Amount of Dirt:</th>
-			<td>{{job.amount}} cubic yards</td>
-		</tr>
-		<tr>
-			<th>Type of Dirt:</th>
-			<td ng-bind="job.type"></td>
-		</tr>
-		<tr>
-			<th>Distance:</th>
-			<td>10 miles (hard coded)</td>
-		</tr>
-		<tr>
-			<th>Pickup Location:</th>
-			<td>Some hard coded address</td>
-		</tr>
-		<tr>
-			<th>Estimated Cost:</th>
-			<td>$300</td>
-		</tr>
-	</table>
-	<label>Notes:</label><br>
-	<textarea ng-model="new_invoice.notes"></textarea><br>
-	<button ng-click="createInvoice()">Send Invoice</button>
-</div>
-
-<!-- INVOICED -->
-<div class="row center-content" ng-show="mode=='invoiced'">
-	<h1>Success!</h1>
-	<p>Your invoice has been sent.</p>
-	<p>Your funds will be available to view in the top right menu under invoices, or just click below:</p>
-	<a href="#/invoices"><button>View Invoices</button></a>
 </div>
 
 <!-- MODALS -->
@@ -287,10 +243,30 @@
 				<h4 class="modal-title text-center">Send Invoice to <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span></h4>
 			</div>
 			<div class="modal-body">
-				<p>Please check the invoice details before sending:</p>
+				<p>Please review details before sending:</p>
+				<table class="table table-bordered">
+					<tr>
+						<th>Completion Date:</th>
+						<td ng-bind="job.completion_date | date:'fullDate'"></td>
+					</tr>
+					<tr>
+						<th>Volume of Dirt:</th>
+						<td>{{job.volume | number:2}} cubic yards</td>
+					</tr>
+					<tr>
+						<th>Type of Dirt:</th>
+						<td ng-bind="job.dirt_type"></td>
+					</tr>
+					<tr>
+						<th>Estimated Cost:</th>
+						<td>$<input type="number" step="0.01" ng-init="new_invoice.cost=300.00" ng-model="new_invoice.cost" required></td>
+					</tr>				
+				</table>
+				<label>Notes:</label><br>
+				<textarea ng-model="new_invoice.notes"></textarea><br>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="">Confirm</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="createInvoice()">Send Invoice</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
