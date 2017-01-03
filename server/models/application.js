@@ -344,9 +344,9 @@ module.exports = {
 					else if (!data)
 						callback({errors: {update: {message: "Invalid invoice provided."}}});					
 					else {
-						console.log(req.body.id)
+						console.log(application[0].cost*100)
 						stripe.charges.create({
-							amount: application[0].cost * 100,
+							amount: Math.round(application[0].cost * 100),
 							currency: "usd",
 							source: req.body.id,
 							description: "Invoice"

@@ -272,7 +272,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 				}, 1000, true);
 			}
 		});
-	}		
+	}
 
 	//////////////////////////////////////////////////////
 	//										MESSAGE

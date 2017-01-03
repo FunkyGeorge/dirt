@@ -77,7 +77,7 @@
 				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
 				<small class="text-muted" ng-if="cur_app.status==2">{{cur_app.first_name}} will send you an invoice once the job has been completed.</small>
 				<small class="text-muted" ng-if="cur_app.status==3">{{cur_app.first_name}} has sent you an <a href="#/invoices">invoice</a>.</small>
-				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
+				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="setDoNotShow()">Click here</a> to remove the conversation from the sidebar.</small>
 			</div>
 		</div>
 
@@ -101,7 +101,7 @@
 				<button class="btn btn-default" data-toggle="modal" data-target="#invoice_modal" ng-if="cur_app.status==2" ng-click="showJob()">Invoice Client</button>
 				<small class="text-muted" ng-if="cur_app.status==2"><br><br>Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
 				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices">invoice</a>.</small>
-				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="">Click here</a> to close the conversation.</small>
+				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="setDoNotShow()">Click here</a> to remove the conversation from the sidebar.</small>
 			</div>
 		</div>
 

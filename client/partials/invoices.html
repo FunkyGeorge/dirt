@@ -35,7 +35,7 @@
 		</ul>
 	</div>
 	<div class="col-sm-8">
-		<div ng-repeat="application in applications | filter:{status: status}">
+		<div ng-repeat="application in applications | filter:{status: status} | orderBy:'-updated_at'">
 			<h3>{{application.first_name}} {{application.last_name}} - ${{application.cost | number:2}}<button class="btn btn-info pull-right" data-toggle="modal" data-target="#pay_modal" ng-if="user_type=='user' && application.status==3" ng-click="setCurApp(application)">Make Payment</button></h3>
 			<p>{{status==3?'Request':'Payment'}} sent {{application.updated_at | date:"fullDate"}}</p>
 			<a href="#/jobs/{{application.job_id}}">View Job</a> | <a href="#/messages/{{application.id}}">View Messages</a>
