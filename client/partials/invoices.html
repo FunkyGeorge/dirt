@@ -26,34 +26,50 @@
 
 <!-- MAIN -->
 <div class="row">
-	<h1>Invoices</h1>
-	<div class="col-sm-2">
-		<p ng-click="mode='pending'">Pending Invoices</p>
-		<p ng-click="mode='history'">Invoice History</p>
-		<p ng-click="mode='bank'">Bank Account</p>
+	<h1 class="col-xs-12">Invoices</h1>
+	<div class="col-sm-4">
+		<ul>
+			<a href="" ng-click="status=3" ng-class="{selected: status==3}">Pending Invoices</a><br>
+			<a href="" ng-click="status=4" ng-class="{selected: status==4}">Invoice History</a><br>
+			<!-- <a href="" ng-click="status=5" ng-class="{selected: status==5}">Bank Account</a><br> -->
+		</ul>
 	</div>
-	<div class="col-sm-10">
-		<!-- PENDING -->
-		<div ng-repeat="invoice in invoices | filter:{status: 0}" ng-if="mode=='pending'">
-			<h4>{{invoice.first_name}} {{invoice.last_name}} - ${{invoice.cost}}</h4>
-			<p>Request sent {{invoice.created_at | date:"fullDate"}}</p>
-			<button ng-if="user_type=='trucker'" ng-click="">Send Reminder</button>
-			<button ng-if="user_type=='user'" ng-click="">Make Payment</button>
+	<div class="col-sm-8">
+		<div ng-repeat="application in applications | filter:{status: status} | orderBy:'-updated_at'">
+			<h3>{{application.first_name}} {{application.last_name}} - ${{application.cost | number:2}}<button class="btn btn-info pull-right" data-toggle="modal" data-target="#pay_modal" ng-if="user_type=='user' && application.status==3" ng-click="setCurApp(application)">Make Payment</button></h3>
+			<p>{{status==3?'Request':'Payment'}} sent {{application.updated_at | date:"fullDate"}}</p>
+			<a href="#/jobs/{{application.job_id}}">View Job</a> | <a href="#/messages/{{application.id}}">View Messages</a>
+			<hr>
 		</div>
+	</div>
+</div>
 
-		<!-- HISTORY -->
-		<div ng-repeat="invoice in invoices | filter:{status: 1}" ng-if="mode=='history'">
-			<h4>{{invoice.first_name}} {{invoice.last_name}} - ${{invoice.cost}}</h4>
-			<p>Payment received {{invoice.updated_at | date:"fullDate"}}</p>
-		</div>
-
-		<div ng-if="mode=='bank'">
-			<h4>Edit Bank Account</h4>
-			<label>Routing Number</label><br>
-			<input type="text" ng-model="bank.routing_number"><br>
-			<label>Account Number</label><br>
-			<input type="text" ng-model="bank.account_number"><br>
-			<button ng-click="">Cancel???</button><button ng-click="editBank()">Save</button>
+<!-- MODALS -->
+<div id="pay_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Pay <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> ${{cur_app.cost | number:2}}?</h4>
+			</div>
+			<div class="modal-body">
+				<p>After paying the invoice, the job will be closed (you will not be able to contact {{cur_app.first_name}} through this platform).</p>
+				<p>We use stripe payment...reason here</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-info" data-dismiss="modal"
+					stripe-checkout="payInvoice"
+					data-key="pk_test_ZkxMVXmOpx6nBGu2MnwNm0sb"
+					data-amount="{{cur_app.cost * 100}}"
+					data-name="Invoice"
+					data-description="Invoice from {{cur_app.first_name}} {{cur_app.last_name}}"
+					data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+					data-locale="auto"
+					data-zip-code="true">
+					Pay with Stripe
+				</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>				
+			</div>
 		</div>
 	</div>
 </div>

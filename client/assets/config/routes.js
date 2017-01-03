@@ -41,7 +41,7 @@ app.config(function($routeProvider) {
 		templateUrl: "partials/messages.html",
 		controller: "messagesController"
 	})
-	.when("/invoices/:id?",{
+	.when("/invoices",{
 		templateUrl: "partials/invoices.html",
 		controller: "invoicesController"
 	})

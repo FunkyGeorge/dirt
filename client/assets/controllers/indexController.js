@@ -52,7 +52,7 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 						displayErrorNotification("Could not load jobs. Please wait a while and try reloading. Contact an admin if the problem persists.");
 					else {
 						for (var i = 0; i < data.length; i++)
-							data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+							data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace("-", "_").replace(/ /g,  "_");
 
 						transportDistance(data);
 						$scope.jobs = data;

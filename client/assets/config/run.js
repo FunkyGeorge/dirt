@@ -173,10 +173,11 @@ app.run(function($rootScope, $timeout) {
 				});
 			});
 
-			socket.on('connected', function(data) {
+			socket.on('paidLeadFee', function(data) {
+				console.log("CONNECTED")
 				$.notify({
 					icon: "glyphicon glyphicon-info-sign",
-					message: `You're now connected with ${data.name}, say hi!`,
+					message: `${data.name} has paid our lead fee. You're now connected!`,
 					url: `#/messages/${data.application_id}#${Date.now()}`,
 					target: "_self"
 				}, {
@@ -191,6 +192,25 @@ app.run(function($rootScope, $timeout) {
 					}
 				});
 			});			
+
+			socket.on('invoiced', function(data) {
+				$.notify({
+					icon: "glyphicon glyphicon-info-sign",
+					message: `${data.name} has sent you an invoice.`,
+					url: `#/invoices#${Date.now()}`,
+					target: "_self"
+				}, {
+					type: "info",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					}
+				});
+			});
 
 			//////////////////////////////////////////////////////
 			//										SENT FROM USERS
@@ -217,9 +237,28 @@ app.run(function($rootScope, $timeout) {
 			socket.on('declined', function(data) {
 				$.notify({
 					icon: "glyphicon glyphicon-info-sign",
-					message: `${data.name} declined your application. Better luck next time!`,
+					message: `${data.name} declined your application. Better luck next time!`
 				}, {
 					type: "warning",
+					placement: {
+						from: "bottom"
+					},
+					delay: 4000,
+					animate: {
+						enter: 'animated fadeInUp',
+						exit: 'animated fadeOutDown',
+					} 
+				});
+			});
+
+			socket.on('paid', function(data) {
+				$.notify({
+					icon: "glyphicon glyphicon-info-sign",
+					message: `${data.name} has paid you! Click here and check your invoice history.`,
+					url: `#/invoices#${Date.now()}`,
+					target: "_self"
+				}, {
+					type: "info",
 					placement: {
 						from: "bottom"
 					},

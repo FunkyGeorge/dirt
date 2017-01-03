@@ -10,6 +10,10 @@ module.exports = function(server) {
 			io.to(data.application_id).emit('sent', data);
 		});
 
+		socket.on("logout", function() {
+			socket.disconnect();
+		});
+
 		//////////////////////////////////////////////////////
 		//										SENT FROM TRUCKERS
 		//////////////////////////////////////////////////////		
@@ -26,8 +30,13 @@ module.exports = function(server) {
 			socket.broadcast.to(data.application_id).emit('forfeitted', data);
 		});
 
-		socket.on('connect', function(data) {
-			socket.broadcast.to(data.application_id).emit('connected', data);
+		socket.on('payLeadFee', function(data) {
+			console.log("in connect", data)
+			socket.broadcast.to(data.application_id).emit('paidLeadFee', data);
+		});
+
+		socket.on('invoice', function(data) {
+			socket.broadcast.to(data.application_id).emit('invoiced', data);
 		});
 		
 		//////////////////////////////////////////////////////
@@ -39,12 +48,12 @@ module.exports = function(server) {
 		});		
 		
 		socket.on('decline', function(data) {
-			console.log("decline")
 			socket.broadcast.to(data.application_id).emit('declined', data);
 		});
-		
-		socket.on("logout", function() {
-			socket.disconnect();
+
+		socket.on('pay', function(data) {
+			socket.broadcast.to(data.application_id).emit('paid', data);
 		});
+
 	});
 }

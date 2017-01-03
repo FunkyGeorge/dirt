@@ -148,7 +148,7 @@
 					<div class="dodgerblue" ng-if="job.job_status>0">
 						<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
 						<p class="text-center dodgerblue" ng-if="job.job_status==2"><b>In progress</b></p>
-						<a href="#/invoices/{{job.application_jd}}"><p class="text-center" ng-if="job.job_status==3"><b>Check Invoices</b></p></a>
+						<a href="#/invoices"><p class="text-center" ng-if="job.job_status==3"><b>Check Invoices</b></p></a>
 						<p class="text-center dodgerblue" ng-if="job.job_status==4"><b>Job completed!</b></p>
 						<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
 					</div>
