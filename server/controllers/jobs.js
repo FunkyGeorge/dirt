@@ -11,7 +11,7 @@ module.exports = {
 			else
 				res.json(data);
 		});
-	},	
+	},
 	show: function(req, res) {
 		job.show(req, function(err, data) {
 			if (err)
@@ -22,6 +22,17 @@ module.exports = {
 			else
 				res.json(data);
 		});
+	},
+	getJobs: function(req, res) {
+		job.getJobs(req, function(err, data) {
+			if (err)
+				if (err.errors.jwt)
+					res.clearCookie('ronin_token').json(err);
+				else
+					res.json(err);
+			else
+				res.json(data);
+		})
 	},
 	create: function(req, res) {
 		job.create(req, function(err, data) {

@@ -30,6 +30,12 @@
 		<h1 class="text-center">Dirt Feed</h1>
 		<h4 class="text-center">Sort By:</h4>
 		<form>
+			<div class="checkbox">
+				<label><input type="checkbox" ng-click="state[5] = !state[5]" name="sorting-option">Pickup Only</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" ng-click="state[6] = !state[6];" name="sorting-option">Dropoff Only</label>
+			</div>
 			<div class="radio">
 				<label><input type="radio" ng-click="toggle(true);" name="sorting-option" checked>Latest</label>
 			</div>
@@ -39,9 +45,14 @@
 	  </form>
 	</div>
 	<div class="col-sm-9" ng-if="jobs.length > 0">
+		<ul class="nav nav-pills pull-right">
+			<li ng-class="{active: state[4]==0}"><a href="" ng-click="state[4]=0; getAllListings();">All Listings</a></li>
+			<li ng-class="{active: state[4]==1}"><a href="" ng-click="state[4]=1; getYourListings();">Your Listings</a></li>
+		</ul>
+		<div class="clearfix"></div>
 		<!-- nfinite scroll zone ########################################################### -->
 		<div infinite-scroll="append();" infinite-scroll-distance="0">
-			<div class="row" ng-repeat="job in jobs">
+			<div class="row" ng-repeat="job in jobs | filter: filterByStatus">
 		<hr>
 				<div class="col-sm-3 col-xs-4" style="margin-bottom: 20px;">
 					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg">
@@ -56,7 +67,7 @@
 					<div class="row visible-xs-block center-content">
 						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
 						<a href="#/jobs/{{job.id}}">View Job</a>
-					</div>					
+					</div>
 				</div>
 				<div class="col-sm-9 col-xs-12 pull-right">
 					<table class="table table-bordered">

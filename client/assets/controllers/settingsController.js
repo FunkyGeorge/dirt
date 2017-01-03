@@ -16,7 +16,6 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 
 			$scope.jobs = data.jobs;
 			$scope.user = data.user;
-      console.log(data);
     });
 	}
 	else
