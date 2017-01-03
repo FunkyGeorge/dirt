@@ -74,7 +74,7 @@ module.exports = {
 				var query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
 				HEX(applications.id) AS application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
 				LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
-				AND job_status = status WHERE HEX(jobs.user_id) = ? LIMIT 1";
+				AND job_status = status WHERE HEX(jobs.user_id) = ?";
 				connection.query(query, req.params.id, function(err, data){
 					if (err)
 					callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
@@ -87,7 +87,8 @@ module.exports = {
 				var query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
 				HEX(applications.id) AS application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
 				LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
-				AND job_status = status WHERE HEX(applications.user_id) = ? LIMIT 1";
+				AND job_status = status WHERE HEX(jobs.id) IN (SELECT HEX(job_id) FROM applications WHERE HEX(trucker_id) \
+				= ?)";
 				connection.query(query, req.params.id, function(err, data){
 					if (err)
 					callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});

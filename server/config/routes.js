@@ -51,10 +51,4 @@ module.exports = function(app) {
 	app.put('/api/messages/:id', messages.update);
 	app.delete('/api/messages/:id', messages.delete);
 
-	// INVOICES
-	app.get('/api/invoices', invoices.index);
-	app.get('/api/invoices/:id', invoices.show);
-	app.post('/api/invoices', invoices.create);
-	app.put('/api/invoices/:id', invoices.update);
-	app.delete('/api/invoices/:id', invoices.delete);
 }
