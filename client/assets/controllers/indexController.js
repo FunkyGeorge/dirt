@@ -7,10 +7,13 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 
 		//state variable
 		$scope.state = [
-			1, //scroll
-			true, //keepscrolling flag
-			true, //distance/latest flag
-			false //isLoadedflag
+			1, 			//scroll
+			true, 	//keepscrolling flag
+			true, 	//distance/latest flag
+			false,	//isLoadedflag
+			0,			//public/self jobs flag
+			false,	//pickup flag
+			false,	//dropoff flag
 		];
 		//#####  Commented to save api calls  #####
 		navigator.geolocation.getCurrentPosition(showPosition);
@@ -95,6 +98,41 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 			$scope.state[0] = 1;
 			appendJobs();
 		}
+	};
+
+	$scope.filterByStatus = function(value){
+		if (!$scope.state[5] && !$scope.state[6])
+			return true;
+		else if ($scope.state[5] && $scope.state[6])
+			return false
+		else if ($scope.state[5] && (value.job_type == 0 || value.job_type == 2))
+			return true;
+		else if ($scope.state[6] && value.job_type == 1)
+			return true;
+		else
+			return false;
+	};
+
+	$scope.getAllListings = function(){
+		$scope.state[1] = true;
+		appendJobs();
+	};
+
+	$scope.getYourListings = function(){
+		if ($scope.user_type == 'user')
+			jobsFactory.getUserJobs($scope.id, function(data){
+				for (var i = 0; i < data.length; i++)
+					data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+
+				$scope.jobs = data;
+			});
+		else if ($scope.user_type = 'trucker')
+			jobsFactory.getTruckerJobs($scope.id, function(data){
+				for (var i = 0; i < data.length; i++)
+					data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+
+				$scope.jobs = data;
+			});
 	};
 
 });
