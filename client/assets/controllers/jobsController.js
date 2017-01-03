@@ -1,4 +1,4 @@
-app.controller('jobsController', function ($scope, $location, jobsFactory) {
+app.controller('jobsController', function ($scope, $location, $routeParams, jobsFactory) {
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
@@ -21,6 +21,15 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 	}
 	else
 		$location.url('/welcome');
+
+	if ($routeParams.id) {
+		jobsFactory.show($routeParams.id, function(data){
+			data.completion_date = null;
+			$scope.job = data;
+			$scope.change();
+			console.log($scope.job);
+		});
+	}
 
 	//////////////////////////////////////////////////////
 	//										HELPER FUNCTIONS
@@ -142,36 +151,45 @@ app.controller('jobsController', function ($scope, $location, jobsFactory) {
 
 	//////////////////////////////////////////////////////
 	//										JOB
-	//////////////////////////////////////////////////////	
+	//////////////////////////////////////////////////////
 	$scope.create = function() {
 		$scope.error = null;
-		jobsFactory.create($scope.job, function(data) {
-			if (data.errors) {
-				var error = "Could not create new job. "
-				for (key in data.errors)
-					error += " " + data.errors[key].message;
-				displayErrorNotification(error + " Fix the error before re-submitting.");
-			}
-			else {
-				$scope.id = data.id;
-				$.notify({
-					icon: "glyphicon glyphicon-check",
-					message: `Successfully listed new job!`,
-					url: `#/jobs/${data.id}`,
-					target: "_self"
-				}, {
-					type: "success",
-					placement: {
-						from: "bottom"
-					},
-					delay: 4000,
-					animate: {
-						enter: 'animated fadeInUp',
-						exit: 'animated fadeOutDown',
-					} 
-				});					
-				$scope.step = 7;
-			}
+		if ($routeParams.id)
+			$scope.update();
+		else
+			jobsFactory.create($scope.job, function(data) {
+				if (data.errors) {
+					var error = "Could not create new job. "
+					for (key in data.errors)
+						error += " " + data.errors[key].message;
+					displayErrorNotification(error + " Fix the error before re-submitting.");
+				}
+				else {
+					$scope.id = data.id;
+					$.notify({
+						icon: "glyphicon glyphicon-check",
+						message: `Successfully listed new job!`,
+						url: `#/jobs/${data.id}`,
+						target: "_self"
+					}, {
+						type: "success",
+						placement: {
+							from: "bottom"
+						},
+						delay: 4000,
+						animate: {
+							enter: 'animated fadeInUp',
+							exit: 'animated fadeOutDown',
+						}
+					});
+					$scope.step = 7;
+				}
+			});
+	}
+
+	$scope.update = function(){
+		jobsFactory.edit($routeParams.id, $scope.job, function(data){
+			console.log(data);
 		});
 	}
 });

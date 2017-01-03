@@ -1,5 +1,5 @@
 app.factory('jobsFactory', function($http, $cookies) {
-	return {	
+	return {
 		index: function(data, zips, callback) {
 			$http.get('/api/jobs', {
 				headers: {
@@ -28,6 +28,13 @@ app.factory('jobsFactory', function($http, $cookies) {
 		},
 		relist: function(id, callback) {
 			$http.put(`/api/jobs/relist/${id}`, null, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
+		edit: function(id, data, callback) {
+			$http.put(`/api/jobs/edit/${id}`, data, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {
 				callback(res.data);
