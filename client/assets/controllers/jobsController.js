@@ -54,35 +54,35 @@ app.controller('jobsController', function ($scope, $location, $routeParams, jobs
 				break;
 			case 'Recycled Asphalt':
 				$scope.description = "Crushed for reuse, from a recycling plant or staging area."
-				$scope.src = "../static/images/dirt_types/recycled_asphalt.jpg";
+				$scope.src = "../static/images/dirt_types/recycledasphalt.jpg";
 				break;
 			case 'Recycled Concrete':
 				$scope.description = "Crushed for reuse, from a recycling plant or staging area."
-				$scope.src = "../static/images/dirt_types/recycled_concrete.jpg";
+				$scope.src = "../static/images/dirt_types/recycledconcrete.jpg";
 				break;
 			case 'Recycled Base Material':
 				$scope.description = "Ready for reuse, from under roads &amp; parking lots."
-				$scope.src = "../static/images/dirt_types/recycled_base_material.jpg";
+				$scope.src = "../static/images/dirt_types/recycledbasematerial.jpg";
 				break;
 			case 'Clean Fill':
 				$scope.description = "Sand, sandyclay, clay, topsoil or a mixture of any of these with less than 5% clumps or rocks or sod or roots or weeds or concrete chunks, etc."
-				$scope.src = "../static/images/dirt_types/clean_fill.jpg";
+				$scope.src = "../static/images/dirt_types/cleanfill.jpg";
 				break;
 			case 'Rough Fill':
 				$scope.description = "Same as Clean Fill, with 5% or more clumps or rocks or sod or roots or weeds, or concrete chunks, etc. Also gumbo clay and marsh bottom."
-				$scope.src = "../static/images/dirt_types/rough_fill.jpg";
+				$scope.src = "../static/images/dirt_types/roughfill.jpg";
 				break;
 			case 'Topsoil - Nice':
 				$scope.description = "High quality, rich black organic, natural or screened."
-				$scope.src = "../static/images/dirt_types/topsoil_nice.jpg";
+				$scope.src = "../static/images/dirt_types/topsoilnice.jpg";
 				break;
 			case 'Topsoil - Average':
 				$scope.description = "Average quality, medium black organic, little or no clumps, rocks, sod, or roots, etc."
-				$scope.src = "../static/images/dirt_types/topsoil_average.jpg";
+				$scope.src = "../static/images/dirt_types/topsoilaverage.jpg";
 				break;
 			case 'Topsoil - Economy':
 				$scope.description = "Low quality, some black organic, could have some clumps, rocks, sod, or roots, etc."
-				$scope.src = "../static/images/dirt_types/topsoil_economy.jpg";
+				$scope.src = "../static/images/dirt_types/topsoileconomy.jpg";
 				break;
 			case 'Peat':
 				$scope.description = "Decomposed plant material, marsh bottom, could be wet or dry."
@@ -90,11 +90,11 @@ app.controller('jobsController', function ($scope, $location, $routeParams, jobs
 				break;
 			case 'River Rock':
 				$scope.description = "Rounded stones varies in color, 1/2 inch to 3 inches."
-				$scope.src = "../static/images/dirt_types/river_rock.jpg";
+				$scope.src = "../static/images/dirt_types/riverrock.jpg";
 				break;
 			case 'Rip-Rap':
 				$scope.description = "Rock, 3 inches to 10 inches."
-				$scope.src = "../static/images/dirt_types/rip_rap.jpg";
+				$scope.src = "../static/images/dirt_types/riprap.jpg";
 				break;
 			case 'Boulders':
 				$scope.description = "Rock, larger than 10 inches."
@@ -102,15 +102,15 @@ app.controller('jobsController', function ($scope, $location, $routeParams, jobs
 				break;
 			case 'Asphalt Chunks':
 				$scope.description = "Broken pieces of asphalt, not been recycled."
-				$scope.src = "../static/images/dirt_types/asphalt_chunks.jpg";
+				$scope.src = "../static/images/dirt_types/asphaltchunks.jpg";
 				break;
 			case 'Concrete Chunks':
 				$scope.description = "Broken pieces of concrete, not been recycled."
-				$scope.src = "../static/images/dirt_types/concrete_chunks.jpg";
+				$scope.src = "../static/images/dirt_types/concretechunks.jpg";
 				break;
 			case 'Contaminated Fill':
 				$scope.description = "Dirtfill with gas, diesel fuel, PCBs, toxic chemicals, etc."
-				$scope.src = "../static/images/dirt_types/contaminated_fill.jpg";
+				$scope.src = "../static/images/dirt_types/contaminatedfill.jpg";
 				break;
 			case 'Snow':
 				$scope.description = "Removed from streets, parking lots or driveways."

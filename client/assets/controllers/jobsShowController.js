@@ -13,7 +13,7 @@ jobsFactory, applicationsFactory) {
 			}
 			else {
 				$scope.job = data;
-				$scope.job.src = $scope.job.dirt_type.toLowerCase().replace(" - ", "_").replace("-", "_").replace(/ /g,  "_");
+				$scope.job.src = $scope.job.dirt_type.toLowerCase().replace(/-/g, "").replace(/ /g,  "");
 				$scope.job.completion_date = new Date(data.completion_date);
 				$scope.job.p_loader = Boolean(data.p_loader);
 				$scope.job.d_loader = Boolean(data.d_loader);

@@ -279,8 +279,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 	//////////////////////////////////////////////////////
 	$scope.showMessages = function(application) {
 		$rootScope.messages = [];
-		$rootScope._app = application;
-		$scope.cur_app = application;
+		$rootScope.cur_app = application;
 		if (application.status > 1)
 			messagesFactory.show(application.id, function(data) {
 				if (data.errors) {

@@ -79,7 +79,7 @@ app.run(function($rootScope, $timeout) {
 				// Only notify on new messages when you're not the sender 
 				// and you're not currently viewing that conversation:
 				if (allow_notify && data.name != $rootScope.name && 
-				(data.application_id != $rootScope._app.id || !window.location.hash.includes("messages")))
+				(!$rootScope.cur_app || data.application_id != $rootScope.cur_app.id || !window.location.hash.includes("messages")))
 					$.notify({
 						icon: "glyphicon glyphicon-envelope",
 						message: `New message from ${data.name}.`,
@@ -102,7 +102,7 @@ app.run(function($rootScope, $timeout) {
 							allow_notify = true;
 						}				
 					});
-				else if (data.application_id == $rootScope._app.id && window.location.hash.includes("messages")) {
+				else if (data.application_id == $rootScope.cur_app.id && window.location.hash.includes("messages")) {
 					$rootScope.messages.push(data);
 					$rootScope.$apply();
 					$timeout(function() {
