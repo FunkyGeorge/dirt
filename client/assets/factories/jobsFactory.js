@@ -19,7 +19,7 @@ app.factory('jobsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
-		getJobs: function(id, callback) {
+		getUserJobs: function(id, callback) {
 			$http.get(`/api/jobs/user/${id}`, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
 			}).then(function(res) {

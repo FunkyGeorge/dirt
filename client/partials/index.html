@@ -31,10 +31,10 @@
 		<h4 class="text-center">Sort By:</h4>
 		<form>
 			<div class="checkbox">
-				<label><input type="checkbox" ng-click="" name="sorting-option">Pickup Only</label>
+				<label><input type="checkbox" ng-click="state[5] = !state[5]" name="sorting-option">Pickup Only</label>
 			</div>
 			<div class="checkbox">
-				<label><input type="checkbox" ng-click="" name="sorting-option">Dropoff Only</label>
+				<label><input type="checkbox" ng-click="state[6] = !state[6];" name="sorting-option">Dropoff Only</label>
 			</div>
 			<div class="radio">
 				<label><input type="radio" ng-click="toggle(true);" name="sorting-option" checked>Latest</label>
@@ -52,7 +52,7 @@
 		<div class="clearfix"></div>
 		<!-- nfinite scroll zone ########################################################### -->
 		<div infinite-scroll="append();" infinite-scroll-distance="0">
-			<div class="row" ng-repeat="job in jobs">
+			<div class="row" ng-repeat="job in jobs | filter: filterByStatus">
 		<hr>
 				<div class="col-sm-3 col-xs-4" style="margin-bottom: 20px;">
 					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg">
