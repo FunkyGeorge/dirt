@@ -26,6 +26,13 @@ app.factory('jobsFactory', function($http, $cookies) {
 				callback(res.data);
 			});
 		},
+		getTruckerJobs: function(id, callback) {
+			$http.get(`/api/jobs/trucker/${id}`, {
+				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}
+			}).then(function(res) {
+				callback(res.data);
+			});
+		},
 		create: function(data, callback) {
 			$http.post('/api/jobs', data, {
 				headers: {'authorization': `Bearer ${$cookies.get('ronin_token')}`}

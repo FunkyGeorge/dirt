@@ -70,17 +70,32 @@ module.exports = {
 	},
 	getJobs: function(req, callback){
 		jwt.verify(req.cookies.ronin_token, jwt_key, function(err, data){
-			var query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
+			if(req.params.action == 'user'){
+				var query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
 				HEX(applications.id) AS application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
 				LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
 				AND job_status = status WHERE HEX(jobs.user_id) = ? LIMIT 1";
-			connection.query(query, req.params.id, function(err, data){
-				if (err)
+				connection.query(query, req.params.id, function(err, data){
+					if (err)
 					callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
-				else {
-					callback(false, data);
-				}
-			});
+					else {
+						callback(false, data);
+					}
+				});
+			}
+			else if (req.params.action == 'trucker'){
+				var query = "SELECT *, HEX(jobs.id) AS id, jobs.created_at AS created_at, HEX(user_id) AS user_id, \
+				HEX(applications.id) AS application_id FROM jobs LEFT JOIN pickup ON jobs.id = pickup.job_id \
+				LEFT JOIN dropoff ON jobs.id = dropoff.job_id LEFT JOIN applications ON jobs.id = applications.job_id \
+				AND job_status = status WHERE HEX(applications.user_id) = ? LIMIT 1";
+				connection.query(query, req.params.id, function(err, data){
+					if (err)
+					callback({errors: {jwt: {message: "Invalid token. Your session is ending, please login again."}}});
+					else {
+						callback(false, data);
+					}
+				});
+			}
 		});
 	},
 	create: function(req, callback) {
