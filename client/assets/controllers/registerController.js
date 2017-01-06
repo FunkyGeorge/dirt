@@ -1,4 +1,4 @@
-app.controller('registerController', function ($scope, $rootScope, $location, truckersFactory, usersFactory) {
+app.controller('registerController', function ($scope, $location, truckersFactory, usersFactory) {
 	if (payload)
 		$location.url('/');
 

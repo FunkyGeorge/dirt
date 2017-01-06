@@ -174,8 +174,7 @@ module.exports = {
 										last_name: req.body.last_name,
 										password: hash
 									};
-									connection.query("INSERT INTO users SET ?, id = UNHEX(REPLACE(UUID(), '-', '')), \
-									created_at = NOW(), updated_at = NOW()", data, function(err) {
+									connection.query("INSERT INTO users SET ?", data, function(err) {
 										if (err)
 											callback({errors: {database: {message: "Please contact an admin."}}})
 										else {
@@ -220,7 +219,7 @@ module.exports = {
 					// Check valid password:
 					bcrypt.compare(req.body.password, data[0].password, function(err, isMatch) {
 						if (err)
-							callback({errors: {bcrypt: {message: "Invalid email/password, try facebook login."}}});
+							callback({errors: {bcrypt: {message: "Invalid email/password."}}});
 						else if (!isMatch)
 							callback({errors: {password: {message: "Email/password does not match."}}});
 						else {

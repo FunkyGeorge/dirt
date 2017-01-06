@@ -5,7 +5,7 @@ var applications = require('../controllers/applications.js');
 var messages = require('../controllers/messages.js');
 
 module.exports = function(app) {
-	// users
+	// USERS
 	// app.get('/users', users.index);
 	app.get('/api/users/:id', users.show);
 	app.put('/api/users', users.update);
@@ -26,7 +26,7 @@ module.exports = function(app) {
 	// JOBS
 	app.get('/api/jobs', jobs.index);
 	app.get('/api/jobs/:id', jobs.show);
-	app.get('/api/jobs/:action/:id', jobs.getJobs); //
+	app.get('/api/jobs/:action/:id', jobs.getJobs);
 	app.post('/api/jobs', jobs.create);
 	app.put('/api/jobs/:action/:id', jobs.update);
 	app.delete('/api/jobs/:id', jobs.delete);

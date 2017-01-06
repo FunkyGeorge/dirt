@@ -233,7 +233,7 @@ module.exports = {
 					// Check valid password:
 					bcrypt.compare(req.body.password, data[0].password, function(err, isMatch) {
 						if (err)
-							callback({errors: {bcrypt: {message: "Invalid email/password, try facebook login."}}});
+							callback({errors: {bcrypt: {message: "Invalid email/password."}}});
 						else if (!isMatch)
 							callback({errors: {password: {message: "Email/password does not match."}}});
 						else {
