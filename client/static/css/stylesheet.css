@@ -12,6 +12,12 @@ body{
 	font-size: 25px;
 }
 
+#Logo{
+	width: 2em;
+	padding: 0;
+	margin-left: 1em;
+}
+
 .error {
 	color: red;
 }
