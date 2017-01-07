@@ -1,5 +1,6 @@
-body{
-	padding-top: 70px;
+@font-face{
+	font-family: Lato;
+	src: url(../fonts/Lato-Medium.ttf);
 }
 
 @font-face {
@@ -7,8 +8,17 @@ body{
 	src: url(../fonts/BandungHardcoreGP.ttf);
 }
 
+h1,h2,h3,h4,h5,p,li{
+	font-family: Lato, Times;
+}
+
+body{
+	padding-top: 70px;
+}
+
+
 #Bandung {
-	font-family: Bandung, Tahoma;
+	font-family: Bandung, Times;
 	font-size: 25px;
 }
 
