@@ -62,13 +62,13 @@
 					<small class="form-text text-muted">Check this if you have a truck for carrying very large loads.<br></small>
 				</label><br>
 			</div>
-			<input ng-show="user_type=='trucker'" class="form-control btn btn-info" type="submit" value="Sign-up as a Trucker">
+			<input ng-show="user_type=='trucker'" class="form-control btn btn-green" type="submit" value="Sign-up as a Trucker">
 			<div class="row" ng-show="user_type=='user'">
 				<div class="col-xs-6 col-xs-push-6">
-					<input class="form-control btn btn-info" type="submit" value="Sign-up">
+					<input class="form-control btn btn-green" type="submit" value="Sign-up">
 				</div>
 				<div class="col-xs-6 col-xs-pull-6">
-					<button class="form-control btn btn-default" type="button" ng-click="user_type='trucker'"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Trucker Sign-up</button>
+					<button class="form-control btn btn-green" type="button" ng-click="user_type='trucker'"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Trucker Sign-up</button>
 				</div>
 			</div>
 			<p class="text-center">
@@ -86,7 +86,7 @@
 		<h1>Success!</h1>
 		<p>Your account has been created</p>
 		<p>Check your email for an email from us and click the provided link to activate your account<span ng-if="user_type=='trucker'"> and start finding jobs</span>.<br><span ng-if="user_type=='user'">Let's find you a trucker.</span></p>
-		<a href="#/" ng-if="user_type=='trucker'"><button class="btn btn-info">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
-		<a href="#/jobs" ng-if="user_type=='user'"><button class="btn btn-info">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+		<a href="#/" ng-if="user_type=='trucker'"><button class="btn btn-green">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+		<a href="#/jobs" ng-if="user_type=='user'"><button class="btn btn-green">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
 	</div>
 </div>

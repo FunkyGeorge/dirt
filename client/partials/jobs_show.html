@@ -32,7 +32,7 @@
 <!-- MAIN -->
 <div class="row">
 	<a class="col-sm-4 col-sm-offset-8" href="#/">
-		<button class="btn btn-default center-block">Back to Job Listings</button>
+		<button class="btn btn-green center-block">Back to Job Listings</button>
 	</a>
 </div>
 
@@ -116,7 +116,7 @@
 				<!-- STATUS UNDEFINED -->
 				<div ng-if="job.status===null">
 					<p class="text-center error" ng-if="job.job_status>0"><b>No longer available</b></p>
-					<button class="form-control btn btn-info" ng-click="createApplication()" ng-if="job.job_status==0">Apply to Job</button>
+					<button class="form-control btn btn-yellow" ng-click="createApplication()" ng-if="job.job_status==0">Apply to Job</button>
 				</div>
 				<!-- STATUS < 0 -->
 				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
@@ -144,7 +144,7 @@
 					<!-- JOB_STATUS < 0 -->
 					<div ng-if="job.job_status<0">
 						<p class="text-center error"><b>Job was taken down</b></p>
-						<button class="form-control btn btn-primary" ng-click="relistJob()">Relist Job</button>
+						<button class="form-control btn btn-green" ng-click="relistJob()">Relist Job</button>
 					</div>
 					<!-- JOB_STATUS 0 -->
 					<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="edit()">Edit Job</button>

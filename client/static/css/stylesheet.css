@@ -8,14 +8,13 @@
 	src: url(../fonts/BandungHardcoreGP.ttf);
 }
 
-h1,h2,h3,h4,h5,p,li{
+h1,h2,h3,h4,h5,p,li,a{
 	font-family: Lato, Times;
 }
 
 body{
 	padding-top: 70px;
 }
-
 
 #Bandung {
 	font-family: Bandung, Times;
@@ -26,6 +25,84 @@ body{
 	width: 2em;
 	padding: 0;
 	margin-left: 1em;
+}
+
+/* Structure */
+#SuedoBody {
+	min-height: 70vh;
+}
+
+.dirt-link {
+	color: #4A730E;
+}
+
+.dirt-link:hover {
+	color: #593202;
+}
+
+.background {
+	position: absolute;
+	top: -8em;
+	width: 100vw;
+	height: auto;
+	z-index: -5;
+
+}
+
+/* Colors */
+.green {
+	background-color: #4A730E;
+}
+
+.yellow {
+	background-color: #F2B705;
+}
+
+.tan {
+	background-color: #F29F05;
+}
+
+.tan-transparent {
+	background-color: rgba(242, 159, 5, 0.7);
+	border-radius: 5px;
+}
+
+.orange {
+	background-color: #D97904;
+}
+
+.brown {
+	background-color: #593202;
+}
+
+.white-text {
+	color: #FFF;
+}
+
+
+/* Buttons */
+.btn-yellow {
+	color: #FFF;
+	background-color: #F2B705;
+	border-color: #F2B705
+}
+
+.btn-yellow:hover {
+	color: #FFF;
+	background-color: #E5AA06;
+	border-color: #E5AD06;
+}
+
+.btn-green {
+	color: #FFF;
+	background-color: #4A730E;
+	border-color: #4A730E;
+}
+
+.btn-green:hover {
+	color: #FFF;
+	background-color: #45680d;
+	border-color: #44680D;
 }
 
 .error {
@@ -85,6 +162,10 @@ body{
 
 .dodgerblue {
 	color: dodgerblue;
+}
+
+.title-text:hover {
+	color: #D97904;
 }
 
 .a_chat:hover {
