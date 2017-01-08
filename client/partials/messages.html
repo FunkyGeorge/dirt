@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,270 +10,273 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+				<li class="navbar-text white-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='user'"><a class="white-text" href="#/jobs">Post New Job</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
 
-<!-- MAIN -->
-<!-- MESSAGE -->
-<div class="row">
-	<h1 class="col-xs-12">Messages</h1>
-	<div class="col-sm-4">
-		<ul class="nav nav-tabs">
-			<li ng-class="{active: status==0}"><a href="" ng-click="status=0">Pending</a></li>
-			<li ng-class="{active: status==1}"><a href="" ng-click="status=1">Accepted</a></li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane fade in active" >
-				<h4 class="text-center">{{status==0?'Pending':'Accepted'}} Applications</h4>
-				<div ng-repeat="app in apps | filter:filterByStatus">
-					<div class="text-center">
-						<b><a href="#/jobs/{{app[0].job_id}}">{{app[0].dirt_type}} | {{app[0].volume | number:0}} yds<sup>3</sup></a></b><br>
-						<small ng-if="user_type=='user' && status==0">{{app.length}} applicant<span ng-if="app.length>1">s</span></small>
+<div class="container">
+	<div class="row">
+		<h1 class="col-xs-12">Messages</h1>
+		<div class="col-sm-4">
+			<ul class="nav nav-tabs">
+				<li ng-class="{active: status==0}"><a href="" ng-click="status=0">Pending</a></li>
+				<li ng-class="{active: status==1}"><a href="" ng-click="status=1">Accepted</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane fade in active" >
+					<h4 class="text-center">{{status==0?'Pending':'Accepted'}} Applications</h4>
+					<div ng-repeat="app in apps | filter:filterByStatus">
+						<div class="text-center">
+							<b><a href="#/jobs/{{app[0].job_id}}">{{app[0].dirt_type}} | {{app[0].volume | number:0}} yds<sup>3</sup></a></b><br>
+							<small ng-if="user_type=='user' && status==0">{{app.length}} applicant<span ng-if="app.length>1">s</span></small>
+						</div>
+						<div ng-repeat="application in app">
+							<li ng-if="user_type=='user' && status==0"><a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id == application.id}">{{application.first_name}} {{application.last_name}}</a></li>
+							<div class="text-center" ng-if="user_type=='trucker' || status==1">
+								<a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id==application.id}">{{application.first_name}} {{application.last_name}}</a>
+							</div>
+						</div>
+						<hr>
 					</div>
-					<div ng-repeat="application in app">
-						<li ng-if="user_type=='user' && status==0"><a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id == application.id}">{{application.first_name}} {{application.last_name}}</a></li>
-						<div class="text-center" ng-if="user_type=='trucker' || status==1">
-							<a class="a_chat" href="" ng-click="showMessages(application);" ng-class="{selected: cur_app.id==application.id}">{{application.first_name}} {{application.last_name}}</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-8">
+			<div ng-show="!cur_app">
+				<small class="text-muted">You can view your conversations here. Click on a name on the left to view the conversation.</small>
+				<small class="text-muted" ng-if="user_type=='user'"><br>Note that accepting an application will cause all other pending applications for that same job to be declined.</small>
+				<small class="text-muted" ng-if="user_type=='trucker'"><br>Note that you will not be able to re-apply to jobs that you've cancelled.</small>
+			</div>
+
+			<!-- USER -->
+			<div ng-if="cur_app && user_type=='user'">
+				<!-- STATUS 0 -->
+				<div class="center-content" ng-if="cur_app.status==0">
+					<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
+					<button class="btn btn-success" data-toggle="modal" data-target="#accept_modal">Accept</button> <button class="btn btn-danger" data-toggle="modal" data-target="#decline_modal">Decline</button><br><br>
+					<small class="text-muted">Accept {{cur_app.first_name}}'s application to start connecting.<br>You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
+				</div>
+				<!-- STATUS 1 -->
+				<div class="center-content" ng-if="cur_app.status==1">
+					<b>You've accepted <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
+					<small class="text-muted">You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
+				</div>
+				<!-- STATUS > 1 -->
+				<div class="center-content" ng-if="cur_app.status>1">
+					<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
+					<small class="text-muted" ng-if="cur_app.status==2">{{cur_app.first_name}} will send you an invoice once the job has been completed.</small>
+					<small class="text-muted" ng-if="cur_app.status==3">{{cur_app.first_name}} has sent you an <a href="#/invoices">invoice</a>.</small>
+					<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="setDoNotShow()">Click here</a> to remove the conversation from the sidebar.</small>
+				</div>
+			</div>
+
+			<!-- TRUCKER -->
+			<div ng-if="cur_app && user_type=='trucker'">
+				<!-- STATUS 0 -->
+				<div class="center-content" ng-if="cur_app.status==0">
+					<b class="text-center">You applied for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
+					<button class="btn btn-warning center-block" data-toggle="modal" data-target="#cancel_modal">Cancel Application</button><br>
+					<small class="text-muted">Waiting for {{cur_app.first_name}} to accept your application.<br>You'll be connected after being accepted and paying our <a href="#/about#lead_fee">lead fee</a>.</small>
+				</div>
+				<!-- STATUS 1 -->
+				<div class="center-content" ng-if="cur_app.status==1">
+					<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> accepted you for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
+					<button class="btn btn-info" data-toggle="modal" data-target="#pay_modal">Pay Lead Fee</button> <button class="btn btn-danger" data-toggle="modal" data-target="#forfeit_modal">Forfeit Job</button><br><br>
+					<small class="text-muted">You'll be connected with {{cur_app.first_name}} after paying our <a href="#/about#lead_fee">lead fee</a>.</small>
+				</div>
+				<!-- STATUS > 1 -->
+				<div class="center-content" ng-if="cur_app.status>1">
+					<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
+					<button class="btn btn-default" data-toggle="modal" data-target="#invoice_modal" ng-if="cur_app.status==2" ng-click="showJob()">Invoice Client</button>
+					<small class="text-muted" ng-if="cur_app.status==2"><br><br>Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
+					<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices">invoice</a>.</small>
+					<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="setDoNotShow()">Click here</a> to remove the conversation from the sidebar.</small>
+				</div>
+			</div>
+
+			<hr>
+
+			<div id="chat" class="row">
+				<div class="col-xs-12" ng-repeat="message in messages">
+					<div ng-if="message.application_id==cur_app.id">
+						<p class="pull-right chat_time"><b>{{message.created_at | date:'shortTime'}}</b></p>
+						<p class="pull-right chat_me" ng-if="id==message.trucker_id || id==message.user_id" ng-bind="message.message"></p>
+						<p class="chat_you" ng-if="id!=message.trucker_id && id!=message.user_id" ng-bind="message.message"></p>
+					</div>
+				</div>
+			</div>
+			<form ng-show="cur_app" ng-submit="createMessage()">
+				<div class="col-xs-8">
+					<input class="form-control" type="text" placeholder="Type a message here..." ng-model="new_message" required ng-disabled="cur_app.status<2 || cur_app.status==4">
+					</div>
+					<div class="col-xs-4">
+						<input class="btn btn-info form-control pull-right" type="submit" value="Send" ng-disabled="cur_app.status<2 || cur_app.status==4">
+						</div>
+						<a class="error col-xs-4 pull-right text-center" href="" ng-if="cur_app.status>1"><small>Report User</small></a>
+					</form>
+				</div>
+			</div>
+
+			<!-- MODALS -->
+			<div id="accept_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">Accept <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this job?</h4>
+						</div>
+						<div class="modal-body">
+							<p>Accepting {{cur_app.first_name}} for this job will make cause all other applications for this job to be put on hold.</p>
+							<p>Click 'Confirm' if you wish to contine.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="acceptApplication()">Confirm</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						</div>
 					</div>
-					<hr>
+				</div>
+			</div>
+
+			<div id="decline_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">Decline <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> application?</h4>
+						</div>
+						<div class="modal-body">
+							<p>{{cur_app.first_name}} will not be able to apply for this job again.</p>
+							<p>Click 'Confirm' if you wish to contine.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="declineApplication()">Confirm</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="cancel_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">Remove your application for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> job?</h4>
+						</div>
+						<div class="modal-body">
+							<p>You will not be able to apply for this job again.</p>
+							<p>Click 'Confirm' if you wish to contine.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancelApplication()">Confirm</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="forfeit_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">Forfeit <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> job?</h4>
+						</div>
+						<div class="modal-body">
+							<p>{{cur_app.first_name}} has accepted you for this job. Are you sure you want to forfeit this job? You will not be able to apply for this job again.</p>
+							<p>Click 'Confirm' if you wish to contine.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="forfeitApplication()">Confirm</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="pay_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">Pay lead fee</h4>
+						</div>
+						<div class="modal-body">
+							<p>We charge a lead fee of $25. This fee helps us by <b>some reason here...</b></p>
+							<p>You can view the location details and chat with the user after making this payment.</p>
+							<p>Your credit card information will not be stored which follows PCI compliance blah blah blah. We use <a href="https://stripe.com/">Stripe</a> for making secure payments... Continue checking out with Stripe below.</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-info" data-dismiss="modal"
+							stripe-checkout="payLeadFee"
+							data-key="pk_test_ZkxMVXmOpx6nBGu2MnwNm0sb"
+							data-amount="2500"
+							data-name="Lead Fee"
+							data-description="$25.00 lead fee"
+							data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+							data-locale="auto"
+							data-zip-code="true">
+							Pay with Stripe
+						</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-sm-8">
-		<div ng-show="!cur_app">
-			<small class="text-muted">You can view your conversations here. Click on a name on the left to view the conversation.</small>
-			<small class="text-muted" ng-if="user_type=='user'"><br>Note that accepting an application will cause all other pending applications for that same job to be declined.</small>
-			<small class="text-muted" ng-if="user_type=='trucker'"><br>Note that you will not be able to re-apply to jobs that you've cancelled.</small>
-		</div>
 
-		<!-- USER -->
-		<div ng-if="cur_app && user_type=='user'">
-			<!-- STATUS 0 -->
-			<div class="center-content" ng-if="cur_app.status==0">
-				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> applied for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
-				<button class="btn btn-success" data-toggle="modal" data-target="#accept_modal">Accept</button> <button class="btn btn-danger" data-toggle="modal" data-target="#decline_modal">Decline</button><br><br>
-				<small class="text-muted">Accept {{cur_app.first_name}}'s application to start connecting.<br>You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
-			</div>
-			<!-- STATUS 1 -->
-			<div class="center-content" ng-if="cur_app.status==1">
-				<b>You've accepted <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
-				<small class="text-muted">You'll be connected after {{cur_app.first_name}} has paid our <a href="#/about#lead_fee">lead fee</a>.</small>
-			</div>
-			<!-- STATUS > 1 -->
-			<div class="center-content" ng-if="cur_app.status>1">
-				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
-				<small class="text-muted" ng-if="cur_app.status==2">{{cur_app.first_name}} will send you an invoice once the job has been completed.</small>
-				<small class="text-muted" ng-if="cur_app.status==3">{{cur_app.first_name}} has sent you an <a href="#/invoices">invoice</a>.</small>
-				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="setDoNotShow()">Click here</a> to remove the conversation from the sidebar.</small>
-			</div>
-		</div>
-
-		<!-- TRUCKER -->
-		<div ng-if="cur_app && user_type=='trucker'">
-			<!-- STATUS 0 -->
-			<div class="center-content" ng-if="cur_app.status==0">
-				<b class="text-center">You applied for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.created_at"></span></b><br><br>
-				<button class="btn btn-warning center-block" data-toggle="modal" data-target="#cancel_modal">Cancel Application</button><br>
-				<small class="text-muted">Waiting for {{cur_app.first_name}} to accept your application.<br>You'll be connected after being accepted and paying our <a href="#/about#lead_fee">lead fee</a>.</small>
-			</div>
-			<!-- STATUS 1 -->
-			<div class="center-content" ng-if="cur_app.status==1">
-				<b><span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> accepted you for this <a href="#/jobs/{{cur_app.job_id}}">job</a> <span am-time-ago="cur_app.updated_at"></span></b><br><br>
-				<button class="btn btn-info" data-toggle="modal" data-target="#pay_modal">Pay Lead Fee</button> <button class="btn btn-danger" data-toggle="modal" data-target="#forfeit_modal">Forfeit Job</button><br><br>
-				<small class="text-muted">You'll be connected with {{cur_app.first_name}} after paying our <a href="#/about#lead_fee">lead fee</a>.</small>
-			</div>
-			<!-- STATUS > 1 -->
-			<div class="center-content" ng-if="cur_app.status>1">
-				<b>Now chatting with <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> about this <a href="#/jobs/{{cur_app.job_id}}">job</a></b><br><br>
-				<button class="btn btn-default" data-toggle="modal" data-target="#invoice_modal" ng-if="cur_app.status==2" ng-click="showJob()">Invoice Client</button>
-				<small class="text-muted" ng-if="cur_app.status==2"><br><br>Send {{cur_app.first_name}} an invoice after you've completed the job.</small>
-				<small class="text-muted" ng-if="cur_app.status==3">You've sent {{cur_app.first_name}} an <a href="#/invoices">invoice</a>.</small>
-				<small class="text-muted" ng-if="cur_app.status==4">Invoice paid. Congratulations, the job has successfully been completed!<br><a href="" ng-click="setDoNotShow()">Click here</a> to remove the conversation from the sidebar.</small>
-			</div>
-		</div>
-
-		<hr>
-
-		<div id="chat" class="row">
-			<div class="col-xs-12" ng-repeat="message in messages">
-				<div ng-if="message.application_id==cur_app.id">
-					<p class="pull-right chat_time"><b>{{message.created_at | date:'shortTime'}}</b></p>
-					<p class="pull-right chat_me" ng-if="id==message.trucker_id || id==message.user_id" ng-bind="message.message"></p>
-					<p class="chat_you" ng-if="id!=message.trucker_id && id!=message.user_id" ng-bind="message.message"></p>
+		<div id="invoice_modal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title text-center">Send Invoice to <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span></h4>
+					</div>
+					<div class="modal-body">
+						<p>Please review details before sending:</p>
+						<table class="table table-bordered">
+							<tr>
+								<th>Completion Date:</th>
+								<td ng-bind="job.completion_date | date:'fullDate'"></td>
+							</tr>
+							<tr>
+								<th>Volume of Dirt:</th>
+								<td>{{job.volume | number:2}} cubic yards</td>
+							</tr>
+							<tr>
+								<th>Type of Dirt:</th>
+								<td ng-bind="job.dirt_type"></td>
+							</tr>
+							<tr>
+								<th>Estimated Cost:</th>
+								<td>$<input type="number" step="0.01" ng-init="new_invoice.cost=300.00" ng-model="new_invoice.cost" required></td>
+							</tr>
+						</table>
+						<label>Notes:</label><br>
+						<textarea ng-model="new_invoice.notes"></textarea><br>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="createInvoice()">Send Invoice</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<form ng-show="cur_app" ng-submit="createMessage()">
-			<div class="col-xs-8">
-				<input class="form-control" type="text" placeholder="Type a message here..." ng-model="new_message" required ng-disabled="cur_app.status<2 || cur_app.status==4">
-			</div>
-			<div class="col-xs-4">
-				<input class="btn btn-info form-control pull-right" type="submit" value="Send" ng-disabled="cur_app.status<2 || cur_app.status==4">
-			</div>
-			<a class="error col-xs-4 pull-right text-center" href="" ng-if="cur_app.status>1"><small>Report User</small></a>
-		</form>
-	</div>
-</div>
 
-<!-- MODALS -->
-<div id="accept_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Accept <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> for this job?</h4>
-			</div>
-			<div class="modal-body">
-				<p>Accepting {{cur_app.first_name}} for this job will make cause all other applications for this job to be put on hold.</p>
-				<p>Click 'Confirm' if you wish to contine.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="acceptApplication()">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
 </div>
-
-<div id="decline_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Decline <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> application?</h4>
-			</div>
-			<div class="modal-body">
-				<p>{{cur_app.first_name}} will not be able to apply for this job again.</p>
-				<p>Click 'Confirm' if you wish to contine.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="declineApplication()">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="cancel_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Remove your application for <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> job?</h4>
-			</div>
-			<div class="modal-body">
-				<p>You will not be able to apply for this job again.</p>
-				<p>Click 'Confirm' if you wish to contine.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancelApplication()">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="forfeit_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Forfeit <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}'s</span> job?</h4>
-			</div>
-			<div class="modal-body">
-				<p>{{cur_app.first_name}} has accepted you for this job. Are you sure you want to forfeit this job? You will not be able to apply for this job again.</p>
-				<p>Click 'Confirm' if you wish to contine.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="forfeitApplication()">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="pay_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Pay lead fee</h4>
-			</div>
-			<div class="modal-body">
-				<p>We charge a lead fee of $25. This fee helps us by <b>some reason here...</b></p>
-				<p>You can view the location details and chat with the user after making this payment.</p>
-				<p>Your credit card information will not be stored which follows PCI compliance blah blah blah. We use <a href="https://stripe.com/">Stripe</a> for making secure payments... Continue checking out with Stripe below.</p>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-info" data-dismiss="modal"
-					stripe-checkout="payLeadFee"
-					data-key="pk_test_ZkxMVXmOpx6nBGu2MnwNm0sb"
-					data-amount="2500"
-					data-name="Lead Fee"
-					data-description="$25.00 lead fee"
-					data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-					data-locale="auto"
-					data-zip-code="true">
-					Pay with Stripe
-				</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="invoice_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Send Invoice to <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span></h4>
-			</div>
-			<div class="modal-body">
-				<p>Please review details before sending:</p>
-				<table class="table table-bordered">
-					<tr>
-						<th>Completion Date:</th>
-						<td ng-bind="job.completion_date | date:'fullDate'"></td>
-					</tr>
-					<tr>
-						<th>Volume of Dirt:</th>
-						<td>{{job.volume | number:2}} cubic yards</td>
-					</tr>
-					<tr>
-						<th>Type of Dirt:</th>
-						<td ng-bind="job.dirt_type"></td>
-					</tr>
-					<tr>
-						<th>Estimated Cost:</th>
-						<td>$<input type="number" step="0.01" ng-init="new_invoice.cost=300.00" ng-model="new_invoice.cost" required></td>
-					</tr>
-				</table>
-				<label>Notes:</label><br>
-				<textarea ng-model="new_invoice.notes"></textarea><br>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="createInvoice()">Send Invoice</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
+<!-- MAIN -->
+<!-- MESSAGE -->

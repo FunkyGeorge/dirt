@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown white-text navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,59 +10,60 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+				<li class="navbar-text white-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='user'"><a class="white-text" href="#/jobs">Post New Job</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
 
-<!-- MAIN -->
-<div class="row">
-	<h1 class="col-xs-12">Invoices</h1>
-	<div class="col-sm-4">
-		<ul>
-			<a href="" ng-click="status=3" ng-class="{selected: status==3}">Pending Invoices</a><br>
-			<a href="" ng-click="status=4" ng-class="{selected: status==4}">Invoice History</a><br>
-			<!-- <a href="" ng-click="status=5" ng-class="{selected: status==5}">Bank Account</a><br> -->
-		</ul>
-	</div>
-	<div class="col-sm-8">
-		<div ng-repeat="application in applications | filter:{status: status} | orderBy:'-updated_at'">
-			<h3>{{application.first_name}} {{application.last_name}} - ${{application.cost | number:2}}<button class="btn btn-info pull-right" data-toggle="modal" data-target="#pay_modal" ng-if="user_type=='user' && application.status==3" ng-click="setCurApp(application)">Make Payment</button></h3>
-			<p>{{status==3?'Request':'Payment'}} sent {{application.updated_at | date:"fullDate"}}</p>
-			<a href="#/jobs/{{application.job_id}}">View Job</a> | <a href="#/messages/{{application.id}}">View Messages</a>
-			<hr>
+<div class="container">
+	<!-- MAIN -->
+	<div class="row">
+		<h1 class="col-xs-12">Invoices</h1>
+		<div class="col-sm-4">
+			<ul>
+				<a href="" ng-click="status=3" ng-class="{selected: status==3}">Pending Invoices</a><br>
+				<a href="" ng-click="status=4" ng-class="{selected: status==4}">Invoice History</a><br>
+				<!-- <a href="" ng-click="status=5" ng-class="{selected: status==5}">Bank Account</a><br> -->
+			</ul>
+		</div>
+		<div class="col-sm-8">
+			<div ng-repeat="application in applications | filter:{status: status} | orderBy:'-updated_at'">
+				<h3>{{application.first_name}} {{application.last_name}} - ${{application.cost | number:2}}<button class="btn btn-info pull-right" data-toggle="modal" data-target="#pay_modal" ng-if="user_type=='user' && application.status==3" ng-click="setCurApp(application)">Make Payment</button></h3>
+				<p>{{status==3?'Request':'Payment'}} sent {{application.updated_at | date:"fullDate"}}</p>
+				<a href="#/jobs/{{application.job_id}}">View Job</a> | <a href="#/messages/{{application.id}}">View Messages</a>
+				<hr>
+			</div>
 		</div>
 	</div>
-</div>
 
-<!-- MODALS -->
-<div id="pay_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title text-center">Pay <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> ${{cur_app.cost | number:2}}?</h4>
-			</div>
-			<div class="modal-body">
-				<p>After paying the invoice, the job will be closed (you will not be able to contact {{cur_app.first_name}} through this platform).</p>
-				<p>We use stripe payment...reason here</p>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-info" data-dismiss="modal"
+	<!-- MODALS -->
+	<div id="pay_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title text-center">Pay <span class="darkorange">{{cur_app.first_name}} {{cur_app.last_name}}</span> ${{cur_app.cost | number:2}}?</h4>
+				</div>
+				<div class="modal-body">
+					<p>After paying the invoice, the job will be closed (you will not be able to contact {{cur_app.first_name}} through this platform).</p>
+					<p>We use stripe payment...reason here</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-info" data-dismiss="modal"
 					stripe-checkout="payInvoice"
 					data-key="pk_test_ZkxMVXmOpx6nBGu2MnwNm0sb"
 					data-amount="{{cur_app.cost * 100}}"
@@ -77,4 +78,6 @@
 			</div>
 		</div>
 	</div>
+</div>
+
 </div>

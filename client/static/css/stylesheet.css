@@ -79,6 +79,10 @@ body{
 	color: #FFF;
 }
 
+.black-text {
+	color: #000;
+}
+
 
 /* Buttons */
 .btn-yellow {
@@ -91,6 +95,23 @@ body{
 	color: #FFF;
 	background-color: #E5AA06;
 	border-color: #E5AD06;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+	color: black;
+	background-color: #4A730E;
+}
+
+.btn-orange {
+	color: #FFF;
+	background-color: #D97904;
+	border-color: #D97904;
+}
+
+.btn-orange:hover {
+	color: #FFF;
+	background-color: #CE7004;
+	border-color: #C96D04;
 }
 
 .btn-green {

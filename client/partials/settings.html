@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,126 +10,130 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+				<li class="navbar-text white-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='user'"><a class="white-text" href="#/jobs">Post New Job</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
-<h1>Settings</h1>
-<hr>
-<div class="row">
-	<div class="col-md-2">
-		<ul class="nav nav-pills nav-stacked">
-		  <li role="presentation"><a href="" ng-click="tab='profile'">Profile</a></li>
-		  <li role="presentation"><a href="" ng-click="tab='jobs'">Jobs</a></li>
-		  <li role="presentation"><a href="" ng-click="tab='password'">Password</a></li>
-		</ul>
-	</div>
-	<div class="col-md-10">
-		<div ng-show="tab == 'profile'">
-			<h2>Profile</h2>
-			<form ng-submit="updateUser();">
-				<div class="form-group col-md-12">
-					<label for="email">Email:</label>
-					<input type="email" class="form-control" ng-model="user.email" id="email">
-				</div>
-			  <div class="form-group col-md-6">
-			    <label for="first_name">First Name:</label>
-			    <input type="text" class="form-control" ng-model="user.first_name" id="first_name">
-			  </div>
-			  <div class="form-group col-md-6">
-			    <label for="last_name">Last Name:</label>
-			    <input type="text" class="form-control" ng-model="user.last_name" id="last_name">
-			  </div>
-				<div ng-show="user_type != 'user'">
-					<h4>Truck</h4>
-					<div class="form-group col-md-4">
-				    <label for="make">Make:</label>
-				    <input type="text" class="form-control" ng-model="user.make" id="make" ng-value="user.make">
-				  </div>
-					<div class="form-group col-md-4">
-				    <label for="model">Model:</label>
-				    <input type="text" class="form-control" ng-model="user.model" id="model" ng-value="user.model">
-				  </div>
-					<div class="form-group col-md-4">
-				    <label for="year">Year:</label>
-				    <input type="text" class="form-control" ng-model="user.year" id="year" ng-value="user.year">
-				  </div>
-				</div>
-				<div class="clearfix"></div>
-				<button type="submit" class="btn btn-green">Edit</button>
-			</form>
+
+<div class="container">
+	<h1>Settings</h1>
+	<hr>
+	<div class="row">
+		<div class="col-md-2">
+			<ul class="nav nav-pills nav-stacked">
+				<li role="presentation"><a href="" ng-click="tab='profile'">Profile</a></li>
+				<li role="presentation"><a href="" ng-click="tab='jobs'">Jobs</a></li>
+				<li role="presentation"><a href="" ng-click="tab='password'">Password</a></li>
+			</ul>
 		</div>
-		<div ng-show="tab == 'jobs'">
-			<div class="row" ng-repeat="job in jobs">
-				<div class="col-sm-3 col-xs-6" style="margin-bottom: 20px;">
-					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
-				</div>
-				<div class="col-sm-9">
-					<div class="row">
-						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">Listed by you</h4>
-						<div class="col-sm-6 hidden-xs">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-yellow pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
+		<div class="col-md-10">
+			<div ng-show="tab == 'profile'">
+				<h2>Profile</h2>
+				<form ng-submit="updateUser();">
+					<div class="form-group col-md-12">
+						<label for="email">Email:</label>
+						<input type="email" class="form-control" ng-model="user.email" id="email">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="first_name">First Name:</label>
+						<input type="text" class="form-control" ng-model="user.first_name" id="first_name">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="last_name">Last Name:</label>
+						<input type="text" class="form-control" ng-model="user.last_name" id="last_name">
+					</div>
+					<div ng-show="user_type != 'user'">
+						<h4>Truck</h4>
+						<div class="form-group col-md-4">
+							<label for="make">Make:</label>
+							<input type="text" class="form-control" ng-model="user.make" id="make" ng-value="user.make">
 						</div>
-						<div class="col-sm-6 visible-xs-block">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-yellow">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
+						<div class="form-group col-md-4">
+							<label for="model">Model:</label>
+							<input type="text" class="form-control" ng-model="user.model" id="model" ng-value="user.model">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="year">Year:</label>
+							<input type="text" class="form-control" ng-model="user.year" id="year" ng-value="user.year">
 						</div>
 					</div>
-				</div>
-				<div class="col-sm-9 col-xs-12 pull-right">
-					<table class="table table-bordered">
-						<tr>
-							<td><b>Type:</b> {{job.dirt_type}}</td>
-							<td><b>Posted:</b> {{job.created_at | date:'shortDate'}}</td>
-						</tr>
-						<tr>
-							<td><b>Volume:</b> {{job.volume | number:2}} yds<sup>3</sup></td>
-							<td><b>Complete by:</b> {{job.completion_date | date:'shortDate'}}</td>
-						</tr>
-					</table>
-					<div class="row">
-						<div class="col-xs-4">
-							<input type="checkbox" ng-checked="job.pickup_only" disabled/> Pickup Only
-						</div>
-						<div class="col-xs-4">
-							<input type="checkbox" ng-checked="job.p_loader" disabled/> Loader at Pick-Up
-						</div>
-						<div class="col-xs-4">
-							<span ng-class="{strike: job.pickup_only}"><input type="checkbox" ng-checked="job.d_loader" disabled/> Loader at Drop-Off</span>
+					<div class="clearfix"></div>
+					<button type="submit" class="btn btn-green">Edit</button>
+				</form>
+			</div>
+			<div ng-show="tab == 'jobs'">
+				<div class="row" ng-repeat="job in jobs">
+					<div class="col-sm-3 col-xs-6" style="margin-bottom: 20px;">
+						<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
+					</div>
+					<div class="col-sm-9">
+						<div class="row">
+							<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">Listed by you</h4>
+							<div class="col-sm-6 hidden-xs">
+								<a href="#/jobs/{{job.id}}"><button class="btn btn-yellow pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
+							</div>
+							<div class="col-sm-6 visible-xs-block">
+								<a href="#/jobs/{{job.id}}"><button class="btn btn-yellow">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
+							</div>
 						</div>
 					</div>
-					<hr>
+					<div class="col-sm-9 col-xs-12 pull-right">
+						<table class="table table-bordered">
+							<tr>
+								<td><b>Type:</b> {{job.dirt_type}}</td>
+								<td><b>Posted:</b> {{job.created_at | date:'shortDate'}}</td>
+							</tr>
+							<tr>
+								<td><b>Volume:</b> {{job.volume | number:2}} yds<sup>3</sup></td>
+								<td><b>Complete by:</b> {{job.completion_date | date:'shortDate'}}</td>
+							</tr>
+						</table>
+						<div class="row">
+							<div class="col-xs-4">
+								<input type="checkbox" ng-checked="job.pickup_only" disabled/> Pickup Only
+							</div>
+							<div class="col-xs-4">
+								<input type="checkbox" ng-checked="job.p_loader" disabled/> Loader at Pick-Up
+							</div>
+							<div class="col-xs-4">
+								<span ng-class="{strike: job.pickup_only}"><input type="checkbox" ng-checked="job.d_loader" disabled/> Loader at Drop-Off</span>
+							</div>
+						</div>
+						<hr>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div ng-show="tab == 'password'">
-			<div class="form-group col-md-7">
-		    <label for="current">Current Password</label>
-		    <input type="password" class="form-control" ng-model="user.password" id="current">
-		  </div>
-			<div class="form-group col-md-7">
-		    <label for="pword">New Password</label>
-		    <input type="password" class="form-control" ng-model="user.new" id="pword">
-		  </div>
-			<div class="form-group col-md-7">
-		    <label for="cword">Confirm Password</label>
-		    <input type="password" class="form-control" ng-model="user.confirm" id="cword">
-		  </div>
-			<div class="clearfix"></div>
-			<button class="btn btn-green" type="button" name="button" ng-click="updatePassword();">Change Password</button>
+			<div ng-show="tab == 'password'">
+				<div class="form-group col-md-7">
+					<label for="current">Current Password</label>
+					<input type="password" class="form-control" ng-model="user.password" id="current">
+				</div>
+				<div class="form-group col-md-7">
+					<label for="pword">New Password</label>
+					<input type="password" class="form-control" ng-model="user.new" id="pword">
+				</div>
+				<div class="form-group col-md-7">
+					<label for="cword">Confirm Password</label>
+					<input type="password" class="form-control" ng-model="user.confirm" id="cword">
+				</div>
+				<div class="clearfix"></div>
+				<button class="btn btn-green" type="button" name="button" ng-click="updatePassword();">Change Password</button>
+			</div>
 		</div>
 	</div>
+	<p class="error" ng-bind="error"></p>
+
 </div>
-<p class="error" ng-bind="error"></p>

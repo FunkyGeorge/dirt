@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,84 +10,86 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+				<li class="navbar-text white-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='user'"><a class="white-text" href="#/jobs">Post New Job</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
 
 <!-- MAIN -->
-<div class="row">
-	<div class="col-sm-3">
-		<h1 class="text-center">Dirt Feed</h1>
-		<h4 class="text-center">Sort By:</h4>
-		<form>
-			<div class="checkbox">
-				<label><input type="checkbox" ng-click="state[5] = !state[5]" name="sorting-option">Pickup Only</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" ng-click="state[6] = !state[6];" name="sorting-option">Dropoff Only</label>
-			</div>
-			<div class="radio">
-				<label><input type="radio" ng-click="toggle(true);" name="sorting-option" checked>Latest</label>
-			</div>
-	    <div class="radio">
-	      <label><input type="radio" ng-click="toggle(false);" name="sorting-option">Distance</label>
-	    </div>
-	  </form>
-	</div>
-	<div class="col-sm-9" ng-if="jobs.length > 0">
-		<ul class="nav nav-pills pull-right">
-			<li ng-class="{active: state[4]==0}"><a href="" ng-click="state[4]=0; getAllListings();">All Listings</a></li>
-			<li ng-class="{active: state[4]==1}"><a href="" ng-click="state[4]=1; getYourListings();">Your Listings</a></li>
-		</ul>
-		<div class="clearfix"></div>
-		<!-- nfinite scroll zone ########################################################### -->
-		<div infinite-scroll="append();" infinite-scroll-distance="0">
-			<div class="row" ng-repeat="job in jobs | filter: filterByStatus">
-		<hr>
-				<div class="col-sm-3 col-xs-4" style="margin-bottom: 20px;">
-					<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg">
+<div class="container tan-transparent">
+	<div class="row">
+		<div class="col-sm-3">
+			<h1 class="text-center">Dirt Feed</h1>
+			<h4 class="text-center">Sort By:</h4>
+			<form>
+				<div class="checkbox">
+					<label><input type="checkbox" ng-click="state[5] = !state[5]" name="sorting-option">Pickup Only</label>
 				</div>
-				<div class="col-sm-9">
-					<div class="row hidden-xs">
-						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
-						<div class="col-sm-6">
-							<a href="#/jobs/{{job.id}}"><button class="btn btn-info pull-right">View Job</button></a>
+				<div class="checkbox">
+					<label><input type="checkbox" ng-click="state[6] = !state[6];" name="sorting-option">Dropoff Only</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" ng-click="toggle(true);" name="sorting-option" checked>Latest</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" ng-click="toggle(false);" name="sorting-option">Distance</label>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-9" ng-if="jobs.length > 0">
+			<ul class="nav nav-pills yellow pull-right">
+				<li ng-class="{active: state[4]==0}"><a class="black-text" href="" ng-click="state[4]=0; getAllListings();">All Listings</a></li>
+				<li ng-class="{active: state[4]==1}"><a class="black-text" href="" ng-click="state[4]=1; getYourListings();">Your Listings</a></li>
+			</ul>
+			<div class="clearfix"></div>
+			<!-- nfinite scroll zone ########################################################### -->
+			<div infinite-scroll="append();" infinite-scroll-distance="0">
+				<div class="row" ng-repeat="job in jobs | filter: filterByStatus">
+					<hr>
+					<div class="col-sm-3 col-xs-4" style="margin-bottom: 20px;">
+						<img class="img-rounded img-responsive" ng-src="../static/images/dirt_types/{{job.src}}.jpg">
+					</div>
+					<div class="col-sm-9">
+						<div class="row hidden-xs">
+							<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
+							<div class="col-sm-6">
+								<a href="#/jobs/{{job.id}}"><button class="btn btn-orange pull-right">View Job</button></a>
+							</div>
+						</div>
+						<div class="row visible-xs-block center-content">
+							<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
+							<a href="#/jobs/{{job.id}}">View Job</a>
 						</div>
 					</div>
-					<div class="row visible-xs-block center-content">
-						<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
-						<a href="#/jobs/{{job.id}}">View Job</a>
+					<div class="col-sm-9 col-xs-12 pull-right">
+						<table class="table table-bordered">
+							<tr>
+								<td><b>Type:</b> {{job.dirt_type}}</td>
+								<td><b>Posted:</b> {{job.created_at | date:'shortDate'}}</td>
+							</tr>
+							<tr>
+								<td><b>Volume:</b> {{job.volume | number:2}} yds<sup>3</sup></td>
+								<td><b>Complete by:</b> {{job.completion_date | date:'shortDate'}}</td>
+							</tr>
+						</table>
 					</div>
 				</div>
-				<div class="col-sm-9 col-xs-12 pull-right">
-					<table class="table table-bordered">
-						<tr>
-							<td><b>Type:</b> {{job.dirt_type}}</td>
-							<td><b>Posted:</b> {{job.created_at | date:'shortDate'}}</td>
-						</tr>
-						<tr>
-							<td><b>Volume:</b> {{job.volume | number:2}} yds<sup>3</sup></td>
-							<td><b>Complete by:</b> {{job.completion_date | date:'shortDate'}}</td>
-						</tr>
-					</table>
-				</div>
 			</div>
+			<!-- ############################################################################################## -->
 		</div>
-		<!-- ############################################################################################## -->
 	</div>
 </div>

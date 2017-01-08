@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,14 +10,14 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/login">Login</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/login">Login</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
@@ -25,68 +25,72 @@
 
 <!-- MAIN -->
 <!-- STEP 1 -->
-<div class="row" ng-show="step==1">
-	<div class="col-sm-7">
-		<h1>The Down and Dirty</h1>
-		<h4>Got Dirt, Need Dirt is a platform that provides truckers to help you move, remove, and provide dirt.</h4>
-	</div>
-	<div class="col-sm-5">
-		<div ng-show="user_type=='trucker'">
-			<h4>Need a Trucker?</h4>
-			<a href="" ng-click="user_type='user'">Sign-up</a>
-			<hr>
+<img class="background" src="static/images/registrationScreen.jpg" alt="">
+<div class="container">
+	<div class="row" ng-show="step==1">
+		<div class="col-sm-7 tan-transparent">
+			<h1 class="white-text">The Down and Dirty</h1>
+			<h4 class="white-text">Got Dirt, Need Dirt is a platform that provides truckers to help you move, remove, and provide dirt.</h4>
 		</div>
-		<form ng-submit="register()">
-			<h4 class="text-center" ng-show="user_type=='trucker'">Or sign-up as a Trucker</h4>
-			<h4 class="text-center" ng-show="user_type=='user'">Sign-up to post jobs and find truckers</h4>
-			<div class="row">
-				<div class="col-xs-6">
-					<input type="text" class="form-control" placeholder="First Name" ng-model="new_user.first_name" required>
-				</div>
-				<div class="col-xs-6">
-					<input type="text" class="form-control" placeholder='Last Name' ng-model="new_user.last_name" required><br>
-				</div>
+		<div class="col-sm-5 tan-transparent">
+			<div ng-show="user_type=='trucker'">
+				<h4 class="white-text">Need a Trucker?</h4>
+				<a class="dirt-link" href="" ng-click="user_type='user'">Sign-up</a>
+				<hr>
 			</div>
-			<input type="email" class="form-control" placeholder='Email' ng-model="new_user.email" required><br>
-			<input type="password" class="form-control" placeholder='Password' ng-model="new_user.password" required><br>
-			<input type="password" class="form-control" placeholder='Confirm Password' ng-model="new_user.confirm_password" required><br>
-			<div ng-if="user_type=='trucker' && extend">
-				<h4 class="text-center">Almost done! Tell us about your truck</h4>
-				<input type="text" class="form-control" placeholder='Make' ng-model="new_user.make" required><br>
-				<input type="text" class="form-control" placeholder='Model' ng-model="new_user.model" required><br>
-				<input type="number" class="form-control" placeholder='Year' min="1960" max="{{year}}" ng-model="new_user.year" required><br>
-				<textarea class="form-control" ng-model="new_user.description" placeholder='Tell everyone a little about your truck. Example: "If you can no longer tell what color it is, you&#39;re doing it right."'></textarea><br>
-				<label class="form-check-label">
-					<input type="checkbox" class="form-check-input" ng-model="new_user.truck_type">
-					This is a DOT commercial truck<br>
-					<small class="form-text text-muted">Check this if you have a truck for carrying very large loads.<br></small>
-				</label><br>
-			</div>
-			<input ng-show="user_type=='trucker'" class="form-control btn btn-green" type="submit" value="Sign-up as a Trucker">
-			<div class="row" ng-show="user_type=='user'">
-				<div class="col-xs-6 col-xs-push-6">
-					<input class="form-control btn btn-green" type="submit" value="Sign-up">
+			<form ng-submit="register()">
+				<h4 class="text-center" ng-show="user_type=='trucker'">Or sign-up as a Trucker</h4>
+				<h4 class="text-center" ng-show="user_type=='user'">Sign-up to post jobs and find truckers</h4>
+				<div class="row">
+					<div class="col-xs-6">
+						<input type="text" class="form-control" placeholder="First Name" ng-model="new_user.first_name" required>
+					</div>
+					<div class="col-xs-6">
+						<input type="text" class="form-control" placeholder='Last Name' ng-model="new_user.last_name" required><br>
+					</div>
 				</div>
-				<div class="col-xs-6 col-xs-pull-6">
-					<button class="form-control btn btn-green" type="button" ng-click="user_type='trucker'"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Trucker Sign-up</button>
+				<input type="email" class="form-control" placeholder='Email' ng-model="new_user.email" required><br>
+				<input type="password" class="form-control" placeholder='Password' ng-model="new_user.password" required><br>
+				<input type="password" class="form-control" placeholder='Confirm Password' ng-model="new_user.confirm_password" required><br>
+				<div ng-if="user_type=='trucker' && extend">
+					<h4 class="text-center">Almost done! Tell us about your truck</h4>
+					<input type="text" class="form-control" placeholder='Make' ng-model="new_user.make" required><br>
+					<input type="text" class="form-control" placeholder='Model' ng-model="new_user.model" required><br>
+					<input type="number" class="form-control" placeholder='Year' min="1960" max="{{year}}" ng-model="new_user.year" required><br>
+					<textarea class="form-control" ng-model="new_user.description" placeholder='Tell everyone a little about your truck. Example: "If you can no longer tell what color it is, you&#39;re doing it right."'></textarea><br>
+					<label class="form-check-label">
+						<input type="checkbox" class="form-check-input" ng-model="new_user.truck_type">
+						This is a DOT commercial truck<br>
+						<small class="form-text text-muted">Check this if you have a truck for carrying very large loads.<br></small>
+					</label><br>
 				</div>
-			</div>
-			<p class="text-center">
-				Already have an account? <a href="#/login/{{user_type}}">Log in</a>
-			</p>
-			<p class="error" ng-bind="error"></p>
-		</form>
+				<input ng-show="user_type=='trucker'" class="form-control btn btn-green" type="submit" value="Sign-up as a Trucker">
+				<div class="row" ng-show="user_type=='user'">
+					<div class="col-xs-6 col-xs-push-6">
+						<input class="form-control btn btn-green" type="submit" value="Sign-up">
+					</div>
+					<div class="col-xs-6 col-xs-pull-6">
+						<button class="form-control btn btn-green" type="button" ng-click="user_type='trucker'"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Trucker Sign-up</button>
+					</div>
+				</div>
+				<p class="text-center">
+					Already have an account? <a class="dirt-link" href="#/login/{{user_type}}">Log in</a>
+				</p>
+				<p class="error" ng-bind="error"></p>
+			</form>
+		</div>
 	</div>
-</div>
 
-<!-- STEP 2: SUCCESS -->
-<div class="row" ng-show="step==2">
-	<div class="col-md-12 center-content">
-		<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-		<h1>Success!</h1>
-		<p>Your account has been created</p>
-		<p>Check your email for an email from us and click the provided link to activate your account<span ng-if="user_type=='trucker'"> and start finding jobs</span>.<br><span ng-if="user_type=='user'">Let's find you a trucker.</span></p>
-		<a href="#/" ng-if="user_type=='trucker'"><button class="btn btn-green">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
-		<a href="#/jobs" ng-if="user_type=='user'"><button class="btn btn-green">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+	<!-- STEP 2: SUCCESS -->
+	<div class="row" ng-show="step==2">
+		<div class="col-md-12 center-content">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			<h1>Success!</h1>
+			<p>Your account has been created</p>
+			<p>Check your email for an email from us and click the provided link to activate your account<span ng-if="user_type=='trucker'"> and start finding jobs</span>.<br><span ng-if="user_type=='user'">Let's find you a trucker.</span></p>
+			<a href="#/" ng-if="user_type=='trucker'"><button class="btn btn-green">Continue to Find Jobs <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+			<a href="#/jobs" ng-if="user_type=='user'"><button class="btn btn-green">Create Job <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></a>
+		</div>
 	</div>
+
 </div>

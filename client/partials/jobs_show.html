@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,7 +10,7 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>
 	</div>
@@ -19,159 +19,162 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
 				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
 
+<div class="container">
+	<div class="row">
+		<a class="col-sm-4 col-sm-offset-8" href="#/">
+			<button class="btn btn-green center-block">Back to Job Listings</button>
+		</a>
+	</div>
+
+	<div class="row">
+		<!-- SHOW MODE -->
+		<div ng-show="mode=='show'">
+			<h4 class="text-center" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : 'You are 10 miles away from the pick-up location'}}</h4>
+			<div class="col-sm-3">
+				<img class="img-rounded img-responsive center-block" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
+				<hr>
+				<p ng-if="job.job_type==0">This job requires a trucker that can pick-up/remove {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> from a location.</p>
+				<p ng-if="job.job_type==1">This job requires a trucker that has {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> and can drop-off at a location.</p>
+				<p ng-if="job.job_type==2">This job requires a trucker that can pick-up {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> from one location and drop-off at another location.</p>
+			</div>
+			<div class="col-sm-6 center-content">
+				<table class="table table-bordered">
+					<tr>
+						<th>Job Type:</th>
+						<td ng-if="job.job_type==0">Dirt removal/pick-up</td>
+						<td ng-if="job.job_type==1">Dirt delivery/drop-off</td>
+						<td ng-if="job.job_type==2">Dirt pick-up &amp; delivery</td>
+						<tr>
+							<th>Dirt Type:</th>
+							<td ng-bind="job.dirt_type"></td>
+						</tr>
+						<tr>
+							<th>Volume:</th>
+							<td>{{job.volume | number:2}} yds<sup>3</sup></td>
+						</tr>
+						<tr>
+							<th>Posted On:</th>
+							<td ng-bind="job.created_at | date:'shortDate'"></td>
+						</tr>
+						<tr>
+							<th>Complete By:</th>
+							<td ng-bind="job.completion_date | date:'shortDate'"></td>
+						</tr>
+						<tr ng-if="job.job_type!=1">
+							<th>Pick-Up Location:</th>
+							<td ng-if="job.status>1 || id==job.user_id">{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}} {{job.p_zip}}</td>
+							<td ng-if="job.status<=1 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
+						</tr>
+						<tr ng-if="job.job_type!=0">
+							<th>Drop-Off Location:</th>
+							<td ng-if="job.status>1 || id==job.user_id">{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}} {{job.d_zip}}</td>
+							<td ng-if="job.status<=1 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
+						</tr>
+					</table>
+					<p class="text-center"><small class="text-muted">Location details will be provided upon payment of our <a href="#/about#lead_fee">lead fee</a>.</small><br>
+					</div>
+					<div class="col-sm-3">
+						<span ng-if="job.job_type!=1">
+							<input type="checkbox" ng-checked="job.p_loader" disabled/> Loader at Pick-Up<br>
+						</span>
+						<span ng-if="job.job_type!=0">
+							<input type="checkbox" ng-checked="job.d_loader" disabled/> Loader at Drop-Off<br>
+						</span>
+						<hr>
+						<table>
+							<tr>
+								<th>Volume:</th>
+								<td class="pull-right" ng-bind="job.volume | number:2"></td>
+							</tr>
+							<tr>
+								<th>Distance:</th>
+								<td class="pull-right">10 mi</td>
+							</tr>
+							<tr style="border-bottom: 1px solid black">
+								<th>Lead Fee:</th>
+								<td class="pull-right">$25</td>
+							</tr>
+							<tr>
+								<th>Trucker's payout:</th>
+								<td class="pull-right">$200</td>
+							</tr>
+						</table>
+						<br>
+
+						<!-- TRUCKER -->
+						<div ng-if="user_type=='trucker'">
+							<!-- STATUS UNDEFINED -->
+							<div ng-if="job.status===null">
+								<p class="text-center error" ng-if="job.job_status>0"><b>No longer available</b></p>
+								<button class="form-control btn btn-yellow" ng-click="createApplication()" ng-if="job.job_status==0">Apply to Job</button>
+							</div>
+							<!-- STATUS < 0 -->
+							<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
+								<!-- STATUS >= 0 -->
+								<div class="dodgerblue" ng-if="job.status>=0 && job.status!=null">
+									<p class="text-center" ng-if="job.status===0"><b>You've applied for this job!</b></p>
+									<p class="text-center" ng-if="job.status===1"><b>You've been accepted for this job!</b></p>
+									<p class="text-center" ng-if="job.status==2"><b>In progress</b></p>
+									<p class="text-center" ng-if="job.status==3"><b>Invoice sent</b></p>
+									<p class="text-center" ng-if="job.status==4"><b>Job completed!</b></p>
+									<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-orange">View in Messages</button></a>
+								</div>
+							</div>
+
+							<!-- USER -->
+							<div ng-if="user_type=='user'">
+								<!-- NOT JOB OWNER -->
+								<div ng-if="id!=job.user_id">
+									<button class="form-control btn btn-orange" ng-if="id!=job.user_id" disabled>Apply to Job</button>
+									<p class="text-center"><small class="text-muted" ng-if="id!=job.user_id">Only truckers can apply to jobs.<br>Have a truck? Apply to be a trucker!</small></p>
+								</div>
+
+								<!-- JOB OWNER -->
+								<div ng-if="id==job.user_id">
+									<!-- JOB_STATUS < 0 -->
+									<div ng-if="job.job_status<0">
+										<p class="text-center error"><b>Job was taken down</b></p>
+										<button class="form-control btn btn-green" ng-click="relistJob()">Relist Job</button>
+									</div>
+									<!-- JOB_STATUS 0 -->
+									<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="edit()">Edit Job</button>
+									<button class="form-control btn btn-danger" ng-if="job.job_status<=0" ng-click="deleteJob()">Remove Job</button>
+									<!-- JOB_STATUS > 0 -->
+									<div class="dodgerblue" ng-if="job.job_status>0">
+										<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
+										<p class="text-center dodgerblue" ng-if="job.job_status==2"><b>In progress</b></p>
+										<a href="#/invoices"><p class="text-center" ng-if="job.job_status==3"><b>Check Invoices</b></p></a>
+										<p class="text-center dodgerblue" ng-if="job.job_status==4"><b>Job completed!</b></p>
+										<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-orange">View in Messages</button></a>
+									</div>
+								</div>
+							</div>
+
+							<div class="row text-center">
+								<small class="darkorange" ng-if="job.job_type!=1 && !job.p_loader"><br>*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small>
+								<small class="darkorange" ng-if="job.job_type!=0 && !job.d_loader"><br>*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
+							</div>
+						</div>
+					</div>
+
+					<!-- APPLIED MODE -->
+					<div class="row center-content" ng-show="mode=='applied'">
+						<h1>Successfully Applied to Job!</h1>
+						<p>The user has been notified.<br>You can chat with the user once they've accepted your application.</p>
+						<p>Check your messages to view you application status.</p>
+						<a href="#/messages/{{application_id}}"><button class="btn btn-info">Go to Messages</button></a>
+					</div>
+				</div>
+
+</div>
 <!-- MAIN -->
-<div class="row">
-	<a class="col-sm-4 col-sm-offset-8" href="#/">
-		<button class="btn btn-green center-block">Back to Job Listings</button>
-	</a>
-</div>
-
-<div class="row">
-	<!-- SHOW MODE -->
-	<div ng-show="mode=='show'">
-		<h4 class="text-center" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : 'You are 10 miles away from the pick-up location'}}</h4>
-		<div class="col-sm-3">
-			<img class="img-rounded img-responsive center-block" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
-			<hr>
-			<p ng-if="job.job_type==0">This job requires a trucker that can pick-up/remove {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> from a location.</p>
-			<p ng-if="job.job_type==1">This job requires a trucker that has {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> and can drop-off at a location.</p>
-			<p ng-if="job.job_type==2">This job requires a trucker that can pick-up {{job.volume | number:2}} yds<sup>3</sup> of <b>{{job.dirt_type}}</b> from one location and drop-off at another location.</p>
-		</div>
-		<div class="col-sm-6 center-content">
-			<table class="table table-bordered">
-				<tr>
-					<th>Job Type:</th>
-					<td ng-if="job.job_type==0">Dirt removal/pick-up</td>
-					<td ng-if="job.job_type==1">Dirt delivery/drop-off</td>
-					<td ng-if="job.job_type==2">Dirt pick-up &amp; delivery</td>
-				<tr>
-					<th>Dirt Type:</th>
-					<td ng-bind="job.dirt_type"></td>
-				</tr>
-				<tr>
-					<th>Volume:</th>
-					<td>{{job.volume | number:2}} yds<sup>3</sup></td>
-				</tr>
-				<tr>
-					<th>Posted On:</th>
-					<td ng-bind="job.created_at | date:'shortDate'"></td>
-				</tr>
-				<tr>
-					<th>Complete By:</th>
-					<td ng-bind="job.completion_date | date:'shortDate'"></td>
-				</tr>
-				<tr ng-if="job.job_type!=1">
-					<th>Pick-Up Location:</th>
-					<td ng-if="job.status>1 || id==job.user_id">{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}} {{job.p_zip}}</td>
-					<td ng-if="job.status<=1 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
-				</tr>
-				<tr ng-if="job.job_type!=0">
-					<th>Drop-Off Location:</th>
-					<td ng-if="job.status>1 || id==job.user_id">{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}} {{job.d_zip}}</td>
-					<td ng-if="job.status<=1 && id!=job.user_id">{{job.p_city}}, {{job.p_state}}</td>
-				</tr>
-			</table>
-			<p class="text-center"><small class="text-muted">Location details will be provided upon payment of our <a href="#/about#lead_fee">lead fee</a>.</small><br>
-		</div>
-		<div class="col-sm-3">
-			<span ng-if="job.job_type!=1">
-				<input type="checkbox" ng-checked="job.p_loader" disabled/> Loader at Pick-Up<br>
-			</span>
-			<span ng-if="job.job_type!=0">
-				<input type="checkbox" ng-checked="job.d_loader" disabled/> Loader at Drop-Off<br>
-			</span>
-			<hr>
-			<table>
-				<tr>
-					<th>Volume:</th>
-					<td class="pull-right" ng-bind="job.volume | number:2"></td>
-				</tr>
-				<tr>
-					<th>Distance:</th>
-					<td class="pull-right">10 mi</td>
-				</tr>
-				<tr style="border-bottom: 1px solid black">
-					<th>Lead Fee:</th>
-					<td class="pull-right">$25</td>
-				</tr>
-				<tr>
-					<th>Trucker's payout:</th>
-					<td class="pull-right">$200</td>
-				</tr>
-			</table>
-			<br>
-
-			<!-- TRUCKER -->
-			<div ng-if="user_type=='trucker'">
-				<!-- STATUS UNDEFINED -->
-				<div ng-if="job.status===null">
-					<p class="text-center error" ng-if="job.job_status>0"><b>No longer available</b></p>
-					<button class="form-control btn btn-yellow" ng-click="createApplication()" ng-if="job.job_status==0">Apply to Job</button>
-				</div>
-				<!-- STATUS < 0 -->
-				<p class="text-center error" ng-if="job.status<0 || job.job_status<0"><b>Not available for application</b></p>
-				<!-- STATUS >= 0 -->
-				<div class="dodgerblue" ng-if="job.status>=0 && job.status!=null">
-					<p class="text-center" ng-if="job.status===0"><b>You've applied for this job!</b></p>
-					<p class="text-center" ng-if="job.status===1"><b>You've been accepted for this job!</b></p>
-					<p class="text-center" ng-if="job.status==2"><b>In progress</b></p>
-					<p class="text-center" ng-if="job.status==3"><b>Invoice sent</b></p>
-					<p class="text-center" ng-if="job.status==4"><b>Job completed!</b></p>
-					<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
-				</div>
-			</div>
-
-			<!-- USER -->
-			<div ng-if="user_type=='user'">
-				<!-- NOT JOB OWNER -->
-				<div ng-if="id!=job.user_id">
-					<button class="form-control btn btn-info" ng-if="id!=job.user_id" disabled>Apply to Job</button>
-					<p class="text-center"><small class="text-muted" ng-if="id!=job.user_id">Only truckers can apply to jobs.<br>Have a truck? Apply to be a trucker!</small></p>
-				</div>
-
-				<!-- JOB OWNER -->
-				<div ng-if="id==job.user_id">
-					<!-- JOB_STATUS < 0 -->
-					<div ng-if="job.job_status<0">
-						<p class="text-center error"><b>Job was taken down</b></p>
-						<button class="form-control btn btn-green" ng-click="relistJob()">Relist Job</button>
-					</div>
-					<!-- JOB_STATUS 0 -->
-					<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="edit()">Edit Job</button>
-					<button class="form-control btn btn-danger" ng-if="job.job_status<=0" ng-click="deleteJob()">Remove Job</button>
-					<!-- JOB_STATUS > 0 -->
-					<div class="dodgerblue" ng-if="job.job_status>0">
-						<p class="text-center" ng-if="job.job_status===1"><b>Awaiting trucker response</b></p>
-						<p class="text-center dodgerblue" ng-if="job.job_status==2"><b>In progress</b></p>
-						<a href="#/invoices"><p class="text-center" ng-if="job.job_status==3"><b>Check Invoices</b></p></a>
-						<p class="text-center dodgerblue" ng-if="job.job_status==4"><b>Job completed!</b></p>
-						<a href="#/messages/{{job.application_id}}"><button class="form-control btn btn-info">View in Messages</button></a>
-					</div>
-				</div>
-			</div>
-
-			<div class="row text-center">
-				<small class="darkorange" ng-if="job.job_type!=1 && !job.p_loader"><br>*Note: the user has specified there will be no loaders to assist at <b>pick-up</b>.</small>
-				<small class="darkorange" ng-if="job.job_type!=0 && !job.d_loader"><br>*Note: the user has specified there will be no loaders to assist at <b>drop-off</b>.</small>
-			</div>
-		</div>
-	</div>
-
-	<!-- APPLIED MODE -->
-	<div class="row center-content" ng-show="mode=='applied'">
-		<h1>Successfully Applied to Job!</h1>
-		<p>The user has been notified.<br>You can chat with the user once they've accepted your application.</p>
-		<p>Check your messages to view you application status.</p>
-		<a href="#/messages/{{application_id}}"><button class="btn btn-info">Go to Messages</button></a>
-	</div>
-</div>

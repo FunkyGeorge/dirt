@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,51 +10,60 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
-		<div class="container-fluid">
+		<div ng-show="user_type" class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-
+				<li class="navbar-text white-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='user'"><a class="white-text" href="#/jobs">Post New Job</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
 
-<!-- MAIN -->
-<div class="row">
-	<div class="col-xs-12">
-	<h1>About</h1>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<hr>
-		<h4 id="faqs">FAQs</h4>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<hr>
-		<h4 id="disclaimer">Disclaimer</h4>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<hr>
-		<h4 id="lead_fee">Lead Fee</h4>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<hr>
-		<h4 id="ronin">Ronin Dev</h4>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
-		<hr>
+<div class="container">
+	<!-- MAIN -->
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>About</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<hr>
+			<h4 id="faqs">FAQs</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<hr>
+			<h4 id="disclaimer">Disclaimer</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<hr>
+			<h4 id="lead_fee">Lead Fee</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<hr>
+			<h4 id="ronin">Ronin Dev</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod facere sint molestiae tempore sed dignissimos ullam. Tempora voluptatibus inventore magni, dolorum possimus dolore veritatis culpa cum provident perspiciatis nostrum explicabo.</p>
+			<hr>
+		</div>
 	</div>
+
 </div>
