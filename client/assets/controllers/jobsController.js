@@ -142,9 +142,6 @@ app.controller('jobsController', function ($scope, $location, $routeParams, jobs
 			case '5': //bowl
 			$scope.preview = Math.round((2 * Math.PI * $scope.length * $scope.depth * $scope.width)/3 * 100)/100;
 			break;
-			case '6':
-			$scope.preview = Math.round($scope.length * $scope.depth * $scope.width * 100)/100;
-			break;
 			default:
 		}
 	}
