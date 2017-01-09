@@ -12,7 +12,7 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 
     factory.show($scope.id, function(data){
 			for (var i = 0; i < data.jobs.length; i++)
-				data.jobs[i].src = data.jobs[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+				data.jobs[i].src = data.jobs[i].dirt_type.toLowerCase().replace(/-/g, "").replace(/ /g,  "");
 
 			$scope.jobs = data.jobs;
 			$scope.user = data.user;
@@ -32,7 +32,10 @@ app.controller('settingsController',function ($scope, $location, $routeParams, u
 			data['year'] = $scope.user.year;
 		}
 		factory.update(data, function(data){
-			console.log(data);
+			if(data.err)
+				$scope.error = data;
+			else
+				alert("Info successfully updated");
 		});
 	};
 

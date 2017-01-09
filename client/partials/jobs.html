@@ -1,5 +1,5 @@
 <!-- NAVIGATION -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar brown navbar-fixed-top">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,416 +10,417 @@
 		<a class="navbar-brand" id="Logo" href="#/">
 			<img class="img-responsive" src="static/images/dirtlogo.png" alt="">
 		</a>
-		<a class="navbar-brand" id="Bandung" href="#/">
+		<a class="navbar-brand white-text title-text" id="Bandung" href="#/">
 			Got Dirt, Need Dirt
 		</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="navbar-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
-				<li ng-if="user_type=='user'"><a href="#/jobs">Post New Job</a></li>
-				<li><a href="#/messages">Messages</a></li>
-				<li><a href="#/invoices">Invoices</a></li>
-				<li><a href="#/about">About</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+				<li class="navbar-text white-text">Welcome {{name}}, you are signed in as a {{user_type}}.</li>
+				<li ng-if="user_type=='user'"><a class="white-text" href="#/jobs">Post New Job</a></li>
+				<li><a class="white-text" href="#/messages">Messages</a></li>
+				<li><a class="white-text" href="#/invoices">Invoices</a></li>
+				<li><a class="white-text" href="#/about">About</a></li>
+				<li><a class="white-text" href="#/settings">Settings</a></li>
+				<li><a class="white-text" href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 	</div><!--/.nav-collapse -->
 </nav>
 
-<!-- MAIN -->
-<h1 ng-show="step<7">Create Job<hr></h1>
+<div class="container">
+	<!-- MAIN -->
+	<h1 ng-show="step<7">Create Job<hr></h1>
 
-<!-- STEP 1 -->
-<div ng-show="step==1">
-	<form class="row" ng-submit="step=2; progress={'width':'20%'}">
-		<h3 class="text-center">Let's start by telling us what you need</h3>
-		<div class="col-xs-12">
-			<div class="form-check">
-				<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="job_type" ng-model="job.job_type" ng-value="0" required>
-					I need a trucker to remove my dirt
-				</label>
+	<!-- STEP 1 -->
+	<div ng-show="step==1">
+		<form class="row" ng-submit="step=2; progress={'width':'20%'}">
+			<h3 class="text-center">Let's start by telling us what you need</h3>
+			<div class="col-xs-12">
+				<div class="form-check">
+					<label class="form-check-label">
+						<input type="radio" class="form-check-input" name="job_type" ng-model="job.job_type" ng-value="0" required>
+						I need a trucker to remove my dirt
+					</label>
+				</div>
+				<div class="form-check">
+					<label class="form-check-label">
+						<input type="radio" class="form-check-input" name="job_type" ng-model="job.job_type" ng-value="1" required>
+						I need a trucker to bring me dirt
+					</label>
+				</div>
+				<div class="form-check">
+					<label class="form-check-label">
+						<input type="radio" class="form-check-input" name="job_type" ng-model="job.job_type" ng-value="2" required>
+						I need a trucker to pick-up dirt and move it to another location
+					</label>
+				</div>
+				<br>
+				<small class="form-text text-muted" ng-if="job.job_type==0">We will ask you for the location of where to pick-up the dirt.</small>
+				<small class="form-text text-muted" ng-if="job.job_type==1">We will ask you for the location of where you want the dirt dropped-off at.</small>
+				<small class="form-text text-muted" ng-if="job.job_type==2">We will ask you for both the pick-up and drop-off locations.</small>
 			</div>
-			<div class="form-check">
-				<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="job_type" ng-model="job.job_type" ng-value="1" required>
-					I need a trucker to bring me dirt
-				</label>
-			</div>
-			<div class="form-check">
-				<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="job_type" ng-model="job.job_type" ng-value="2" required>
-					I need a trucker to pick-up dirt and move it to another location
-				</label>
-			</div>
-			<br>
-			<small class="form-text text-muted" ng-if="job.job_type==0">We will ask you for the location of where to pick-up the dirt.</small>
-			<small class="form-text text-muted" ng-if="job.job_type==1">We will ask you for the location of where you want the dirt dropped-off at.</small>
-			<small class="form-text text-muted" ng-if="job.job_type==2">We will ask you for both the pick-up and drop-off locations.</small>
-		</div>
-		<div style="margin-top: 20px;" class="col-sm-5 col-xs-12 pull-right">
-			<input class="btn btn-green center-block" type="submit" value="Next">
-		</div>
-	</form>
-</div>
-
-<!-- STEP 2 -->
-<div ng-show="step==2">
-	<form class="row" ng-submit="step=3; progress={'width':'40%'}">
-		<h3 class="text-center">What type of dirt do you <span ng-if="job.job_type==0">have</span><span ng-if="job.job_type==1">want</span><span ng-if="job.job_type==2">need transported</span>?</h3>
-		<div class="form-group col-sm-7">
-			<label>Type of Dirt:</label>
-			<select class="form-control" ng-init="job.dirt_type='Sand'" ng-model="job.dirt_type" ng-change="change()">
-				<optgroup label="Compactable Fill">
-					<option value="Sand">Sand</option>
-					<option value="Sandyclay">Sandyclay</option>
-					<option value="Clay">Clay</option>
-					<option value="Gravel">Gravel</option>
-					<option value="Recycled Asphalt">Recycled Asphalt</option>
-					<option value="Recycled Concrete">Recycled Concrete</option>
-					<option value="Recycled Base Material">Recycled Base Material</option>
-				</optgroup>
-				<optgroup label="Yard Fill">
-					<option value="Clean Fill">Clean Fill</option>
-					<option value="Rough Fill">Rough Fill</option>
-				</optgroup>
-				<optgroup label="Topsoil">
-					<option value="Topsoil - Nice">Topsoil - Nice</option>
-					<option value="Topsoil - Average">Topsoil - Average</option>
-					<option value="Topsoil - Economy">Topsoil - Economy</option>
-					<option value="Peat">Peat</option>
-				</optgroup>
-				<optgroup label="Other">
-					<option value="River Rock">River Rock</option>
-					<option value="Rip-Rap">Rip-Rap</option>
-					<option value="Boulders">Boulders</option>
-					<option value="Asphalt Chunks">Asphalt Chunks</option>
-					<option value="Concrete Chunks">Concrete Chunks</option>
-					<option value="Contaminated Fill">Contaminated Fill</option>
-					<option value="Snow">Snow</option>
-				</optgroup>
-			</select>
-			<hr>
-			<p ng-bind="description"></p>
-		</div>
-		<div class="col-sm-5">
-			<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
-		</div>
-		<div style="margin-top: 20px;" class="col-xs-12">
-			<div class="col-sm-5 col-xs-6 pull-right">
+			<div style="margin-top: 20px;" class="col-sm-5 col-xs-12 pull-right">
 				<input class="btn btn-green center-block" type="submit" value="Next">
 			</div>
-			<div class="col-sm-7 col-xs-6">
-				<button class="btn btn-default center-block" type="button" ng-click="step=1; progress={'width':'0%'}">Previous</button>
-			</div>
-		</div>
-	</form>
-</div>
-
-<!-- STEP 3 -->
-<div ng-show="step==3">
-	<form class="row" ng-submit="step=4; progress={'width':'60%'}">
-		<h3 class="text-center" ng-bind="job.dirt_type"></h3>
-		<div class="col-sm-7">
-			<div class="form-group">
-				<label>Volume (in cubic yards - yds<sup>3</sup>):</label><br>
-				<input class="form-control" type="number" step="0.01" min="0.01" ng-model="job.volume" required><br>
-				<button class="form-control btn btn-info" type="button" ng-click="step=8">Fill Calculator</button>
-				<small class="form-text text-muted">You can input the volume of the load above or use the fill calculator to estimate the volume.</small>
-			</div>
-			<div class="form-group">
-				<label>Desired Completion Date:</label>
-				<input class="form-control" type="date" ng-model="job.completion_date" min="{{today|date:'yyyy-MM-dd'}}" required>
-			</div>
-		</div>
-		<div class="col-sm-5 pull-right">
-			<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
-		</div>
-		<div style="margin-top: 20px;" class="col-xs-12">
-			<div class="col-sm-5 col-xs-6 pull-right">
-				<input class="btn btn-green center-block" type="submit" value="Next">
-			</div>
-			<div class="col-sm-7 col-xs-6">
-				<button class="btn btn-default center-block" type="button" ng-click="step=2; progress={'width':'20%'}">Previous</button>
-			</div>
-		</div>
-	</form>
-</div>
-
-<!-- STEP 4 -->
-<div ng-show="step==4">
-	<form class="row" ng-submit="step=5; progress={'width':'80%'}">
-		<h3 class="text-center" ng-bind="job.dirt_type"></h3>
-		<div class="col-sm-7">
-			<div class="form-group">
-				<label>Pick-Up Location:</label><br>
-				<small class="form-text text-muted">This is where truckers will pick-up the load.</small>
-				<input class="form-control" type="text" placeholder="Address" ng-model="job.p_address" ng-disabled="job.job_type==1" ng-required="job.job_type!=1"><br>
-				<div class="row">
-					<div class="col-xs-6">
-						<input class="form-control" type="text" placeholder="City" ng-model="job.p_city" ng-disabled="job.job_type==1" ng-required="job.job_type!=1">
-					</div>
-					<div class="col-xs-6">
-						<select class="form-control" placeholder="State" ng-model="job.p_state" ng-disabled="job.job_type==1" ng-required="job.job_type!=1">
-							<option value="AL">AL</option>
-							<option value="AK">AK</option>
-							<option value="AZ">AZ</option>
-							<option value="AR">AR</option>
-							<option value="CA">CA</option>
-							<option value="CO">CO</option>
-							<option value="CT">CT</option>
-							<option value="DE">DE</option>
-							<option value="DC">DC</option>
-							<option value="FL">FL</option>
-							<option value="GA">GA</option>
-							<option value="HI">HI</option>
-							<option value="ID">ID</option>
-							<option value="IL">IL</option>
-							<option value="IN">IN</option>
-							<option value="IA">IA</option>
-							<option value="KS">KS</option>
-							<option value="KY">KY</option>
-							<option value="LA">LA</option>
-							<option value="ME">ME</option>
-							<option value="MD">MD</option>
-							<option value="MA">MA</option>
-							<option value="MI">MI</option>
-							<option value="MN">MN</option>
-							<option value="MS">MS</option>
-							<option value="MO">MO</option>
-							<option value="MT">MT</option>
-							<option value="NE">NE</option>
-							<option value="NV">NV</option>
-							<option value="NH">NH</option>
-							<option value="NJ">NJ</option>
-							<option value="NM">NM</option>
-							<option value="NY">NY</option>
-							<option value="NC">NC</option>
-							<option value="ND">ND</option>
-							<option value="OH">OH</option>
-							<option value="OK">OK</option>
-							<option value="OR">OR</option>
-							<option value="PA">PA</option>
-							<option value="RI">RI</option>
-							<option value="SC">SC</option>
-							<option value="SD">SD</option>
-							<option value="TN">TN</option>
-							<option value="TX">TX</option>
-							<option value="UT">UT</option>
-							<option value="VT">VT</option>
-							<option value="VA">VA</option>
-							<option value="WA">WA</option>
-							<option value="WV">WV</option>
-							<option value="WI">WI</option>
-							<option value="WY">WY</option>
-						</select><br>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<input class="form-control" type="number" placeholder="Zip" ng-model="job.p_zip" ng-disabled="job.job_type==1" ng-required="job.job_type!=1"><br>
-					</div>
-					<fieldset class="form-check col-xs-6">
-						<label class="form-check-label">
-							<input type="checkbox" class="form-check-input" ng-model="job.p_loader" ng-disabled="job.job_type==1">
-							Loader at Pick-Up<br>
-							<small class="form-text text-muted">Check this if you have loaders to assist at the pick-up location.</small>
-						</label>
-					</fieldset>
-				</div>
-			</div>
-			<b style="color: darkorange" ng-if="job.job_type==1">You can skip this step since you've specified you only need dirt brought to you.</b>
-		</div>
-		<div class="col-sm-5">
-			<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
-		</div>
-		<div style="margin-top: 20px;" class="col-xs-12">
-			<div class="col-sm-5 col-xs-6 pull-right">
-				<input class="btn btn-green center-block" type="submit" value="Next">
-			</div>
-			<div class="col-sm-7 col-xs-6">
-				<button class="btn btn-default center-block" type="button" ng-click="step=3; progress={'width':'40%'}">Previous</button>
-			</div>
-		</div>
-	</form>
-</div>
-
-<!-- STEP 5 -->
-<div ng-show="step==5">
-	<form class="row" ng-submit="step=6; progress={'width':'99%'}">
-		<h3 class="text-center" ng-bind="job.dirt_type"></h3>
-		<div class="col-sm-7">
-			<div class="form-group">
-				<label>Drop-Off Location:</label><br>
-				<small class="form-text text-muted">This is where truckers will drop-off the load.</small>
-				<input class="form-control" type="text" placeholder="Address" ng-model="job.d_address" ng-disabled="job.job_type==0" ng-required="job.job_type!=0"><br>
-				<div class="row">
-					<div class="col-xs-6">
-						<input class="form-control" type="text" placeholder="City" ng-model="job.d_city" ng-disabled="job.job_type==0" ng-required="job.job_type!=0">
-					</div>
-					<div class="col-xs-6">
-						<select class="form-control"  placeholder="State" ng-model="job.d_state" ng-disabled="job.job_type==0" ng-required="job.job_type!=0">
-							<option value="AL">AL</option>
-							<option value="AK">AK</option>
-							<option value="AZ">AZ</option>
-							<option value="AR">AR</option>
-							<option value="CA">CA</option>
-							<option value="CO">CO</option>
-							<option value="CT">CT</option>
-							<option value="DE">DE</option>
-							<option value="DC">DC</option>
-							<option value="FL">FL</option>
-							<option value="GA">GA</option>
-							<option value="HI">HI</option>
-							<option value="ID">ID</option>
-							<option value="IL">IL</option>
-							<option value="IN">IN</option>
-							<option value="IA">IA</option>
-							<option value="KS">KS</option>
-							<option value="KY">KY</option>
-							<option value="LA">LA</option>
-							<option value="ME">ME</option>
-							<option value="MD">MD</option>
-							<option value="MA">MA</option>
-							<option value="MI">MI</option>
-							<option value="MN">MN</option>
-							<option value="MS">MS</option>
-							<option value="MO">MO</option>
-							<option value="MT">MT</option>
-							<option value="NE">NE</option>
-							<option value="NV">NV</option>
-							<option value="NH">NH</option>
-							<option value="NJ">NJ</option>
-							<option value="NM">NM</option>
-							<option value="NY">NY</option>
-							<option value="NC">NC</option>
-							<option value="ND">ND</option>
-							<option value="OH">OH</option>
-							<option value="OK">OK</option>
-							<option value="OR">OR</option>
-							<option value="PA">PA</option>
-							<option value="RI">RI</option>
-							<option value="SC">SC</option>
-							<option value="SD">SD</option>
-							<option value="TN">TN</option>
-							<option value="TX">TX</option>
-							<option value="UT">UT</option>
-							<option value="VT">VT</option>
-							<option value="VA">VA</option>
-							<option value="WA">WA</option>
-							<option value="WV">WV</option>
-							<option value="WI">WI</option>
-							<option value="WY">WY</option>
-						</select><br>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<input class="form-control" type="text" placeholder="Zip" ng-model="job.d_zip" ng-disabled="job.job_type==0" ng-required="job.job_type!=0">
-					</div>
-					<fieldset class="form-check col-xs-6">
-						<label class="form-check-label">
-							<input type="checkbox" class="form-check-input" ng-model="job.d_loader" ng-disabled="job.job_type==0">
-							Loader at Drop-Off<br>
-							<small class="form-text text-muted">Check this if you have loaders to assist at the drop-off location.</small>
-						</label>
-					</fieldset>
-				</div>
-			</div>
-			<b style="color: darkorange" ng-if="job.job_type==0">You can skip this step since you've specified you only need dirt removed.</b>
-		</div>
-		<div class="col-sm-5">
-			<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
-		</div>
-		<div style="margin-top: 20px;" class="col-xs-12">
-			<div class="col-sm-5 col-xs-6 pull-right">
-				<input class="btn btn-green center-block" type="submit" value="Next">
-			</div>
-			<div class="col-sm-7 col-xs-6">
-				<button class="btn btn-default center-block" type="button" ng-click="step=4; progress={'width':'60%'}">Previous</button>
-			</div>
-		</div>
-	</form>
-</div>
-
-<!-- STEP 6: VERIFICATION -->
-<div ng-show="step==6">
-	<h3>Review the details before it goes live:</h3>
-	<div class="row">
-		<div class="col-sm-7">
-			<table class="table table-bordered">
-				<tr>
-					<th>Job Type:</th>
-					<td ng-if="job.job_type==0">Dirt removal/pick-up</td>
-					<td ng-if="job.job_type==1">Dirt delivery/drop-off</td>
-					<td ng-if="job.job_type==2">Dirt pick-up &amp; delivery</td>
-				</tr>
-				<tr>
-					<th>Dirt Type:</th>
-					<td ng-bind="job.dirt_type"></td>
-				</tr>
-				<tr>
-					<th>Volume:</th>
-					<td>{{job.volume | number:2}} yds<sup>3</sup></td>
-				</tr>
-				<tr>
-					<th>Completion Date:</th>
-					<td ng-bind="job.completion_date | date:'fullDate'"></td>
-				</tr>
-				<tr>
-					<th>Distance:</th>
-					<td>10 miles</td>
-				</tr>
-				<tr>
-					<th>Estimated Cost:</th>
-					<td>$300</td>
-				</tr>
-			</table>
-			<p style="color: darkorange">*Cost is an estimate and may change depending on truck capacity.</p>
-		</div>
-		<div class="col-sm-5">
-			<fieldset class="form-check">
-				<label class="form-check-label" ng-if="job.job_type!=1">
-					<input type="checkbox" class="form-check-input" ng-model="job.p_loader" disabled>
-					Loader at Pick-Up
-				</label><br>
-				<label class="form-check-label" ng-if="job.job_type!=0">
-					<input type="checkbox" class="form-check-input" ng-model="job.d_loader" disabled>
-					Loader at Drop-Off
-				</label>
-			</fieldset>
-		<hr>
-		</div>
-		<div class="col-xs-6" ng-if="job.job_type!=1">
-			<label>Pick-Up Location</label>
-			<p>{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}}<br>{{job.p_zip}}</p>
-		</div>
-		<div class="col-xs-6 text-right pull-right" ng-if="job.job_type!=0">
-			<label>Drop-Off Location</label>
-			<p>{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}}<br>{{job.d_zip}}</p>
-		</div>
-<!-- 		<div class="col-xs-6 text-right" ng-if="job.pickup_only">
-			<fieldset class="form-check">
-				<label class="form-check-label">
-					<input type="checkbox" class="form-check-input" checked disabled>
-					Find somewhere to drop it off<br>
-					<small class="form-text text-muted">Truckers are free to do as they please with the dirt after pick-up.</small>
-				</label><br>
-			</fieldset>
-		</div> -->
-		<div style="margin-top: 20px;" class="col-xs-12">
-			<div class="col-xs-6">
-				<button class="btn btn-default center-block" ng-click="step=5; progress={'width':'80%'}">Edit Details</button>
-			</div>
-			<div class="col-xs-6">
-				<button class="btn btn-green center-block" ng-click="create()">List Job</button>
-			</div>
-			<b class="error text-center" ng-bind="error"></b>
-		</div>
+		</form>
 	</div>
+
+	<!-- STEP 2 -->
+	<div ng-show="step==2">
+		<form class="row" ng-submit="step=3; progress={'width':'40%'}">
+			<h3 class="text-center">What type of dirt do you <span ng-if="job.job_type==0">have</span><span ng-if="job.job_type==1">want</span><span ng-if="job.job_type==2">need transported</span>?</h3>
+			<div class="form-group col-sm-7">
+				<label>Type of Dirt:</label>
+				<select class="form-control" ng-init="job.dirt_type='Sand'" ng-model="job.dirt_type" ng-change="change()">
+					<optgroup label="Compactable Fill">
+						<option value="Sand">Sand</option>
+						<option value="Sandyclay">Sandyclay</option>
+						<option value="Clay">Clay</option>
+						<option value="Gravel">Gravel</option>
+						<option value="Recycled Asphalt">Recycled Asphalt</option>
+						<option value="Recycled Concrete">Recycled Concrete</option>
+						<option value="Recycled Base Material">Recycled Base Material</option>
+					</optgroup>
+					<optgroup label="Yard Fill">
+						<option value="Clean Fill">Clean Fill</option>
+						<option value="Rough Fill">Rough Fill</option>
+					</optgroup>
+					<optgroup label="Topsoil">
+						<option value="Topsoil - Nice">Topsoil - Nice</option>
+						<option value="Topsoil - Average">Topsoil - Average</option>
+						<option value="Topsoil - Economy">Topsoil - Economy</option>
+						<option value="Peat">Peat</option>
+					</optgroup>
+					<optgroup label="Other">
+						<option value="River Rock">River Rock</option>
+						<option value="Rip-Rap">Rip-Rap</option>
+						<option value="Boulders">Boulders</option>
+						<option value="Asphalt Chunks">Asphalt Chunks</option>
+						<option value="Concrete Chunks">Concrete Chunks</option>
+						<option value="Contaminated Fill">Contaminated Fill</option>
+						<option value="Snow">Snow</option>
+					</optgroup>
+				</select>
+				<hr>
+				<p ng-bind="description"></p>
+			</div>
+			<div class="col-sm-5">
+				<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
+			</div>
+			<div style="margin-top: 20px;" class="col-xs-12">
+				<div class="col-sm-5 col-xs-6 pull-right">
+					<input class="btn btn-green center-block" type="submit" value="Next">
+				</div>
+				<div class="col-sm-7 col-xs-6">
+					<button class="btn btn-default center-block" type="button" ng-click="step=1; progress={'width':'0%'}">Previous</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- STEP 3 -->
+	<div ng-show="step==3">
+		<form class="row" ng-submit="step=4; progress={'width':'60%'}">
+			<h3 class="text-center" ng-bind="job.dirt_type"></h3>
+			<div class="col-sm-7">
+				<div class="form-group">
+					<label>Volume (in cubic yards - yds<sup>3</sup>):</label><br>
+					<input class="form-control" type="number" step="0.01" min="0.01" ng-model="job.volume" required><br>
+					<button class="form-control btn btn-info" type="button" ng-click="step=8">Fill Calculator</button>
+					<small class="form-text text-muted">You can input the volume of the load above or use the fill calculator to estimate the volume.</small>
+				</div>
+				<div class="form-group">
+					<label>Desired Completion Date:</label>
+					<input class="form-control" type="date" ng-model="job.completion_date" min="{{today|date:'yyyy-MM-dd'}}" required>
+				</div>
+			</div>
+			<div class="col-sm-5 pull-right">
+				<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
+			</div>
+			<div style="margin-top: 20px;" class="col-xs-12">
+				<div class="col-sm-5 col-xs-6 pull-right">
+					<input class="btn btn-green center-block" type="submit" value="Next">
+				</div>
+				<div class="col-sm-7 col-xs-6">
+					<button class="btn btn-default center-block" type="button" ng-click="step=2; progress={'width':'20%'}">Previous</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- STEP 4 -->
+	<div ng-show="step==4">
+		<form class="row" ng-submit="step=5; progress={'width':'80%'}">
+			<h3 class="text-center" ng-bind="job.dirt_type"></h3>
+			<div class="col-sm-7">
+				<div class="form-group">
+					<label>Pick-Up Location:</label><br>
+					<small class="form-text text-muted">This is where truckers will pick-up the load.</small>
+					<input class="form-control" type="text" placeholder="Address" ng-model="job.p_address" ng-disabled="job.job_type==1" ng-required="job.job_type!=1"><br>
+					<div class="row">
+						<div class="col-xs-6">
+							<input class="form-control" type="text" placeholder="City" ng-model="job.p_city" ng-disabled="job.job_type==1" ng-required="job.job_type!=1">
+						</div>
+						<div class="col-xs-6">
+							<select class="form-control" placeholder="State" ng-model="job.p_state" ng-disabled="job.job_type==1" ng-required="job.job_type!=1">
+								<option value="AL">AL</option>
+								<option value="AK">AK</option>
+								<option value="AZ">AZ</option>
+								<option value="AR">AR</option>
+								<option value="CA">CA</option>
+								<option value="CO">CO</option>
+								<option value="CT">CT</option>
+								<option value="DE">DE</option>
+								<option value="DC">DC</option>
+								<option value="FL">FL</option>
+								<option value="GA">GA</option>
+								<option value="HI">HI</option>
+								<option value="ID">ID</option>
+								<option value="IL">IL</option>
+								<option value="IN">IN</option>
+								<option value="IA">IA</option>
+								<option value="KS">KS</option>
+								<option value="KY">KY</option>
+								<option value="LA">LA</option>
+								<option value="ME">ME</option>
+								<option value="MD">MD</option>
+								<option value="MA">MA</option>
+								<option value="MI">MI</option>
+								<option value="MN">MN</option>
+								<option value="MS">MS</option>
+								<option value="MO">MO</option>
+								<option value="MT">MT</option>
+								<option value="NE">NE</option>
+								<option value="NV">NV</option>
+								<option value="NH">NH</option>
+								<option value="NJ">NJ</option>
+								<option value="NM">NM</option>
+								<option value="NY">NY</option>
+								<option value="NC">NC</option>
+								<option value="ND">ND</option>
+								<option value="OH">OH</option>
+								<option value="OK">OK</option>
+								<option value="OR">OR</option>
+								<option value="PA">PA</option>
+								<option value="RI">RI</option>
+								<option value="SC">SC</option>
+								<option value="SD">SD</option>
+								<option value="TN">TN</option>
+								<option value="TX">TX</option>
+								<option value="UT">UT</option>
+								<option value="VT">VT</option>
+								<option value="VA">VA</option>
+								<option value="WA">WA</option>
+								<option value="WV">WV</option>
+								<option value="WI">WI</option>
+								<option value="WY">WY</option>
+							</select><br>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<input class="form-control" type="number" placeholder="Zip" ng-model="job.p_zip" ng-disabled="job.job_type==1" ng-required="job.job_type!=1"><br>
+						</div>
+						<fieldset class="form-check col-xs-6">
+							<label class="form-check-label">
+								<input type="checkbox" class="form-check-input" ng-model="job.p_loader" ng-disabled="job.job_type==1">
+								Loader at Pick-Up<br>
+								<small class="form-text text-muted">Check this if you have loaders to assist at the pick-up location.</small>
+							</label>
+						</fieldset>
+					</div>
+				</div>
+				<b style="color: darkorange" ng-if="job.job_type==1">You can skip this step since you've specified you only need dirt brought to you.</b>
+			</div>
+			<div class="col-sm-5">
+				<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
+			</div>
+			<div style="margin-top: 20px;" class="col-xs-12">
+				<div class="col-sm-5 col-xs-6 pull-right">
+					<input class="btn btn-green center-block" type="submit" value="Next">
+				</div>
+				<div class="col-sm-7 col-xs-6">
+					<button class="btn btn-default center-block" type="button" ng-click="step=3; progress={'width':'40%'}">Previous</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- STEP 5 -->
+	<div ng-show="step==5">
+		<form class="row" ng-submit="step=6; progress={'width':'99%'}">
+			<h3 class="text-center" ng-bind="job.dirt_type"></h3>
+			<div class="col-sm-7">
+				<div class="form-group">
+					<label>Drop-Off Location:</label><br>
+					<small class="form-text text-muted">This is where truckers will drop-off the load.</small>
+					<input class="form-control" type="text" placeholder="Address" ng-model="job.d_address" ng-disabled="job.job_type==0" ng-required="job.job_type!=0"><br>
+					<div class="row">
+						<div class="col-xs-6">
+							<input class="form-control" type="text" placeholder="City" ng-model="job.d_city" ng-disabled="job.job_type==0" ng-required="job.job_type!=0">
+						</div>
+						<div class="col-xs-6">
+							<select class="form-control"  placeholder="State" ng-model="job.d_state" ng-disabled="job.job_type==0" ng-required="job.job_type!=0">
+								<option value="AL">AL</option>
+								<option value="AK">AK</option>
+								<option value="AZ">AZ</option>
+								<option value="AR">AR</option>
+								<option value="CA">CA</option>
+								<option value="CO">CO</option>
+								<option value="CT">CT</option>
+								<option value="DE">DE</option>
+								<option value="DC">DC</option>
+								<option value="FL">FL</option>
+								<option value="GA">GA</option>
+								<option value="HI">HI</option>
+								<option value="ID">ID</option>
+								<option value="IL">IL</option>
+								<option value="IN">IN</option>
+								<option value="IA">IA</option>
+								<option value="KS">KS</option>
+								<option value="KY">KY</option>
+								<option value="LA">LA</option>
+								<option value="ME">ME</option>
+								<option value="MD">MD</option>
+								<option value="MA">MA</option>
+								<option value="MI">MI</option>
+								<option value="MN">MN</option>
+								<option value="MS">MS</option>
+								<option value="MO">MO</option>
+								<option value="MT">MT</option>
+								<option value="NE">NE</option>
+								<option value="NV">NV</option>
+								<option value="NH">NH</option>
+								<option value="NJ">NJ</option>
+								<option value="NM">NM</option>
+								<option value="NY">NY</option>
+								<option value="NC">NC</option>
+								<option value="ND">ND</option>
+								<option value="OH">OH</option>
+								<option value="OK">OK</option>
+								<option value="OR">OR</option>
+								<option value="PA">PA</option>
+								<option value="RI">RI</option>
+								<option value="SC">SC</option>
+								<option value="SD">SD</option>
+								<option value="TN">TN</option>
+								<option value="TX">TX</option>
+								<option value="UT">UT</option>
+								<option value="VT">VT</option>
+								<option value="VA">VA</option>
+								<option value="WA">WA</option>
+								<option value="WV">WV</option>
+								<option value="WI">WI</option>
+								<option value="WY">WY</option>
+							</select><br>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<input class="form-control" type="text" placeholder="Zip" ng-model="job.d_zip" ng-disabled="job.job_type==0" ng-required="job.job_type!=0">
+						</div>
+						<fieldset class="form-check col-xs-6">
+							<label class="form-check-label">
+								<input type="checkbox" class="form-check-input" ng-model="job.d_loader" ng-disabled="job.job_type==0">
+								Loader at Drop-Off<br>
+								<small class="form-text text-muted">Check this if you have loaders to assist at the drop-off location.</small>
+							</label>
+						</fieldset>
+					</div>
+				</div>
+				<b style="color: darkorange" ng-if="job.job_type==0">You can skip this step since you've specified you only need dirt removed.</b>
+			</div>
+			<div class="col-sm-5">
+				<img class="img-rounded center-block img-responsive" ng-src="{{src}}" alt="OOPS!">
+			</div>
+			<div style="margin-top: 20px;" class="col-xs-12">
+				<div class="col-sm-5 col-xs-6 pull-right">
+					<input class="btn btn-green center-block" type="submit" value="Next">
+				</div>
+				<div class="col-sm-7 col-xs-6">
+					<button class="btn btn-default center-block" type="button" ng-click="step=4; progress={'width':'60%'}">Previous</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- STEP 6: VERIFICATION -->
+	<div ng-show="step==6">
+		<h3>Review the details before it goes live:</h3>
+		<div class="row">
+			<div class="col-sm-7">
+				<table class="table table-bordered">
+					<tr>
+						<th>Job Type:</th>
+						<td ng-if="job.job_type==0">Dirt removal/pick-up</td>
+						<td ng-if="job.job_type==1">Dirt delivery/drop-off</td>
+						<td ng-if="job.job_type==2">Dirt pick-up &amp; delivery</td>
+					</tr>
+					<tr>
+						<th>Dirt Type:</th>
+						<td ng-bind="job.dirt_type"></td>
+					</tr>
+					<tr>
+						<th>Volume:</th>
+						<td>{{job.volume | number:2}} yds<sup>3</sup></td>
+					</tr>
+					<tr>
+						<th>Completion Date:</th>
+						<td ng-bind="job.completion_date | date:'fullDate'"></td>
+					</tr>
+					<tr>
+						<th>Distance:</th>
+						<td>10 miles</td>
+					</tr>
+					<tr>
+						<th>Estimated Cost:</th>
+						<td>$300</td>
+					</tr>
+				</table>
+				<p style="color: darkorange">*Cost is an estimate and may change depending on truck capacity.</p>
+			</div>
+			<div class="col-sm-5">
+				<fieldset class="form-check">
+					<label class="form-check-label" ng-if="job.job_type!=1">
+						<input type="checkbox" class="form-check-input" ng-model="job.p_loader" disabled>
+						Loader at Pick-Up
+					</label><br>
+					<label class="form-check-label" ng-if="job.job_type!=0">
+						<input type="checkbox" class="form-check-input" ng-model="job.d_loader" disabled>
+						Loader at Drop-Off
+					</label>
+				</fieldset>
+				<hr>
+			</div>
+			<div class="col-xs-6" ng-if="job.job_type!=1">
+				<label>Pick-Up Location</label>
+				<p>{{job.p_address}}<br>{{job.p_city}}, {{job.p_state}}<br>{{job.p_zip}}</p>
+			</div>
+			<div class="col-xs-6 text-right pull-right" ng-if="job.job_type!=0">
+				<label>Drop-Off Location</label>
+				<p>{{job.d_address}}<br>{{job.d_city}}, {{job.d_state}}<br>{{job.d_zip}}</p>
+			</div>
+			<!-- 		<div class="col-xs-6 text-right" ng-if="job.pickup_only">
+			<fieldset class="form-check">
+			<label class="form-check-label">
+			<input type="checkbox" class="form-check-input" checked disabled>
+			Find somewhere to drop it off<br>
+			<small class="form-text text-muted">Truckers are free to do as they please with the dirt after pick-up.</small>
+		</label><br>
+	</fieldset>
+</div> -->
+<div style="margin-top: 20px;" class="col-xs-12">
+	<div class="col-xs-6">
+		<button class="btn btn-default center-block" ng-click="step=5; progress={'width':'80%'}">Edit Details</button>
+	</div>
+	<div class="col-xs-6">
+		<button class="btn btn-green center-block" ng-click="create()">List Job</button>
+	</div>
+	<b class="error text-center" ng-bind="error"></b>
+</div>
+</div>
 </div>
 
 <!-- STEP 7: SUCCESS -->
@@ -459,10 +460,6 @@
 				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="5" required>
 				<img src="static/images/bowl_shape.png" alt="OOPS!">
 			</label>
-			<label>
-				<input type="radio" name="shape" ng-click="calculate();" ng-model="shape" value="6" required>
-				<img src="static/images/box_shape.png" alt="OOPS!">
-			</label>
 		</div>
 		<div class="form-group col-md-4" ng-hide="shape==3 || shape==4">
 			<label>Length (yards)</label>
@@ -489,7 +486,7 @@
 </div>
 
 <!-- STATUS BAR -->
-	<hr>
+<hr>
 <div class="row" ng-show="step<7">
 	<div class="col-xs-12">
 		<h1 class="text-center">Step {{step}}</h1>
@@ -498,4 +495,5 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>

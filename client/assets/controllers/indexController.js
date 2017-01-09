@@ -122,14 +122,14 @@ app.controller('indexController', function ($scope, $location, $routeParams, job
 		if ($scope.user_type == 'user')
 			jobsFactory.getUserJobs($scope.id, function(data){
 				for (var i = 0; i < data.length; i++)
-					data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+					data[i].src = data[i].dirt_type.toLowerCase().replace(/-/g, "").replace(/ /g,  "");
 
 				$scope.jobs = data;
 			});
 		else if ($scope.user_type = 'trucker')
 			jobsFactory.getTruckerJobs($scope.id, function(data){
 				for (var i = 0; i < data.length; i++)
-					data[i].src = data[i].dirt_type.toLowerCase().replace(" - ", "_").replace(" ",  "_");
+					data[i].src = data[i].dirt_type.toLowerCase().replace(/-/g, "").replace(/ /g,  "");
 
 				$scope.jobs = data;
 			});
