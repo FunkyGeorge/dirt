@@ -29,6 +29,7 @@
 	</div><!--/.nav-collapse -->
 </nav>
 
+
 <!-- MAIN -->
 <div class="container tan-transparent">
 	<div class="row">
@@ -50,11 +51,21 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-sm-9" ng-if="jobs.length > 0">
+		<div class="col-sm-9">
 			<ul class="nav nav-pills yellow pull-right">
 				<li ng-class="{active: state[4]==0}"><a class="black-text" href="" ng-click="state[4]=0; getAllListings();">All Listings</a></li>
 				<li ng-class="{active: state[4]==1}"><a class="black-text" href="" ng-click="state[4]=1; getYourListings();">Your Listings</a></li>
 			</ul>
+			<br><br><br><br>
+			<div class="clearfix"></div>
+			<div ng-show="!state[3]" class="progress">
+				<div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+					<span class="sr-only">45% Complete</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-9" ng-if="jobs.length > 0">
+
 			<div class="clearfix"></div>
 			<!-- nfinite scroll zone ########################################################### -->
 			<div infinite-scroll="append();" infinite-scroll-distance="0">
