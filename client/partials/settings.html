@@ -81,7 +81,7 @@
 					</div>
 					<div class="col-sm-9">
 						<div class="row">
-							<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">Listed by you</h4>
+							<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{user_type == 'user' ? 'Listed' : 'Applied'}} by you</h4>
 							<div class="col-sm-6 hidden-xs">
 								<a href="#/jobs/{{job.id}}"><button class="btn btn-yellow pull-right">{{job.applied ? 'Applied!' : 'View Job'}}</button></a>
 							</div>
