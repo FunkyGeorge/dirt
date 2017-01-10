@@ -8,8 +8,34 @@
 	src: url(../fonts/BandungHardcoreGP.ttf);
 }
 
+/*Bootstrap Overrides*/
 h1,h2,h3,h4,h5,p,li,a{
 	font-family: Lato, Times;
+}
+
+.navbar-custom .navbar-toggle .icon-bar {
+    background-color: black;
+}
+
+.navbar-custom {
+    background-color: #593202;
+    color: white;
+    border-radius:0;
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color: #FFF;
+}
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #FFF;
+    background-color:transparent;
+}
+.navbar-custom .navbar-brand {
+    color: #eeeeee;
+}
+
+.navbar-toggle{
+	background-color: #F2B705;
 }
 
 body{
