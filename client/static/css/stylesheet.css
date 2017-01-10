@@ -40,7 +40,10 @@ h1,h2,h3,h4,h5,p,li,a{
 }
 
 .navbar-toggle{
-	background-color: #F2B705;
+	background-color: #FFF;
+}
+.progress-bar-dirt {
+	background-image: linear-gradient(to bottom,#D97904 0,#B26003 100%);
 }
 
 body{
@@ -175,6 +178,18 @@ body{
 	color: #FFF;
 	background-color: #45680d;
 	border-color: #44680D;
+}
+
+.btn-tan {
+	color: #FFF;
+	background-color: #F29F05;
+	border-color: #F29F05;
+}
+
+.btn-tan:hover {
+	color: #FFF;
+	background-color: #E59306;
+	border-color: #E29206;
 }
 
 .error {
