@@ -31,7 +31,7 @@
 
 
 <!-- MAIN -->
-<div class="container tan-transparent">
+<div class="container">
 	<div class="row">
 		<div class="col-sm-3">
 			<h1 class="text-center">Dirt Feed</h1>
@@ -53,8 +53,8 @@
 		</div>
 		<div class="col-sm-9">
 			<ul class="nav nav-pills yellow pull-right">
-				<li ng-class="{active: state[4]==0}"><a class="black-text" href="" ng-click="state[4]=0; getAllListings();">All Listings</a></li>
-				<li ng-class="{active: state[4]==1}"><a class="black-text" href="" ng-click="state[4]=1; getYourListings();">Your Listings</a></li>
+				<li ng-class="{active: state[4]==0}"><a class="white-text" href="" ng-click="state[4]=0; getAllListings();">All Listings</a></li>
+				<li ng-class="{active: state[4]==1}"><a class="white-text" href="" ng-click="state[4]=1; getYourListings();">Your Listings</a></li>
 			</ul>
 			<br><br><br>
 			<div class="clearfix"></div>
@@ -78,7 +78,7 @@
 					</div>
 					<div class="col-sm-9">
 						<div class="row hidden-xs">
-							<h4 class="col-sm-6" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
+							<h4 class="col-sm-6" ng-class="{black-text: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : getDistance(job) + ' miles away'}}</h4>
 							<div class="col-sm-6">
 								<a href="#/jobs/{{job.id}}"><button class="btn btn-orange pull-right">View Job</button></a>
 							</div>

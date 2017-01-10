@@ -28,8 +28,13 @@ h1,h2,h3,h4,h5,p,li,a{
 }
 .navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
     color: #FFF;
-    background-color:transparent;
+    background-color: #D97904;
 }
+
+.navbar-nav > li > a:focus, .navbar-nav > li > a:hover {
+	background-color: #D97904;
+}
+
 .navbar-custom .navbar-brand {
     color: #eeeeee;
 }
@@ -59,11 +64,11 @@ body{
 }
 
 .dirt-link {
-	color: #4A730E;
+	color: #F2B705;
 }
 
 .dirt-link:hover {
-	color: #593202;
+	color: #D97904;
 }
 
 .background {
@@ -76,6 +81,16 @@ body{
 }
 
 /* Colors */
+#color-facebook {
+	color: #3B5998;
+}
+#color-yelp {
+	color: #D32323;
+}
+#color-twitter {
+	color: #1DA1F2;
+}
+
 .green {
 	background-color: #4A730E;
 }
@@ -88,8 +103,8 @@ body{
 	background-color: #F29F05;
 }
 
-.tan-transparent {
-	background-color: rgba(242, 159, 5, 0.7);
+.transparent {
+	background-color: rgba(69, 69, 69, 0.5);
 	border-radius: 5px;
 }
 
@@ -124,6 +139,16 @@ body{
 }
 
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+	color: black;
+	background-color: #4A730E;
+}
+
+.nav-tabs > li > a, .nav-tabs > li > a:hover {
+	color: white;
+	background-color: #F2B705;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
 	color: black;
 	background-color: #4A730E;
 }

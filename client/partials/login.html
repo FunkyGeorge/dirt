@@ -27,7 +27,7 @@
 <!-- MAIN -->
 <img class="background hidden-xs hidden-sm" src="static/images/loginScreen.png" alt="">
 <div class="row" id="LoginBody">
-	<div class="col-sm-4 col-sm-offset-4 center-content tan-transparent">
+	<div class="col-sm-4 col-sm-offset-4 center-content transparent">
 		<form ng-submit="login()">
 			<div class="form-group">
 				<h4 class="white-text">Are you a trucker?</h4>
@@ -45,8 +45,8 @@
 			<input class="form-control" type="password" placeholder='password' ng-model="user.password" required>
 			<br>
 			<input class="btn btn-green form-control" type="submit" value="Log In"><br>
-			<small class="form-text">Forgot password? <a class="dirt-link" href="">Reset Password</a></small><br>
-			<small class="form-text">Don't have an account? <a class="dirt-link" href="#/register">Register</a></small>
+			<small class="form-text white-text">Forgot password? <a class="dirt-link" href="">Reset Password</a></small><br>
+			<small class="form-text white-text">Don't have an account? <a class="dirt-link" href="#/register">Register</a></small>
 			<p class="error" ng-bind="error"></p>
 		</form>
 	</div>

@@ -39,7 +39,7 @@
 	<div class="row">
 		<!-- SHOW MODE -->
 		<div ng-show="mode=='show'">
-			<h4 class="text-center" ng-class="{darkorange: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : 'You are 10 miles away from the pick-up location'}}</h4>
+			<h4 class="text-center" ng-class="{black-text: id==job.user_id}">{{id==job.user_id ? 'Listed by you' : 'You are 10 miles away from the pick-up location'}}</h4>
 			<div class="col-sm-3">
 				<img class="img-rounded img-responsive center-block" ng-src="../static/images/dirt_types/{{job.src}}.jpg" alt="">
 				<hr>
@@ -148,6 +148,9 @@
 									</div>
 									<!-- JOB_STATUS 0 -->
 									<button class="form-control btn btn-warning" ng-if="job.job_status===0" ng-click="edit()">Edit Job</button>
+									<div class="row">
+										<br>
+									</div>
 									<button class="form-control btn btn-danger" ng-if="job.job_status<=0" ng-click="deleteJob()">Remove Job</button>
 									<!-- JOB_STATUS > 0 -->
 									<div class="dodgerblue" ng-if="job.job_status>0">

@@ -1,28 +1,29 @@
-app.controller("messagesController", function ($scope, $rootScope, $location, $route, $routeParams, $timeout, 
+app.controller("messagesController", function ($scope, $rootScope, $location, $route, $routeParams, $timeout,
 moment, applicationsFactory, messagesFactory, jobsFactory) {
 
 	//////////////////////////////////////////////////////
 	//										INITIALIZATION
 	//////////////////////////////////////////////////////
+	$scope.status = 1;
+
 	if (payload) {
 		applicationsFactory.index(function(data) {
 			if (data.errors) {
 				var error = "Could not load job applications and messages.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
-				displayErrorNotification(error);					
+				displayErrorNotification(error);
 			}
 			else {
 				$scope.apps = [];
 				// Organize applications into groups:
-				for (var i = 0; i < data.length; i++) {						
+				for (var i = 0; i < data.length; i++) {
 					if ($scope.apps.length == 0 || $scope.apps[$scope.apps.length - 1][0].job_id != data[i].job_id)
 						$scope.apps.push([data[i]]);
 					else if ($scope.apps[$scope.apps.length - 1][0].job_id == data[i].job_id)
 						$scope.apps[$scope.apps.length - 1].push(data[i]);
 				}
 
-				$scope.status = 0;
 				$scope.mode = "message";
 
 				// Check if certain application requested in URL:
@@ -91,8 +92,8 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
-				});	
+					}
+				});
 				$timeout(function() {
 					$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
 				}, 1000, true);
@@ -112,7 +113,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 				socket.emit("decline", {
 					application_id: $scope.cur_app.id,
 					name: $scope.name
-				});	
+				});
 			}
 			$.notify({
 				icon: "glyphicon glyphicon-check",
@@ -126,7 +127,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 				animate: {
 					enter: 'animated fadeInUp',
 					exit: 'animated fadeOutDown',
-				} 
+				}
 			});
 			$timeout(function() {
 				$location.url(`/messages#${Date.now()}`);
@@ -159,8 +160,8 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
-				});					
+					}
+				});
 				$location.url(`/messages`);
 			}
 		});
@@ -192,8 +193,8 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
-				});						
+					}
+				});
 				$location.url(`/messages`);
 			}
 		});
@@ -227,7 +228,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
+					}
 				});
 				$timeout(function() {
 					$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
@@ -264,8 +265,8 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 					animate: {
 						enter: 'animated fadeInUp',
 						exit: 'animated fadeOutDown',
-					} 
-				});						
+					}
+				});
 				// $location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
 				$timeout(function() {
 					$location.url(`/messages/${$scope.cur_app.id}#${Date.now()}`);
@@ -286,13 +287,13 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 					var error = "Could not load conversation.";
 					for (key in data.errors)
 						error += " " + data.errors[key].message;
-					displayErrorNotification(error + " Try reloading the page.");					
+					displayErrorNotification(error + " Try reloading the page.");
 				}
 				else {
 					$rootScope.messages = data;
 					$timeout(function() {
 						var _ = document.getElementById("chat");
-						_.scrollTop = _.scrollHeight;				
+						_.scrollTop = _.scrollHeight;
 					}, 0, false);
 				}
 			});
@@ -313,10 +314,10 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 				var error = "Message not sent.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
-				displayErrorNotification(error);					
+				displayErrorNotification(error);
 			}
 			else
-				$scope.new_message = "";				
+				$scope.new_message = "";
 		});
 	}
 
@@ -329,7 +330,7 @@ moment, applicationsFactory, messagesFactory, jobsFactory) {
 				var error = "Could not load job.";
 				for (key in data.errors)
 					error += " " + data.errors[key].message;
-				displayErrorNotification(error);					
+				displayErrorNotification(error);
 			}
 			else
 				$scope.job = data;

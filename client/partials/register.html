@@ -28,18 +28,18 @@
 <img class="background hidden-xs hidden-sm" src="static/images/registrationScreen.jpg" alt="">
 <div class="container">
 	<div class="row" ng-show="step==1">
-		<div class="col-sm-7 tan-transparent">
+		<div class="col-sm-7 transparent">
 			<h1 class="white-text">The Down and Dirty</h1>
 			<h4 class="white-text">Got Dirt, Need Dirt is a platform that provides truckers to help you move, remove, and provide dirt.</h4>
 		</div>
-		<div class="col-sm-5 tan-transparent">
+		<div class="col-sm-5 transparent">
 			<div ng-show="user_type=='trucker'">
 				<h4 class="white-text">Need a Trucker?</h4>
 				<a class="dirt-link" href="" ng-click="user_type='user'">Sign-up</a>
 				<hr>
 			</div>
 			<form ng-submit="register()">
-				<h4 class="text-center" ng-show="user_type=='trucker'">Or sign-up as a Trucker</h4>
+				<h4 class="text-center white-text" ng-show="user_type=='trucker'">Or sign-up as a Trucker</h4>
 				<h4 class="text-center" ng-show="user_type=='user'">Sign-up to post jobs and find truckers</h4>
 				<div class="row">
 					<div class="col-xs-6">
@@ -73,7 +73,7 @@
 						<button class="form-control btn btn-green" type="button" ng-click="user_type='trucker'"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Trucker Sign-up</button>
 					</div>
 				</div>
-				<p class="text-center">
+				<p class="text-center white-text">
 					Already have an account? <a class="dirt-link" href="#/login">Log in</a>
 				</p>
 				<p class="error" ng-bind="error"></p>
