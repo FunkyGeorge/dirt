@@ -80,7 +80,17 @@ body{
 	width: 100vw;
 	height: auto;
 	z-index: -5;
+}
 
+@media (max-device-width: 480px) {
+  /* define mobile specific styles come here */
+  .background {
+		position: absolute;
+		top: 5em;
+		max-width: 100vw;
+		clip: inherit;
+		z-index: -5;
+  }
 }
 
 /* Colors */
